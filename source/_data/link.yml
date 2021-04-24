@@ -29,10 +29,6 @@
       link: https://www.centoscn.vip/
       avatar: https://www.centoscn.vip/wp-content/uploads/2020/03/9DF0B7249C75F15D8AC42889564FD226.jpg
       descr: 运维大佬
-    - name: 云域博客
-      link: https://68su.cn/
-      avatar: /img/index.png
-      descr: 云上云域
 
 - class_name: 开源镜像站
   class_desc: 
