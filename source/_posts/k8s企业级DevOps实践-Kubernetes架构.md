@@ -450,7 +450,7 @@ $ vi kube-flannel.yml
           mountPath: /etc/kube-flannel/
       containers:
       - name: kube-flannel
-        image: 192.168.56.10：5000/coreos/flannel:v0.11.0-amd64
+        image: 192.168.56.10:5000/coreos/flannel:v0.11.0-amd64
         command:
         - /opt/bin/flanneld
         args:
