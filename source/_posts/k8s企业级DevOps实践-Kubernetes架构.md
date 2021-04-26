@@ -71,7 +71,8 @@ date: 2021-04-25 17:44:00
   - ResourceQuota Controller: 确保了指定的资源对象在任何时候都不会超量占用系统物理资源，避免了由于某些业务进程的设计或实现的缺陷导致整个系统运行紊乱，甚至意外宕机
   - Service Controller
   - ...等
-  
+
+
 ![k8s架构](/images/pasted-38.png)
 
 ### 节点组件（地方）
@@ -482,7 +483,7 @@ kubectl delete -f kube-flannel.yml #删除
 
 默认部署成功后，master节点无法调度业务pod，如需设置master节点也可以参与pod的调度，需执行：
 
-``` python
+``` bash
 $ kubectl taint node k8s-master node-role.kubernetes.io/master:NoSchedule-
 ```
 
@@ -490,7 +491,7 @@ $ kubectl taint node k8s-master node-role.kubernetes.io/master:NoSchedule-
 
 操作节点： 在master节点（`k8s-master`）执行
 
-``` python
+``` bash
 $ kubectl get nodes  #观察集群节点是否全部Ready
 NAME         STATUS   ROLES    AGE   VERSION
 k8s-master   Ready    master   56m   v1.16.2
@@ -505,7 +506,7 @@ $ kubectl run  test-nginx --image=nginx:alpine
 ```
 查看pod是否创建成功，并访问pod ip测试是否可用
 
-``` powershell
+``` bash
 $ kubectl get po -o wide
 NAME                          READY   STATUS    RESTARTS   AGE   IP           NODE         NOMINATED NODE   READINESS GATES
 test-nginx-5bd8859b98-pvgv4   1/1     Running   0          9s    10.244.1.2   k8s-slave2   <none>           <none>

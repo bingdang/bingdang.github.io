@@ -363,7 +363,7 @@ $ docker run -ti --rm --net=container:mysql busybox sh
 
    ```bash
    ## 若有时遇到容器启动失败的情况，可以先使用相同的镜像启动一个临时容器，先进入容器
-   $ docker exec -ti --rm <image_id> bash
+   $ docker run -ti --rm <image_id> bash
    ## 进入容器后，手动执行该容器对应的ENTRYPOINT或者CMD命令，这样即使出错，容器也不会退出，因为bash作为1号进程，我们只要不退出容器，该容器就不会自动退出
    ```
 
