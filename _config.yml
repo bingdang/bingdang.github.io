@@ -13,7 +13,7 @@ timezone: 'Asia/Shanghai'
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://example.com/child' and root as '/child/'
-url: https://pincheng.org
+url: https://cakepanit.com
 root: /
 permalink: forward/:abbrlink.html
 permalink_defaults:
