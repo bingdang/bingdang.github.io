@@ -2764,11 +2764,6 @@
     "opencollective-postinstall" "^2.0.2"
     "path" "^0.12.7"
 
-"hexo-history-calendar@^1.0.3":
-  "integrity" "sha1-9WhCB4d5Xj7/FWEcPQG4QPgukjA="
-  "resolved" "https://registry.nlark.com/hexo-history-calendar/download/hexo-history-calendar-1.0.3.tgz"
-  "version" "1.0.3"
-
 "hexo-i18n@^0.2.1":
   "integrity" "sha1-hPFBQyvwnYtVjth4xygWS20c1t4="
   "resolved" "https://registry.npm.taobao.org/hexo-i18n/download/hexo-i18n-0.2.1.tgz"
