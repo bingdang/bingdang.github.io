@@ -4,9 +4,10 @@ cover: images/pasted-6.png
 abbrlink: 6b4e4d76
 tags:
   - k8s
+  - 容器编排
 categories:
   - Web集群
-date: 2021-04-25 23:04:00
+date: 2021-04-28 07:04:00
 ---
 ## 核心组件
 **静态Pod的方式：**
@@ -1170,7 +1171,7 @@ mysql    1/1     Running   0          5m4s    192.168.56.20   k8s-slave1   <none
 <head>
 ...
 ```
-#### 如何编写资源yaml
+### 如何编写资源yaml
 
 1. 拿来主义，从机器中已有的资源中拿
 
@@ -1184,4 +1185,3 @@ $ kubectl -n kube-system get po,deployment,ds
 3. 从kubernetes-api文档中查找， https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/#pod-v1-core 
 
 4. kubectl explain 查看具体字段含义
-
