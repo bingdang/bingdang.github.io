@@ -1,4 +1,4 @@
-title: k8s企业级DevOps实践-Pod管理业务应用
+title: k8s企业级DevOps实践-Pod管理、健康检查、ConfigMap和Secret的定义与容器编排
 author: 饼铛
 cover: images/pasted-6.png
 abbrlink: 6b4e4d76
@@ -347,6 +347,7 @@ $ kubectl delete -f demo-pod.yaml
 
 #根据pod_name删除
 $ kubectl -n <namespace> delete pod <pod_name>
+--grace-period=0 --force //强制删除，一般不用
 ```
 
 ### Pod数据持久化
@@ -369,8 +370,8 @@ metadata:
     component: myblog
 spec:
   volumes: 
-  - name: mysql-data
-    hostPath: 
+  - name: mysql-data #volume名字
+    hostPath: #持久化到node的哪个位置
       path: /opt/mysql/data
   nodeSelector:   # 使用节点选择器将Pod调度到指定label的节点
     component: mysql
@@ -393,9 +394,9 @@ spec:
       value: "123456"
     - name: MYSQL_DATABASE
       value: "myblog"
-    volumeMounts:
-    - name: mysql-data
-      mountPath: /var/lib/mysql
+    volumeMounts: #挂载volume到pod内mysql容器中
+    - name: mysql-data #volume名字
+      mountPath: /var/lib/mysql #容器内的路径
 ```
 
 保存文件为`pod-with-volume.yaml`，执行创建
@@ -495,3 +496,692 @@ myblog   2/2     Running   0          29s   10.244.2.18   k8s-slave1   <none>   
 ## 未做migrate，服务正常
 $ curl 10.244.2.18:8002/blog/index/
 ```
+
+#### 使用PV+PVC连接分布式存储解决方案
+ - ceph
+ - glusterfs
+ - nfs
+
+### 服务健康检查
+检测容器服务是否健康的手段，若不健康，会根据设置的重启策略（restartPolicy）进行操作，两种检测机制可以分别单独设置，若不设置，默认认为Pod是健康的。
+
+**两种机制：**
+- LivenessProbe探针
+  用于判断容器是否存活，即Pod是否为`running`状态，如果LivenessProbe探针探测到容器不健康，则kubelet将kill掉容器，并根据容器的重启策略是否重启，如果一个容器不包含LivenessProbe探针，则Kubelet认为容器的LivenessProbe探针的返回值永远成功。 
+- ReadinessProbe探针
+  用于判断容器是否正常提供服务，即容器的`Ready`是否为True，是否可以接收请求，如果ReadinessProbe探测失败，则容器的Ready将为False，控制器将此Pod的Endpoint从对应的service的Endpoint列表中移除，从此不再将任何请求调度此Pod上，直到下次探测成功。（剔除此pod不参与接收请求不会将流量转发给此Pod）。
+  
+**三种类型：**
+
+- exec：通过执行命令来检查服务是否正常，回值为0则表示容器健康
+- httpGet方式：通过发送http请求检查服务是否正常，返回200-399状态码则表明容器健康
+- tcpSocket：通过容器的IP和Port执行TCP检查，如果能够建立TCP连接，则表明容器健康
+
+示例：
+
+完整文件路径 ` myblog/one-pod/pod-with-healthcheck.yaml`
+
+```bash
+  containers:
+  - name: myblog
+    image: 172.21.32.6:5000/myblog
+    env:
+    - name: MYSQL_HOST   #  指定root用户的用户名
+      value: "127.0.0.1"
+    - name: MYSQL_PASSWD
+      value: "123456"
+    ports:
+    - containerPort: 8002
+    livenessProbe:
+      httpGet:
+        path: /blog/index/
+        port: 8002
+        scheme: HTTP
+      initialDelaySeconds: 10  # 容器启动后第一次执行探测是需要等待多少秒
+      periodSeconds: 15 	# 执行探测的频率
+      timeoutSeconds: 2		# 探测超时时间
+    readinessProbe: 
+      httpGet: 
+        path: /blog/index/
+        port: 8002
+        scheme: HTTP
+      initialDelaySeconds: 10 
+      timeoutSeconds: 2
+      periodSeconds: 15
+```
+- `initialDelaySeconds`：容器启动后第一次执行探测是需要等待多少秒。
+- `periodSeconds`：执行探测的频率。默认是10秒，最小1秒。
+- `timeoutSeconds`：探测超时时间。默认1秒，最小1秒。
+- `successThreshold`：探测失败后，最少连续探测成功多少次才被认定为成功。默认是1。对于liveness必须是1，最小值是1。
+- `failureThreshold`：探测成功后，最少连续探测失败多少次
+  才被认定为失败。默认是3，最小值是1。
+  
+**重启策略：**
+Pod的重启策略（RestartPolicy）应用于Pod内的所有容器，并且仅在Pod所处的Node上由kubelet进行判断和重启操作。当某个容器异常退出或者健康检查失败时，kubelet将根据RestartPolicy的设置来进行相应的操作。
+
+Pod的重启策略包括`Always`、`OnFailure`和`Never`，默认值为Always。
+
+- Always：当容器失败时，由kubelet自动重启该容器；
+- OnFailure：当容器终止运行且退出码不为0时，有kubelet自动重启该容器；
+- Never：不论容器运行状态如何，kubelet都不会重启该容器。
+
+### 镜像拉取策略
+```yaml
+spec:
+  containers:
+  - name: myblog
+    image: 172.21.32.6:5000/demo/myblog
+    imagePullPolicy: IfNotPresent
+```
+
+设置镜像的拉取策略，默认为IfNotPresent
+
+- Always，总是拉取镜像，即使本地有镜像也从仓库拉取(统一标签的镜像被不同版本的代码重复使用时)
+- IfNotPresent ，本地有则使用本地镜像，本地没有则去仓库拉取
+- Never，只使用本地镜像，本地没有则报错
+
+### Pod资源限制
+
+为了保证充分利用集群资源，且确保重要容器在运行周期内能够分配到足够的资源稳定运行，因此平台需要具备
+
+Pod的资源限制的能力。 对于一个pod来说，资源最基础的2个的指标就是：CPU和内存。
+
+Kubernetes提供了个采用requests和limits 两种类型参数对资源进行预分配和使用限制。
+
+完整文件路径：`myblog/one-pod/pod-with-resourcelimits.yaml`
+
+```yaml
+...
+  containers:
+  - name: myblog
+    image: 172.21.32.6:5000/myblog
+    env:
+    - name: MYSQL_HOST   #  指定root用户的用户名
+      value: "127.0.0.1"
+    - name: MYSQL_PASSWD
+      value: "123456"
+    ports:
+    - containerPort: 8002
+    resources: #资源作用单位时容器
+      requests:
+        memory: 100Mi
+        cpu: 50m
+      limits:
+        memory: 500Mi
+        cpu: 100m
+...
+```
+
+`requests`：
+
+- 容器使用的最小资源需求,作用于schedule(调度)阶段，作为容器调度时资源分配的判断依赖
+- 只有当前节点上可分配的资源量 >= request 时才允许将容器调度到该节点
+- request参数不限制容器的最大可使用资源
+- requests.cpu被转成docker的--cpu-shares参数，与cgroup cpu.shares功能相同 (无论宿主机有多少个cpu或者内核，--cpu-shares选项都会按照比例分配cpu资源）
+- requests.memory没有对应的docker参数，仅作为k8s调度依据
+
+`limits`：
+
+- 容器能使用资源的最大值
+- 设置为0表示对使用的资源不做限制, 可无限的使用
+- 当pod 内存超过limit时，会被oom
+- 当cpu超过limit时，不会被kill，但是会限制不超过limit值
+- limits.cpu会被转换成docker的–cpu-quota参数。与cgroup cpu.cfs_quota_us功能相同
+- limits.memory会被转换成docker的–memory参数。用来限制容器使用的最大内存
+
+ 对于 CPU，我们知道计算机里 CPU 的资源是按`“时间片”`的方式来进行分配的，系统里的每一个操作都需要 CPU 的处理，所以，哪个任务要是申请的 CPU 时间片越多，那么它得到的 CPU 资源就越多。
+
+然后还需要了解下 CGroup 里面对于 CPU 资源的单位换算：
+
+```bash
+1 CPU =  1000 millicpu（1 Core = 1000m）
+```
+
+ 这里的 `m` 就是毫、毫核的意思，Kubernetes 集群中的每一个节点可以通过操作系统的命令来确认本节点的 CPU 内核数量，然后将这个数量乘以1000，得到的就是节点总 CPU 总毫数。比如一个节点有四核，那么该节点的 CPU 总毫量为 4000m。 
+
+`docker run`命令和 CPU 限制相关的所有选项如下：
+
+| 选项                  | 描述                                                    |
+| --------------------- | ------------------------------------------------------- |
+| `--cpuset-cpus=""`    | 允许使用的 CPU 集，值可以为 0-3,0,1                     |
+| `-c`,`--cpu-shares=0` | CPU 共享权值（相对权重）                                |
+| `cpu-period=0`        | 限制 CPU CFS 的周期，范围从 100ms~1s，即[1000, 1000000] |
+| `--cpu-quota=0`       | 限制 CPU CFS 配额，必须不小于1ms，即 >= 1000，绝对限制  |
+
+```shell
+docker run -it --cpu-period=50000 --cpu-quota=25000 ubuntu:16.04 /bin/bash
+```
+
+将 CFS 调度的周期设为 50000，将容器在每个周期内的 CPU 配额设置为 25000，表示该容器每 50ms 可以得到 50% 的 CPU 运行时间。
+
+> 注意：若内存使用超出限制，会引发系统的OOM机制，因CPU是可压缩资源，不会引发Pod退出或重建
+
+### yaml优化
+目前完善后的yaml，`myblog/one-pod/pod-completed.yaml`
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myblog #pod的名字
+  namespace: demo #属于哪个ns
+  labels:
+    component: myblog
+spec:
+  volumes: 
+  - name: mysql-data #volume名字
+    hostPath: #持久化到node的哪个位置
+      path: /opt/mysql/data
+  nodeSelector:   # 使用节点选择器将Pod调度到指定label的节点
+    component: mysql
+  containers:
+  - name: myblog
+    image: 192.168.56.10:5000/myblog:v2
+    env:
+    - name: MYSQL_HOST   # 指定root用户的用户名
+      value: "127.0.0.1"
+    - name: MYSQL_PASSWD
+      value: "123456"
+    ports:
+    - containerPort: 8002
+    resources: #资源限制
+      requests: #最小使用资源，用于调度
+        memory: 100Mi
+        cpu: 50m
+      limits: #最大资源限制
+        memory: 500Mi
+        cpu: 100m
+    livenessProbe: #容器级别健康检查判断容器是否存活
+      httpGet: #检查路径
+        path: /blog/index/
+        port: 8002
+        scheme: HTTP
+      initialDelaySeconds: 10  # 容器启动后第一次执行探测是需要等待多少秒
+      periodSeconds: 15 	# 执行探测的频率
+      timeoutSeconds: 2		# 探测超时时间
+    readinessProbe: #容器级别健康判断容器是否正常提供服务
+      httpGet: 
+        path: /blog/index/
+        port: 8002
+        scheme: HTTP
+      initialDelaySeconds: 10 
+      timeoutSeconds: 2
+      periodSeconds: 15
+  - name: mysql
+    image: 192.168.56.10:5000/mysql:5.7-utf8
+    ports:
+    - containerPort: 3306
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: "123456"
+    - name: MYSQL_DATABASE
+      value: "myblog"
+    resources:
+      requests:
+        memory: 100Mi
+        cpu: 50m
+      limits:
+        memory: 500Mi
+        cpu: 100m
+    readinessProbe: #容器级别健康判断容器是否正常提供服务
+      tcpSocket: #采用tcp判断是否能够建立链接
+        port: 3306
+      initialDelaySeconds: 5
+      periodSeconds: 10
+    livenessProbe: #容器级别健康检查判断容器是否存活
+      tcpSocket: #采用tcp判断是否能够建立链接
+        port: 3306
+      initialDelaySeconds: 15
+      periodSeconds: 20
+    volumeMounts: #持久化相关，挂载mysql-data数据卷到容器内部/var/lib/mysql
+    - name: mysql-data
+      mountPath: /var/lib/mysql
+ 
+kubectl -n demo get pods -o wide //检查pod是否正常
+```
+以上yaml还要优化，拆分成两个小的yaml
+
+- 考虑真实的使用场景，像数据库这类中间件，是作为公共资源，为多个项目提供服务，不适合和业务容器绑定在同一个Pod中，因为业务容器是经常变更的，而数据库不需要频繁迭代
+- yaml的环境变量中存在敏感信息（账号、密码），存在安全隐患
+
+`myblog/two-pod/mysql.yaml`
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql
+  namespace: demo
+  labels:
+    component: mysql
+spec:
+  hostNetwork: true	# 声明pod的网络模式为host模式，效果通docker run --net=host,将容器3306端口映射到宿主机192.168.56.20的3306端口，中间件的网络可以写死
+  volumes: 
+  - name: mysql-data
+    hostPath: 
+      path: /opt/mysql/data
+  nodeSelector:   # 使用节点选择器将Pod调度到指定label的节点
+    component: mysql
+  containers:
+  - name: mysql
+    image: 192.168.56.10:5000/mysql:5.7-utf8
+    ports:
+    - containerPort: 3306
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: "123456"
+    - name: MYSQL_DATABASE
+      value: "myblog"
+    resources:
+      requests:
+        memory: 100Mi
+        cpu: 50m
+      limits:
+        memory: 500Mi
+        cpu: 100m
+    readinessProbe:
+      tcpSocket:
+        port: 3306
+      initialDelaySeconds: 5
+      periodSeconds: 10
+    livenessProbe:
+      tcpSocket:
+        port: 3306
+      initialDelaySeconds: 15
+      periodSeconds: 20
+    volumeMounts:
+    - name: mysql-data
+      mountPath: /var/lib/mysql
+```
+`myblog.yaml`
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myblog
+  namespace: demo
+  labels:
+    component: myblog
+spec:
+  containers:
+  - name: myblog
+    image: 192.168.56.10:5000/myblog:v2
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: MYSQL_HOST   #  指定root用户的用户名
+      value: "192.168.56.20" #连接slave1宿主机的3306端口
+    - name: MYSQL_PASSWD
+      value: "123456"
+    ports:
+    - containerPort: 8002
+    resources:
+      requests:
+        memory: 100Mi
+        cpu: 50m
+      limits:
+        memory: 500Mi
+        cpu: 100m
+    livenessProbe:
+      httpGet:
+        path: /blog/index/
+        port: 8002
+        scheme: HTTP
+      initialDelaySeconds: 10  # 容器启动后第一次执行探测是需要等待多少秒
+      periodSeconds: 15 	# 执行探测的频率
+      timeoutSeconds: 2		# 探测超时时间
+    readinessProbe: 
+      httpGet: 
+        path: /blog/index/
+        port: 8002
+        scheme: HTTP
+      initialDelaySeconds: 10 
+      timeoutSeconds: 2
+      periodSeconds: 15
+```
+
+#### 开始构建pod
+```bash
+# 查看当前pod
+[root@k8s-master one-pod]# kubectl -n demo get po
+NAME     READY   STATUS    RESTARTS   AGE
+myblog   2/2     Running   0          25m
+
+# 删除pod
+[root@k8s-master one-pod]# kubectl delete -ndemo po myblog
+pod "myblog" deleted
+
+# 单独创建mysql pod
+[root@k8s-master two-pod]# kubectl create -f mysql.yaml 
+pod/mysql created
+[root@k8s-master two-pod]# kubectl -n demo get po
+NAME    READY   STATUS    RESTARTS   AGE
+mysql   1/1     Running   0          22s
+
+# 单独创建myblog pod
+[root@k8s-master two-pod]# kubectl create -f myblog.yaml
+
+# 查看pod，注意mysqlIP为宿主机IP，因为网络模式为host
+[root@k8s-master two-pod]# kubectl -n demo get po -o wide 
+NAME     READY   STATUS    RESTARTS   AGE     IP              NODE         NOMINATED NODE   READINESS GATES
+myblog   1/1     Running   0          5m48s   10.244.2.29     k8s-slave1   <none>           <none>
+mysql    1/1     Running   0          16m     192.168.56.20   k8s-slave1   <none>           <none>
+
+#访问测试
+[root@k8s-master two-pod]# curl 10.244.2.29:8002
+<!DOCTYPE html>
+<html lang="en">
+<head>
+...
+```
+
+环境变量中敏感信息带来的安全隐患
+
+为何要统一管理环境变量?
+
+- 环境变量中有很多敏感的信息，比如账号密码，直接暴漏在yaml文件中存在安全性问题
+- 团队内部一般存在多个项目，这些项目直接存在配置相同环境变量的情况，因此可以统一维护管理
+- 对于开发、测试、生产环境，由于配置均不同，每套环境部署的时候都要修改yaml，带来额外的开销
+
+k8s提供两类资源，`configMap`和`Secret`，可以用来实现业务配置的统一管理， 允许将配置文件与镜像文件分离，以使容器化的应用程序具有可移植性 。
+
+![configMap和Secret](/images/pasted-44.png)
+
+- configMap，通常用来管理应用的配置文件或者环境变量，`myblog/two-pod/configmap.yaml`
+
+
+  ```yaml
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: myblog
+    namespace: demo
+  data:
+    MYSQL_HOST: "192.168.56.20"
+    MYSQL_PORT: "3306"
+  ```
+  
+创建并查看：
+```bash
+$ kubectl create -f configmap.yaml
+$ kubectl -n demo get configmap
+$ kubectl -n demo describe configmap myblog
+Name:         myblog
+Namespace:    demo
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+MYSQL_PORT:
+----
+3306
+MYSQL_HOST:
+----
+192.168.56.20
+Events:  <none>
+```
+
+- Secret，管理敏感类的信息，默认会base64编码存储，有三种类型
+
+  - Service Account ：用来访问Kubernetes API，由Kubernetes自动创建，并且会自动挂载到Pod的/run/secrets/kubernetes.io/serviceaccount目录中；创建ServiceAccount后，Pod中指定serviceAccount后，自动创建该ServiceAccount对应的secret；
+  - Opaque ： base64编码格式的Secret，用来存储密码、密钥等；
+  - kubernetes.io/dockerconfigjson ：用来存储私有docker registry的认证信息`myblog/two-pod/secret.yaml`
+
+
+  ```yaml
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: myblog
+    namespace: demo
+  type: Opaque
+  data:
+    MYSQL_USER: cm9vdA==		#注意加-n参数否则值中会带换行， echo -n root|base64
+    MYSQL_PASSWD: MTIzNDU2
+  ```
+
+创建并查看：
+```bash
+$ kubectl create -f secret.yaml
+$ kubectl -n demo get secret
+$ kubectl -n demo describe secret myblog
+Name:         myblog
+Namespace:    demo
+Labels:       <none>
+Annotations:  <none>
+
+Type:  Opaque
+
+Data
+====
+MYSQL_PASSWD:  6 bytes
+MYSQL_USER:    4 bytes
+```
+
+如果不习惯这种方式，可以通过如下方式：
+
+```bash
+$ cat secret.txt
+MYSQL_USER=root
+MYSQL_PASSWD=123456
+$ kubectl -n demo create secret generic myblog --from-env-file=secret.txt 
+```
+修改后的myblog的yaml，资源路径：`myblog/two-pod/myblog-with-config.yaml`
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myblog
+  namespace: demo
+  labels:
+    component: myblog
+spec:
+  containers:
+  - name: myblog
+    image: 192.168.56.10:5000/myblog:v2
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: MYSQL_HOST
+      valueFrom: # 值来自
+        configMapKeyRef: # 来自configMap
+          name: myblog # configMap所在pod
+          key: MYSQL_HOST # 取对应的键内容
+    - name: MYSQL_PORT
+      valueFrom:
+        configMapKeyRef:
+          name: myblog
+          key: MYSQL_PORT
+    - name: MYSQL_USER 
+      valueFrom: # 值来自
+        secretKeyRef: # 来自secret
+          name: myblog # secret所在pod
+          key: MYSQL_USER # 取对应的键内容
+    - name: MYSQL_PASSWD
+      valueFrom:
+        secretKeyRef:
+          name: myblog
+          key: MYSQL_PASSWD
+    ports:
+    - containerPort: 8002
+    resources:
+      requests:
+        memory: 100Mi
+        cpu: 50m
+      limits:
+        memory: 500Mi
+        cpu: 100m
+    livenessProbe:
+      httpGet:
+        path: /blog/index/
+        port: 8002
+        scheme: HTTP
+      initialDelaySeconds: 10  # 容器启动后第一次执行探测是需要等待多少秒
+      periodSeconds: 15         # 执行探测的频率
+      timeoutSeconds: 2         # 探测超时时间
+    readinessProbe: 
+      httpGet: 
+        path: /blog/index/
+        port: 8002
+        scheme: HTTP
+      initialDelaySeconds: 10 
+      timeoutSeconds: 2
+      periodSeconds: 15
+```
+
+修改后的mysql的yaml，资源路径：`myblog/two-pod/mysql-with-config.yaml`
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql
+  namespace: demo
+  labels:
+    component: mysql
+spec:
+  hostNetwork: true     # 声明pod的网络模式为host模式，效果通docker run --net=host
+  volumes: 
+  - name: mysql-data
+    hostPath: 
+      path: /opt/mysql/data
+  nodeSelector:   # 使用节点选择器将Pod调度到指定label的节点
+    component: mysql
+  containers:
+  - name: mysql
+    image: 192.168.56.10:5000/mysql:5.7-utf8
+    ports:
+    - containerPort: 3306
+    env:
+    - name: MYSQL_USER
+      valueFrom:
+        secretKeyRef:
+          name: myblog
+          key: MYSQL_USER
+    - name: MYSQL_PASSWD
+      valueFrom:
+        secretKeyRef:
+          name: myblog
+          key: MYSQL_PASSWD
+    - name: MYSQL_DATABASE
+      value: "myblog"
+    resources:
+      requests:
+        memory: 100Mi
+        cpu: 50m
+      limits:
+        memory: 500Mi
+        cpu: 100m
+    readinessProbe:
+      tcpSocket:
+        port: 3306
+      initialDelaySeconds: 5
+      periodSeconds: 10
+    livenessProbe:
+      tcpSocket:
+        port: 3306
+      initialDelaySeconds: 15
+      periodSeconds: 20
+    volumeMounts:
+    - name: mysql-data
+      mountPath: /var/lib/mysql
+```
+在部署不同的环境时，pod的yaml无须再变化，只需要在每套环境中维护一套ConfigMap和Secret即可。但是注意configmap和secret不能跨namespace使用，且更新后，pod内的env不会自动更新，重建后方可更新。
+部署测试：
+```bash
+# 查看当前pod
+[root@k8s-master two-pod]# kubectl -n demo get po
+NAME     READY   STATUS    RESTARTS   AGE
+myblog   1/1     Running   0          48m
+mysql    1/1     Running   0          59m
+
+# 删除pod
+[root@k8s-master one-pod]# kubectl delete -ndemo po myblog
+pod "myblog" deleted
+[root@k8s-master two-pod]# kubectl delete -ndemo po mysql
+pod "mysql" deleted
+
+
+# 检查configmap和secret
+[root@k8s-master two-pod]# kubectl -n demo describe secret myblog
+Name:         myblog
+Namespace:    demo
+Labels:       <none>
+Annotations:  <none>
+
+Type:  Opaque
+
+Data
+====
+MYSQL_PASSWD:  6 bytes
+MYSQL_USER:    4 bytes
+[root@k8s-master two-pod]# kubectl -n demo describe configmap myblog
+Name:         myblog
+Namespace:    demo
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+MYSQL_HOST:
+----
+192.168.56.20
+MYSQL_PORT:
+----
+3306
+Events:  <none>
+
+# 单独创建mysql pod
+[root@k8s-master two-pod]# kubectl create -f mysql-with-config.yaml 
+pod/mysql created
+[root@k8s-master two-pod]# kubectl -n demo get po
+NAME    READY   STATUS    RESTARTS   AGE
+mysql   1/1     Running   0          117s
+
+# 检查mysql环境变量是否注入成功
+[root@k8s-master two-pod]# kubectl create -f mysql-with-config.yaml 
+pod/mysql created
+[root@k8s-master two-pod]# kubectl -n demo exec -it mysql bash
+root@k8s-slave1:/# env | grep MYSQL_USER
+MYSQL_USER=root
+root@k8s-slave1:/# env | grep MYSQL_PASSWD
+MYSQL_PASSWD=123456
+
+# 单独创建myblog pod
+[root@k8s-master two-pod]# kubectl create -f myblog.yaml
+
+# 检查myblog环境变量是否注入成功
+[root@k8s-master two-pod]#  kubectl -n demo exec -it myblog bash
+[root@myblog myblog]# env | grep MYSQL_HOST
+MYSQL_HOST=192.168.56.20
+[root@myblog myblog]# env | grep MYSQL_PORT
+MYSQL_PORT=3306
+[root@myblog myblog]# env | grep MYSQL_PASSWD
+MYSQL_PASSWD=123456
+[root@myblog myblog]# env | grep MYSQL_USER
+MYSQL_USER=root
+
+# 检查pod状态
+[root@k8s-master two-pod]# kubectl -n demo get po -o wide
+NAME     READY   STATUS    RESTARTS   AGE     IP              NODE         NOMINATED NODE   READINESS GATES
+myblog   1/1     Running   0          2m37s   10.244.2.30     k8s-slave1   <none>           <none>
+mysql    1/1     Running   0          5m4s    192.168.56.20   k8s-slave1   <none>           <none>
+
+# 检查服务是否可以访问
+[root@k8s-master two-pod]# curl 10.244.2.30:8002
+<!DOCTYPE html>
+<html lang="en">
+<head>
+...
+```
+#### 如何编写资源yaml
+
+1. 拿来主义，从机器中已有的资源中拿
+
+
+```bash
+$ kubectl -n kube-system get po,deployment,ds
+```
+
+2. 学会在官网查找， https://kubernetes.io/docs/home/ 
+
+3. 从kubernetes-api文档中查找， https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/#pod-v1-core 
+
+4. kubectl explain 查看具体字段含义
+
