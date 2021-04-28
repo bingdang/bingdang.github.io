@@ -263,14 +263,15 @@ comments:
   # Up to two comments system, the first will be shown as default
   # Choose: Disqus/Disqusjs/Livere/Gitalk/Valine/Waline/Utterances/Facebook Comments/Twikoo
   use:
-  # - Valine
+   - Gitalk
   # - Disqus
-  text: true # Display the comment name next to the button
+  # - Twikoo
+  text: false # Display the comment name next to the button
   # lazyload: The comment system will be load when comment element enters the browser's viewport.
   # If you set it to true, the comment count will be invalid
-  lazyload: false
+  lazyload: true
   count: false # Display comment count in post's top_img
-  card_post_count: false # Display comment count in Home Page
+  card_post_count: true # Display comment count in Home Page
 
 # disqus
 # https://disqus.com/
@@ -297,12 +298,12 @@ livere:
 # gitalk
 # https://github.com/gitalk/gitalk
 gitalk:
-  client_id:
-  client_secret:
-  repo:
-  owner:
-  admin:
-  language: en # en, zh-CN, zh-TW, es-ES, fr, ru
+  client_id: 3ddadaacb8229926f8c7
+  client_secret: 9743d213e1397b46252d5a0032e8036b7890d741
+  repo: git@github.com:bingdang/pan.git
+  owner: bingdang
+  admin: bingdang
+  language: zh-CN # en, zh-CN, zh-TW, es-ES, fr, ru
   perPage: 10 # Pagination size, with maximum 100.
   distractionFreeMode: false # Facebook-like distraction free mode.
   pagerDirection: last # Comment sorting direction, available values are last and first.
@@ -448,9 +449,9 @@ google_adsense:
   enable_page_level_ads: true
 
 # Insert ads manually (手動插入廣告)
-# ad:
+#ad:
 #   index:
-#   aside:
+#   aside: <ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-client="ca-pub-1372389585456420" data-ad-slot="9321903126"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script>
 #   post:
 
 # Verification (站長驗證)
