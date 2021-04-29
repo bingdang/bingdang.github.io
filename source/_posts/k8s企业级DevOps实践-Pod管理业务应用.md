@@ -739,6 +739,7 @@ spec:
  
 kubectl -n demo get pods -o wide //检查pod是否正常
 ```
+#### 拆分yaml
 以上yaml还要优化，拆分成两个小的yaml
 
 - 考虑真实的使用场景，像数据库这类中间件，是作为公共资源，为多个项目提供服务，不适合和业务容器绑定在同一个Pod中，因为业务容器是经常变更的，而数据库不需要频繁迭代
@@ -838,7 +839,7 @@ spec:
       periodSeconds: 15
 ```
 
-#### 开始构建pod
+#### 重新构建pod
 ```bash
 # 查看当前pod
 [root@k8s-master one-pod]# kubectl -n demo get po
@@ -873,9 +874,8 @@ mysql    1/1     Running   0          16m     192.168.56.20   k8s-slave1   <none
 ...
 ```
 
-环境变量中敏感信息带来的安全隐患
-
-为何要统一管理环境变量?
+#### configMap和Secret
+环境变量中敏感信息带来的安全隐患，为何要统一管理环境变量?
 
 - 环境变量中有很多敏感的信息，比如账号密码，直接暴漏在yaml文件中存在安全性问题
 - 团队内部一般存在多个项目，这些项目直接存在配置相同环境变量的情况，因此可以统一维护管理
@@ -939,7 +939,7 @@ Events:  <none>
     MYSQL_PASSWD: MTIzNDU2
   ```
 
-创建并查看：
+#### 重新构建pod
 ```bash
 $ kubectl create -f secret.yaml
 $ kubectl -n demo get secret
