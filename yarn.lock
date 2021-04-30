@@ -2891,6 +2891,11 @@
     "strip-indent" "^3.0.0"
     "striptags" "^3.1.1"
 
+"hexo-wordcount@^6.0.1":
+  "integrity" "sha1-WmDvydPI5CGVby/WaDypSop5UmQ="
+  "resolved" "https://registry.nlark.com/hexo-wordcount/download/hexo-wordcount-6.0.1.tgz"
+  "version" "6.0.1"
+
 "hexo@^3.0.0":
   "integrity" "sha1-e1r+O33ogpRpY1rMlSdX+sPshjw="
   "resolved" "https://registry.npm.taobao.org/hexo/download/hexo-3.9.0.tgz"
