@@ -3,10 +3,10 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: BingCheng
-subtitle: '当你能飞的时候就不要放弃飞；当你有梦的时候就不要放弃追。'
-description: '念念不忘，必有回响。'
-keywords: 'DBA,Linux,运维,系统运维,分布式,高可用,负载均衡,老菜鸟,Docker,k8s,虚拟化,云计算,network,system'
+title: Maxbit
+subtitle: '资深沪漂菜鸡运维'
+description: 'Maxbit,上海大比特,DBA,Linux,运维,系统运维,分布式,高可用,负载均衡,老菜鸟,Docker,k8s,虚拟化,云计算,network,system,存储'
+keywords: 'Maxbit,上海大比特,DBA,Linux,运维,系统运维,分布式,高可用,负载均衡,老菜鸟,Docker,k8s,虚拟化,云计算,network,system,存储'
 author: 饼铛
 language: zh-CN
 timezone: 'Asia/Shanghai'
