@@ -17,7 +17,7 @@ date: 2019-03-05 04:03:00
 |Office install|<i class="fab fa-windows"></i>||[Download](https://www.lanzous.com/ib07xij)|
 |Wise Care 365|<i class="fab fa-windows"></i>||[Download](https://www.lanzous.com/ib07xsj)|
 |CleanMyMac X|<i class="fab fa-apple"></i>|i4ri|[Download](https://pincheng.lanzous.com/b016dnz0j)|
-|VNCViewer|<i class="fab fa-windows"></i>||[Download](https://www.lanzous.com/ib07yqd)|
+|VNCViewer|<i class="fab fa-apple"></i>||[Download](https://www.lanzous.com/ib07yqd)|
 |Termius|<i class="fab fa-apple"></i>||[Download](https://www.lanzous.com/ib0ql5i)|
 |IObit Uninstaller|<i class="fab fa-windows"></i>||[Download](https://www.lanzous.com/ib2qg2h)|
 
