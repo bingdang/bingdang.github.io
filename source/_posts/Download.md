@@ -1,5 +1,6 @@
 title: Download
 author: 饼铛
+sticky: 1
 tags:
   - tools
 categories:
