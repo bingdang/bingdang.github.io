@@ -916,7 +916,7 @@ CDN:
   busuanzi: /js/busuanzi.pure.mini.js
 
   # background effect
-  canvas_ribbon: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js
+  canvas_ribbon: /js/canvas-ribbon.min.js
   canvas_fluttering_ribbon: /js/canvas-fluttering-ribbon.min.js
   canvas_nest: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js
 
