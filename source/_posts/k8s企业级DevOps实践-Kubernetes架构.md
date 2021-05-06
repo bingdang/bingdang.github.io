@@ -309,7 +309,7 @@ scheduler: {}
 
 #### 提前下载镜像
 
-操作节点：只在master节点（`k8s-master`）执行
+操作节点：只在master节点（`k8s-master`）执行，带*号要在所有节点执行
 
 ``` bash
 # 查看需要使用的镜像列表,若无问题，将得到如下列表
@@ -317,8 +317,8 @@ $ kubeadm config images list --config kubeadm.yaml
 registry.aliyuncs.com/google_containers/kube-apiserver:v1.16.0
 registry.aliyuncs.com/google_containers/kube-controller-manager:v1.16.0
 registry.aliyuncs.com/google_containers/kube-scheduler:v1.16.0
-registry.aliyuncs.com/google_containers/kube-proxy:v1.16.0
-registry.aliyuncs.com/google_containers/pause:3.1
+registry.aliyuncs.com/google_containers/kube-proxy:v1.16.0 *
+registry.aliyuncs.com/google_containers/pause:3.1 *
 registry.aliyuncs.com/google_containers/etcd:3.3.15-0
 registry.aliyuncs.com/google_containers/coredns:1.6.2
 # 提前下载镜像到本地
@@ -356,8 +356,15 @@ k8s.gcr.io/coredns:1.6.2
 ```bash
 $ docker pull mirrorgooglecontainers/kube-scheduler-amd64:v1.16.0
 $ docker pull mirrorgooglecontainers/etcd-amd64:3.3.15-0
+$ docker pull coredns/coredns:1.6.2 
 ...
-$ docker tag mirrorgooglecontainers/etcd-amd64:3.3.15-0 k8s.gcr.io/etcd:3.3.15-0
+docker tag  b305571ca60a k8s.gcr.io/kube-apiserver:v1.16.0
+docker tag  c21b0c7400f9 k8s.gcr.io/kube-proxy:v1.16.0
+docker tag  06a629a7e51c k8s.gcr.io/kube-controller-manager:v1.16.0
+docker tag  301ddc62b80b k8s.gcr.io/kube-scheduler:v1.16.0
+docker tag  b2756210eeab  k8s.gcr.io/etcd:3.3.15-0
+docker tag  bf261d157914 k8s.gcr.io/coredns:1.6.2
+docker tag  da86e6ba6ca1 k8s.gcr.io/pause:3.1
 ```
 #### 初始化master节点
 操作节点：只在master节点（`k8s-master`）执行
