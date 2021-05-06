@@ -565,7 +565,7 @@ spec:
 ......
 ```
 - **修改镜像地址：**
-  - ashboard:v2.0.0-beta5
+  - dashboard:v2.0.0-beta5
   - metrics-scraper:v1.0.1
 
 - **查看访问地址，本例为30133端口**
@@ -596,6 +596,29 @@ kubernetes-dashboard-5f468cc868-svbbq        1/1     Running   0          2m17s
 - **创建ServiceAccount进行访问**
 
 ```bash
+vi admin.conf
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: admin
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: admin
+  namespace: kubernetes-dashboard
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin
+  namespace: kubernetes-dashboard
+
 [root@k8s-master ~]# kubectl create -f admin.conf
 clusterrolebinding.rbac.authorization.k8s.io/admin created
 serviceaccount/admin created
