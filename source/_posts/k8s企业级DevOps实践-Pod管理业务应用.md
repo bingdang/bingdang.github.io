@@ -1185,3 +1185,7 @@ $ kubectl -n kube-system get po,deployment,ds
 3. 从kubernetes-api文档中查找， https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/#pod-v1-core 
 
 4. kubectl explain 查看具体字段含义
+
+## 健康检查的大坑
+在复盘数据库持久化时，因为健康检查的关系。mysql容器在第一次启动时会进行数据库初始化操作，往往这个时间比较漫长恰好在健康检查的阀值之外！导致我数据库初始化到一般数据库容器被重启。喵的数据库没损坏可以正常使用，只是在yaml文件中配置的启动并创建myblog库配置失效。库并没有被创建出啊来！导致python程序也启动失败。排查了数小时才发现问题😭
+>建议大家不要吧数据库装在容器中。就算放到容器中也要注意健康检查等额外配置会否影响数据库初始化操作！
