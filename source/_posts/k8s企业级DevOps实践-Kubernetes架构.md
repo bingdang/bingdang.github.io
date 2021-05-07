@@ -600,6 +600,9 @@ kubernetes-dashboard-5f468cc868-svbbq        1/1     Running   0          2m17s
 
 ![k8s install](/images/pasted-40.png)
 
+**Google浏览器出现：**您目前无法访问 `XX.XX.XX.XX`，因为此网站发送了 Google Chrome 无法处理的杂乱凭据
+在Chrome该页面上鼠标点击当前页面任意位置，直接键盘输入这11个字符：`thisisunsafe`（输入时是不显示任何字符的）
+
 - **创建ServiceAccount进行访问**
 
 ```bash
