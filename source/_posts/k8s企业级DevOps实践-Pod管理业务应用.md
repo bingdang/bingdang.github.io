@@ -1186,6 +1186,126 @@ $ kubectl -n kube-system get po,deployment,ds
 
 4. kubectl explain 查看具体字段含义
 
+### Pod状态与生命周期
+
+Pod的状态如下表所示：
+
+参见：https://kubernetes.io/zh/docs/concepts/workloads/pods/pod-lifecycle/
+
+| 状态值            | 描述                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| Pending（悬决）   | API Server已经创建该Pod，等待调度器调度                      |
+| ContainerCreating | 镜像正在创建                                                 |
+| Running（运行中） | Pod内容器均已创建，且至少有一个容器处于运行状态、正在启动状态或正在重启状态 |
+| Succeeded（成功） | Pod内所有容器均已成功执行退出，且不再重启                    |
+| Failed（失败）    | Pod内所有容器均已退出，但至少有一个容器退出为失败状态        |
+| CrashLoopBackOff  | Pod内有容器启动失败，比如配置文件丢失导致主进程启动失败      |
+| Unknown（未知）   | 由于某种原因无法获取该Pod的状态，可能由于网络通信不畅导致    |
+
+生命周期示意图：
+![Podif](/images/pasted-45.png)
+
+启动和关闭示意：
+![Podof](/images/pasted-46.png)
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo-start-stop
+  namespace: demo
+  labels:
+    component: demo-start-stop
+spec:
+  initContainers:
+  - name: init
+    image: busybox
+    command: ['sh', '-c', 'echo $(date +%s): INIT >> /loap/timing'] #初始化容器
+    volumeMounts:
+    - mountPath: /loap
+      name: timing
+  containers:
+  - name: main
+    image: busybox
+    command: ['sh', '-c', 'echo $(date +%s): START >> /loap/timing; 
+sleep 10; echo $(date +%s): END >> /loap/timing;'] #启动业务容器,悬停十秒退出
+    volumeMounts:
+    - mountPath: /loap 
+      name: timing
+    livenessProbe:
+      exec:
+        command: ['sh', '-c', 'echo $(date +%s): LIVENESS >> /loap/timing']
+    readinessProbe:
+      exec:
+        command: ['sh', '-c', 'echo $(date +%s): READINESS >> /loap/timing']
+    lifecycle:
+      postStart: #开始结束hook通知，在业务容器启动之后
+        exec:
+          command: ['sh', '-c', 'echo $(date +%s): POST-START >> /loap/timing']
+      preStop:
+        exec:
+          command: ['sh', '-c', 'echo $(date +%s): PRE-STOP >> /loap/timing']
+  volumes:
+  - name: timing
+    hostPath:
+      path: /tmp/loap
+
+```
+**init容器阶段：**
+
+`initContainers `  是一种专用的容器，在应用程序容器启动之前运行，可以包括一些应用程序镜像中不存在的实用工具和安装脚本，可以完成应用的必要数据初始化等工作。总的来说就是在正式的容器启动之前做一些准备工作的（例如授权目录，改变系统参数）。
+
+特点：
+
+- Init 容器总是运行到成功运行完为止。
+- 前面的 Init 容器必须已经运行完成，才会开始运行下一个init容器，而应用程序容器时并行运行的。
+
+参见：https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+
+
+
+**健康检察阶段：**
+
+`livenessProbe` 判断容器是否存活
+
+`readinessProbe` 判断容器是否正常提供服务
+
+**启动关闭函数回调：**
+
+postStart/postStop回调参见：[为容器的生命周期事件设置处理函数](https://kubernetes.io/zh/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/)
+
+创建pod测试：
+
+```bash
+$ kubectl create -f demo-pod-start.yaml
+
+## 查看demo状态
+$ kubectl -n demo get po -o wide -w
+
+## 查看调度节点的/tmp/loap/timing
+$ cat /tmp/loap/timing
+1620401134: INIT
+1620401150: START
+1620401151: POST-START
+1620401152: LIVENESS
+1620401152: READINESS
+1620401160: END
+```
+
+>  须主动杀掉 Pod 才会触发 `pre-stop hook`，如果是 Pod 自己 Down 掉，则不会执行 `pre-stop hook` 。多用于误操作告警
+
+### 小结
+
+1. 实现k8s平台与特定的容器运行时解耦，提供更加灵活的业务部署方式，引入了Pod概念
+2. k8s使用yaml格式定义资源文件，yaml中Map与List的语法，与json做类比
+3. 通过kubectl create | get | exec | logs | delete 等操作k8s资源，必须指定namespace
+4. 每启动一个Pod，为了实现网络空间共享，会先创建Infra容器，并把其他容器网络加入该容器
+5. Pod数据通过给node打标签调度到指定node并持久化数据。
+6. 通过livenessProbe和readinessProbe实现Pod的存活性和就绪健康检查
+7. 通过requests和limit分别限定容器初始资源申请与最高上限资源申请
+8. 配置参数通过configMap和Secret定义
+9. 通过Pod IP访问具体的Pod服务
+
+
 ## 健康检查的大坑
 在复盘数据库持久化时，因为健康检查的关系。mysql容器在第一次启动时会进行数据库初始化操作，往往这个时间比较漫长恰好在健康检查的阀值之外！导致我数据库初始化到一半数据库容器被重启。喵的数据库没损坏可以正常使用，只是在yaml文件中配置的启动并创建myblog库配置失效。库并没有被创建出啊来！导致python程序也启动失败。排查了数小时才发现问题😭
 >建议大家不要吧数据库装在容器中。就算放到容器中也要注意健康检查等额外配置会否影响数据库初始化操作！
