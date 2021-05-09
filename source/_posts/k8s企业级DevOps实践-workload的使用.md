@@ -5,8 +5,9 @@ abbrlink: dc57d8c4
 tags:
   - k8s
   - workload
-categories: []
-date: 2021-05-08 22:16:00
+categories:
+  - Web集群
+date: 2021-05-08 14:16:00
 ---
 只使用Pod, 将会面临如下需求:
 
