@@ -16,6 +16,8 @@ date: 2019-01-03 00:07:00
 活动地址参见：[reddit/r/place](https://www.reddit.com/r/place/)
 活动详情参见：[维基百科](https://en.wikipedia.org/wiki/Place_(Reddit))
 画板元素详解：[The /r/place Atlas](https://draemm.li/various/place-atlas/)
+变化过程参见：[bilibil](https://www.bilibili.com/video/BV1WW41197qY)
+
 
 活动结束时最终快照[高清]：
 ![reddit-place-2017](/images/img--1.png)
