@@ -35,26 +35,26 @@
   link_list:
     - name: 华为开源镜像站
       link: https://mirrors.huaweicloud.com/
-      avatar: https://huawei.best/2021/03/15/fe9c29f1e63d8.png
+      avatar: /img/link/huawei.png
       descr: 构建万物互联的智能世界
     - name: 阿里开源镜像站
       link: https://mirrors.aliyun.com/
-      avatar: https://huawei.best/2021/03/16/1a57aabd7bfe9.png
+      avatar: /img/link/aliyun.png
       descr: 为了无法计算的价值
     - name: 网易开源镜像站
       link: https://mirrors.163.com/
-      avatar: https://huawei.best/2021/03/16/461ee097956da.png
+      avatar: /img/link/netease.png
       descr: 网聚人的力量
     - name: 清华开源镜像站
       link: https://mirrors.tuna.tsinghua.edu.cn/
-      avatar: https://huawei.best/2021/03/16/6d0f0c97325d8.png
+      avatar: /img/link/qh.png
       descr: 自强不息,厚德载物
     - name: 浙大开源镜像站
       link: https://mirrors.zju.edu.cn/
-      avatar: https://huawei.best/2021/03/16/33adc31f26183.png
+      avatar: /img/link/zd.png
       descr: 兼总条贯,知至知终
     - name: 中科大开源镜像站
       link: https://mirrors.ustc.edu.cn/
-      avatar: https://huawei.best/2021/03/16/08a9772456dad.png
+      avatar: /img/link/zkd.png
       descr: 红专并进,理实交融
 
