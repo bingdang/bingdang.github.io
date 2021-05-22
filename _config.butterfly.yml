@@ -652,7 +652,7 @@ aside:
   position: right # left or right
   card_author:
     enable: true
-    description: 念念不忘，必有回响。
+    description: 经几场圆滑换锋芒
     button:
       enable: true
       icon: fab fa-github
