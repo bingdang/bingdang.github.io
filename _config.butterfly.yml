@@ -87,7 +87,8 @@ favicon: /img/favicon.png
 
 # Avatar (頭像)
 avatar:
-  img: /img/avatar.png
+  img: https://q1.qlogo.cn/g?b=qq&nk=9623503&s=640
+#  img: /img/avatar.png
   effect: false
 
 # Disable all banner image
