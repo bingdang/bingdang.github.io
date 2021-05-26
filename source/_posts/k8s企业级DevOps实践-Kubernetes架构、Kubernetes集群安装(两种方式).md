@@ -1596,6 +1596,7 @@ systemctl enable --now kube-proxy
 mkdir -p /opt/cni/{bin,net.d}
 tar zxvf cni-plugins-linux-amd64-v0.8.6.tgz -C /opt/cni/bin
 
+wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 # 多网卡环境下
         args:
         - --ip-masq
@@ -1605,7 +1606,6 @@ tar zxvf cni-plugins-linux-amd64-v0.8.6.tgz -C /opt/cni/bin
 kubectl apply -f kube-flannel.yml
 kubectl get pods -n kube-system
 kubectl get node
-
 ```
 > 部署好网络插件，Node 准备就绪。
 
