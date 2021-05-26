@@ -279,7 +279,7 @@ $ systemctl enable --now docker
 ```
 ### 部署kubernetes（kubeadm方式）
 
-#### 安装 kubeadm, kubelet 和 kubectl
+#### 安装 kubeadm, kubelet, kubectl
 操作节点： 所有的master和slave节点(`k8s-master,k8s-slave`) 需要执行
 ```bash
 ## 指定源安装
@@ -513,7 +513,7 @@ kubectl -n kube-system get po -o wide #检查状态
 kubectl delete -f kube-flannel.yml #删除
 ```
 
-#### 设置master节点是否可调度（可选）
+#### master节点是否可调度（可选）
 
 操作节点：`k8s-master`
 
@@ -784,7 +784,7 @@ mv cfssljson_linux-amd64 /usr/local/bin/cfssljson
 mv cfssl-certinfo_linux-amd64 /usr/bin/cfssl-certinfo
 ```
 
-#### 生成 Etcd 证书 
+#### 生成 etcd 证书 
 
 自签证书颁发机构（CA） 创建工作目录：
 
@@ -836,7 +836,7 @@ cfssl gencert -initca ca-csr.json | cfssljson -bare ca -
 -rw-r--r-- 1 root root 1273 5月  25 17:31 ca.pem
 ```
 
-#### 使用自签 CA 签发 Etcd HTTPS 证书
+#### 签发 etcd 证书
 
 创建证书申请文件
 
