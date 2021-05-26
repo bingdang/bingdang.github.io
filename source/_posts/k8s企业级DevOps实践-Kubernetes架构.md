@@ -1038,7 +1038,7 @@ cfssl gencert -initca ca-csr.json | cfssljson -bare ca -
 [root@k8s-node001 k8s]# ls *pem
 ca-key.pem  ca.pem
 ```
-#### 为apiserver签发 apiserver HTTPS 证书
+#### 签发apiserver证书
 ```bash
 cat > server-csr.json << 'EOF'
 {
@@ -1177,7 +1177,7 @@ EOF
 ```bash
 cp ~/tls/k8s/ca*pem ~/tls/k8s/server*pem /opt/kubernetes/ssl/
 ```
-#### 启用 TLS Bootstrapping 机制
+#### 启用TLS Bootstrapping
 TLS Bootstraping：Master apiserver 启用 TLS 认证后，Node 节点 kubelet 和 kube-proxy 要与 kube-apiserver 进行通信，必须使用 CA 签发的有效证书才可以，当 Node
 节点很多时，这种客户端证书颁发需要大量工作，同样也会增加集群扩展复杂度。为了
 简化流程，Kubernetes 引入了 TLS bootstraping 机制来自动颁发客户端证书，kubelet
@@ -1188,14 +1188,14 @@ TLS bootstraping 工作流程：
 
 ![TLS bootstraping](/images/pasted-53.png)
 
-#### 授权kubelet-bootstrap 用户允许请求证书*
+#### 授权kubelet-bootstrap用户允许请求证书*
 ```bash
 kubectl create clusterrolebinding kubelet-bootstrap \
 --clusterrole=system:node-bootstrapper \
 --user=kubelet-bootstrap
 ```
 
-#### 部署kube-controller-manager
+#### 部署controller-manager
 ```bash
 cat > /opt/kubernetes/cfg/kube-controller-manager.conf << 'EOF'
 KUBE_CONTROLLER_MANAGER_OPTS="--logtostderr=false \
