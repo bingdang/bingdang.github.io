@@ -1,4 +1,4 @@
-title: k8s企业级DevOps实践-Kubernetes架构、Kubernetes集群安装
+title: k8s企业级DevOps实践-Kubernetes架构、Kubernetes集群安装(两种方式)
 author: 饼铛
 cover: images/pasted-6.png
 tags:
