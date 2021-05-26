@@ -881,7 +881,7 @@ server-key.pem  server.pem
 
 下载地址：`https://github.com/etcd-io/etcd/releases/download/v3.4.9/etcd-v3.4.9-linux-amd64.tar.gz`
 
-#### 部署 Etcd 集群
+#### 部署 etcd 集群
 
 ```bash
 tar -xf etcd-v3.4.9-linux-amd64.tar.gz -C /opt/ && mv /opt/etcd-v3.4.9-linux-amd64/ /opt/etcd
@@ -1085,8 +1085,7 @@ ca-key.pem  ca.pem  server-key.pem  server.pem
 
 #### 部署apiserver
 下载二进制包:[https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.18.md](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.18.md)
->注：打开链接你会发现里面有很多包，下载一个 server 包就够了，包含了 Master 和
-Worker Node 二进制文件。
+>注：打开链接你会发现里面有很多包，下载一个 server 包就够了，包含了 Master 和 Worker Node 二进制文件。
 
 ```bash
 wget https://dl.k8s.io/v1.18.12/kubernetes-server-linux-amd64.tar.gz
@@ -1179,7 +1178,7 @@ EOF
 cp ~/tls/k8s/ca*pem ~/tls/k8s/server*pem /opt/kubernetes/ssl/
 ```
 #### 启用 TLS Bootstrapping 机制
-TLS Bootstraping：Master apiserver 启用 TLS 认证后，Node 节点 kubelet 和 kube- proxy 要与 kube-apiserver 进行通信，必须使用 CA 签发的有效证书才可以，当 Node
+TLS Bootstraping：Master apiserver 启用 TLS 认证后，Node 节点 kubelet 和 kube-proxy 要与 kube-apiserver 进行通信，必须使用 CA 签发的有效证书才可以，当 Node
 节点很多时，这种客户端证书颁发需要大量工作，同样也会增加集群扩展复杂度。为了
 简化流程，Kubernetes 引入了 TLS bootstraping 机制来自动颁发客户端证书，kubelet
 会以一个低权限用户自动向 apiserver 申请证书，kubelet 的证书由 apiserver 动态签署。
