@@ -1649,3 +1649,67 @@ subjects:
 EOF
 kubectl apply -f apiserver-to-kubelet-rbac.yaml 
 ```
+#### 安装coredns插件
+>不依赖kubeadm的方式，适用于不是使用kubeadm创建的k8s集群，或者kubeadm初始化集群之后，删除了dns相关部署。
+```bash
+# 安装coredns组件
+mkdir coredns && cd coredns
+wget https://raw.githubusercontent.com/coredns/deployment/master/kubernetes/coredns.yaml.sed
+wget https://raw.githubusercontent.com/coredns/deployment/master/kubernetes/deploy.sh
+chmod +x deploy.sh
+./deploy.sh -i 10.0.0.2 > coredns.yml
+kubectl apply -f coredns.yml
+
+# 查看
+kubectl get pods --namespace kube-system
+kubectl get svc --namespace kube-system
+```
+#### 对接第三方DEVOPS平台
+生成集群管理权限的 config 证书编写集群管理文件
+```bash
+cat << EOF > admin-csr.json
+{
+  "CN": "admin",
+  "hosts": [],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "CN",
+      "ST": "Shanghai",
+      "L": "Shanghai",
+      "O": "system:masters",
+      "OU": "System"
+    }
+  ]
+}
+EOF
+
+生成证书：
+cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes admin-csr.json | cfssljson -bare admin
+```
+
+```yaml
+apiVersion: v1
+clusters:
+- cluster:
+    insecure-skip-tls-verify: true
+    server: https://LB EIP:6443
+  name: kubernetes
+contexts:
+- context:
+    cluster: kubernetes
+    user: kubernetes-admin
+  name: kubernetes-admin@kubernetes
+current-context: kubernetes-admin@kubernetes
+kind: Config
+preferences: {}
+users:
+- name: kubernetes-admin
+  user:
+    client-certificate-data: {base64 admin.pem}
+    client-key-data: {base64 admin-key.pem}
+```
+
