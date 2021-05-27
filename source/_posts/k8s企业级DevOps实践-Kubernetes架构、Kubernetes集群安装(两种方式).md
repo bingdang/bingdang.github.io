@@ -1606,6 +1606,10 @@ wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-
 kubectl apply -f kube-flannel.yml
 kubectl get pods -n kube-system
 kubectl get node
+
+# 打上节点标签
+kubectl label nodes node002 node-role.kubernetes.io/master=
+kubectl label nodes node003 node-role.kubernetes.io/worker=
 ```
 > 部署好网络插件，Node 准备就绪。
 
