@@ -1716,4 +1716,119 @@ users:
     client-certificate-data: {base64 admin.pem}
     client-key-data: {base64 admin-key.pem}
 ```
+### 安装 Metrics Server
+Metrics API相比于之前的监控采集方式(hepaster)是一种新的思路，官方希望核心指标的监控应该是稳定的，版本可控的，且可以直接被用户访问(例如通过使用 kubectl top 命令)，或由集群中的控制器使用(如HPA)，和其他的Kubernetes APIs一样。
+```bash
+wget https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.4.1/components.yaml
 
+记得加入 - --kubelet-insecure-tls 不验证客户端证书
+```
+报错
+```bash
+E0531 06:44:53.044655       1 configmap_cafile_content.go:243] key failed with : missing content for CA bundle "client-ca::kube-system::extension-apiserver-authentication::requestheader-client-ca-file"
+E0531 06:45:53.044657       1 configmap_cafile_content.go:243] key failed with : missing content for CA bundle "client-ca::kube-system::extension-apiserver-authentication::requestheader-client-ca-file"
+E0531 06:45:58.803448       1 configmap_cafile_content.go:243] key failed with : missing content for CA bundle "client-ca::kube-system::extension-apiserver-authentication::requestheader-client-ca-file"
+```
+根据错误日志信息，可以知道是缺少认证的证书文件，导致不能访问 kube-apiserver 而出现的问题。
+之所以出现这个错误是因为 kube-apiserver 没有开启 API 聚合功能。所以需要配置 kube-apiserver 参数，开启聚合功能即可。
+
+#### API 聚合
+这里的 API 聚合机制 是 Kubernetes 1.7 版本引入的特性，能够将用户扩展的 API 注册到 kube-apiserver 上，仍然通过 API Server 的 HTTP URL 对新的 API 进行访问和操作。为了实现这个机制，Kubernetes 在 kube-apiserver 服务中引入了一个 API 聚合层（API Aggregation Layer），用于将 扩展 API 的访问请求转发到用户服务的功能。
+
+为了能够将用户自定义的 API 注册到 Master 的 API Server 中，首先需要在 Master 节点所在服务器，配置 kube-apiserver 应用的启动参数来启用 API 聚合 功能，参数如下：
+
+```bash
+--runtime-config=api/all=true \
+--requestheader-allowed-names=aggregator \
+--requestheader-group-headers=X-Remote-Group \
+--requestheader-username-headers=X-Remote-User \
+--requestheader-extra-headers-prefix=X-Remote-Extra- \
+--requestheader-client-ca-file=/opt/kubernetes/ssl/ca.pem \
+--proxy-client-cert-file=/opt/kubernetes/ssl/proxy-client.pem \
+--proxy-client-key-file=/opt/kubernetes/ssl/proxy-client-key.pem
+```
+如果 kube-apiserver 所在的主机上没有运行 kube-proxy，即无法通过服务的 ClusterIP 进行访问，那么还需要设置以下启动参数：
+`--enable-aggregator-routing=true`
+
+在设置完成重启 kube-apiserver 服务，就启用 API 聚合 功能了。接下来
+```bash
+## 创建证书
+cat > proxy-client-csr.json << 'EOF'
+{
+  "CN": "aggregator",
+  "hosts": [],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "CN",
+      "ST": "Shnghai",
+      "L": "Shnghai",
+      "O": "system:masters",
+      "OU": "System"
+    }
+  ]
+}
+EOF
+
+## 执行下面命令生成证书
+cfssl gencert \
+  -profile=kubernetes \
+  -ca=./ca.pem \
+  -ca-key=./ca-key.pem \
+  proxy-client-csr.json | cfssljson -bare proxy-client
+
+cp /root/tls/k8s/{proxy-client.pem,proxy-client-key.pem} /opt/kubernetes/ssl/
+
+rsync -avz /opt/kubernetes/ssl/{proxy-client.pem,proxy-client-key.pem} node002:/opt/kubernetes/ssl/
+```
+
+修改 kube-apiserver 参数
+```bash
+修改俩 Master 节点中全部 kube-apiserver 配置参数：
+
+vi /opt/kubernetes/cfg/kube-apiserver.conf
+...
+--runtime-config=api/all=true \
+--requestheader-allowed-names=aggregator \
+--requestheader-group-headers=X-Remote-Group \
+--requestheader-username-headers=X-Remote-User \
+--requestheader-extra-headers-prefix=X-Remote-Extra- \
+--requestheader-client-ca-file=/opt/kubernetes/ssl/ca.pem \
+--proxy-client-cert-file=/opt/kubernetes/ssl/proxy-client.pem \
+--proxy-client-key-file=/opt/kubernetes/ssl/proxy-client-key.pem
+...
+
+参数说明：
+
+–requestheader-client-ca-file： 客户端 CA 证书。
+–requestheader-allowed-names： 允许访问的客户端 common names 列表，通过 header 中 –requestheader-username-headers 参数指定的字段获取。客户端 common names 的名称需要在 client-ca-file 中进行设置，将其设置为空值时，表示任意客户端都可访问。
+–requestheader-username-headers： 参数指定的字段获取。
+–requestheader-extra-headers-prefix： 请求头中需要检查的前缀名。
+–requestheader-group-headers 请求头中需要检查的组名。
+–requestheader-username-headers 请求头中需要检查的用户名。
+–proxy-client-cert-file： 在请求期间验证 Aggregator 的客户端 CA 证书。
+–proxy-client-key-file： 在请求期间验证 Aggregator 的客户端私钥。
+–requestheader-allowed-names： 允许访问的客户端 common names 列表，通过 header 中 –requestheader-username-headers 参数指定的字段获取。客户端 common names 的名称需要在 client-ca-file 中进行设置，将其设置为空值时，表示任意客户端都可访问。
+```
+
+### 单独安装Kuboard
+```bash
+Kuboard v3 - 内建用户库
+sudo docker run -d \
+  --restart=unless-stopped \
+  --name=kuboard \
+  -p 10086:80/tcp \
+  -p 10081:10081/udp \
+  -p 10081:10081/tcp \
+  -e KUBOARD_ENDPOINT="http://内网IP:10080" \
+  -e KUBOARD_AGENT_SERVER_UDP_PORT="10081" \
+  -e KUBOARD_AGENT_SERVER_TCP_PORT="10081" \
+  -v /root/kuboard-data:/data \
+  eipwork/kuboard:v3
+```
+
+支持单面板管理多集群：
+![Kuboard v3](/images/pasted-54.png)
