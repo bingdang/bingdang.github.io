@@ -1668,7 +1668,7 @@ kubectl apply -f coredns.yml
 kubectl get pods --namespace kube-system
 kubectl get svc --namespace kube-system
 ```
-#### 对接第三方DEVOPS平台
+### 对接第三方DEVOPS平台
 生成集群管理权限的 config 证书编写集群管理文件
 ```bash
 cat << EOF > admin-csr.json
@@ -1828,7 +1828,16 @@ sudo docker run -d \
   -e KUBOARD_AGENT_SERVER_TCP_PORT="10081" \
   -v /root/kuboard-data:/data \
   eipwork/kuboard:v3
+  
+## 测试
+[root@node001 ~]# kubectl top nodes
+NAME      CPU(cores)   CPU%   MEMORY(bytes)   MEMORY% 
+node001   235m         5%     2328Mi          30% 
+node002   190m         4%     1708Mi          22% 
+node003   106m         2%     1593Mi          20% 
+node004   77m          1%     1482Mi          19%
 ```
 
 支持单面板管理多集群：
 ![Kuboard v3](/images/pasted-54.png)
+![Kuboard v3](/images/pasted-55.png)
