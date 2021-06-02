@@ -9,7 +9,7 @@ categories:
 abbrlink: 8cd3cd17
 date: 2021-05-11 14:18:00
 ---
-alpine简称高山的 是一款非常适合做k8s基础镜像的linux
+[Alpine](https://www.alpinelinux.org/)简称高山的 是一款非常适合做k8s基础镜像的linux
 1. 小巧：基于Musl libc和busybox，和busybox一样小巧，最小的Docker镜像只有5MB；
 2. 安全：面向安全的轻量发行版；
 3. 简单：提供APK包管理工具，软件的搜索、安装、删除、升级都非常方便。
