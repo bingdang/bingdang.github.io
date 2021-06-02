@@ -86,7 +86,7 @@ spec:
     resource:
       name: cpu
       targetAverageUtilization: 10  ##注意此时是根据使用率，也可以根据使用量：targetAverageValue
-# 内存方式不建议用，开发人员技术能力层次不齐，防止内存溢出疯狂扩容
+# 内存方式不建议用，开发人员技术能力参差不齐，防止内存溢出疯狂扩容
 #  - type: Resource
 #    resource:
 #      name: memory
