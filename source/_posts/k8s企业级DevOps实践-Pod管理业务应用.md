@@ -506,14 +506,15 @@ $ curl 10.244.2.18:8002/blog/index/
 ### 服务健康检查
 检测容器服务是否健康的手段，若不健康，会根据设置的重启策略（restartPolicy）进行操作，两种检测机制可以分别单独设置，若不设置，默认认为Pod是健康的。
 
-**两种机制：**
+**三种机制：**
+- StartupProbe探针
+  k8s 1.16版本后新加的探测方式，用于判断容器内应用程序是否已经启动。如果配置了startupProbe，就会先禁止其他的探测，直到它成功为止，成功后将不再进行探测。比较适用于容器启动时间长的场景
 - LivenessProbe探针
   用于判断容器是否存活，即Pod是否为`running`状态，如果LivenessProbe探针探测到容器不健康，则kubelet将kill掉容器，并根据容器的重启策略是否重启，如果一个容器不包含LivenessProbe探针，则Kubelet认为容器的LivenessProbe探针的返回值永远成功。 
 - ReadinessProbe探针
   用于判断容器是否正常提供服务，即容器的`Ready`是否为True，是否可以接收请求，如果ReadinessProbe探测失败，则容器的Ready将为False，控制器将此Pod的Endpoint从对应的service的Endpoint列表中移除，从此不再将任何请求调度此Pod上，直到下次探测成功。（剔除此pod不参与接收请求不会将流量转发给此Pod）。
   
 **三种类型：**
-
 - exec：通过执行命令来检查服务是否正常，回值为0则表示容器健康
 - httpGet方式：通过发送http请求检查服务是否正常，返回200-399状态码则表明容器健康
 - tcpSocket：通过容器的IP和Port执行TCP检查，如果能够建立TCP连接，则表明容器健康
@@ -533,6 +534,10 @@ $ curl 10.244.2.18:8002/blog/index/
       value: "123456"
     ports:
     - containerPort: 8002
+    startupProbe: # 可选，检测容器内进程是否完成启动
+#      httpGet:      # httpGet检测方式，生产环境建议使用httpGet实现接口级健康检查，健康检查由应用程序提供。
+#        path: /blog/index/ # 检查路径
+#        port: 8002
     livenessProbe:
       httpGet:
         path: /blog/index/
@@ -554,8 +559,7 @@ $ curl 10.244.2.18:8002/blog/index/
 - `periodSeconds`：执行探测的频率。默认是10秒，最小1秒。
 - `timeoutSeconds`：探测超时时间。默认1秒，最小1秒。
 - `successThreshold`：探测失败后，最少连续探测成功多少次才被认定为成功。默认是1。对于liveness必须是1，最小值是1。
-- `failureThreshold`：探测成功后，最少连续探测失败多少次
-  才被认定为失败。默认是3，最小值是1。
+- `failureThreshold`：探测成功后，最少连续探测失败多少次才被认定为失败。默认是3，最小值是1。
   
 **重启策略：**
 Pod的重启策略（RestartPolicy）应用于Pod内的所有容器，并且仅在Pod所处的Node上由kubelet进行判断和重启操作。当某个容器异常退出或者健康检查失败时，kubelet将根据RestartPolicy的设置来进行相应的操作。
