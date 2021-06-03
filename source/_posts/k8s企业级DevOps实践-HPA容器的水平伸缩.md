@@ -1,4 +1,4 @@
-title: k8s企业级DevOps实践-HPA容器的水平伸缩
+title: k8s企业级DevOps实践-HPA容器的弹性伸缩
 author: 饼铛
 cover: /images/pasted-6.png
 abbrlink: 2aa52898
