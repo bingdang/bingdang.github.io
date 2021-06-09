@@ -1,0 +1,64 @@
+- class_name: 友情鏈接
+  class_desc: 那些人，那些事
+  link_list:
+    - name: 豌豆多多
+      link: https://wandouduoduo.github.io/
+      avatar: /img/index.png
+      descr: 资深沪漂运维工程师
+    - name: 三步枫
+      link: https://blog.adymilk.cn/
+      avatar: /img/index.png
+      descr: 极客三步枫
+    - name: 周小雨
+      link: https://zxyy.me/
+      avatar: https://q2.qlogo.cn/headimg_dl?dst_uin=1016673080&spec=100
+      descr: PHP程序媛/猿？
+    - name: abcOPS
+      link: https://abcops.cn/
+      avatar: /img/index.png
+      descr: 运维大佬
+    - name: 老寒
+      link: https://blog.liru05.top/
+      avatar: /img/index.png
+      descr: 精神老伙
+    - name: 点滴记忆
+      link: https://blog.quickso.cn/
+      avatar: https://q2.qlogo.cn/headimg_dl?dst_uin=2209514944&spec=100
+      descr: 基安小伙伴
+    - name: Lucky
+      link: https://www.centoscn.vip/
+      avatar: https://q2.qlogo.cn/headimg_dl?dst_uin=490617581&spec=100
+      descr: 运维大佬
+    - name: ACG食堂
+      link: https://canteen.globalacca.top/
+      avatar: https://q2.qlogo.cn/headimg_dl?dst_uin=1478030465&spec=100
+      descr: 汇集ACG、动漫和galgame为一体的综合小站
+
+- class_name: 开源镜像站
+  class_desc: 
+  link_list:
+    - name: 华为开源镜像站
+      link: https://mirrors.huaweicloud.com/
+      avatar: /img/link/huawei.png
+      descr: 构建万物互联的智能世界
+    - name: 阿里开源镜像站
+      link: https://mirrors.aliyun.com/
+      avatar: /img/link/aliyun.png
+      descr: 为了无法计算的价值
+    - name: 网易开源镜像站
+      link: https://mirrors.163.com/
+      avatar: /img/link/netease.png
+      descr: 网聚人的力量
+    - name: 清华开源镜像站
+      link: https://mirrors.tuna.tsinghua.edu.cn/
+      avatar: /img/link/qh.png
+      descr: 自强不息,厚德载物
+    - name: 浙大开源镜像站
+      link: https://mirrors.zju.edu.cn/
+      avatar: /img/link/zd.png
+      descr: 兼总条贯,知至知终
+    - name: 中科大开源镜像站
+      link: https://mirrors.ustc.edu.cn/
+      avatar: /img/link/zkd.png
+      descr: 红专并进,理实交融
+
