@@ -18,7 +18,7 @@ date: 2021-05-10 14:18:00
 - StorageClass
 
 ### emptyDir
-emptyDir是最基础的Volume类型，pod内的容器发生重启不会造成emptyDir里面数据的丢失，但是当pod被重启后，emptyDir数据会丢失，也就是说emptyDir与pod的生命周期是一致的，这个使用场景实际上是在生产环境某些时候，它的最实际实用是提供Pod内多容器的volume数据共享，下面会用一个实际的生产者，消费者的栗子来演示下emptyDir的作用：
+emptyDir是最基础的Volume类型，pod内的容器发生重启不会造成emptyDir里面数据的丢失，但是当pod被重启后，emptyDir数据会丢失，也就是说emptyDir与pod的生命周期是一致的，这个使用场景实际上是在生产环境某些时候，它的最实际实用是提供Pod内多容器的volume数据共享，下面用一个实际的生产者，消费者的栗子来演示下emptyDir的作用：
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
