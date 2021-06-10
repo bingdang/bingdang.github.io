@@ -882,9 +882,9 @@
             
             <tag> 主从复制 </tag>
             
-            <tag> 高可用 </tag>
-            
             <tag> 读写分离 </tag>
+            
+            <tag> 高可用 </tag>
             
             <tag> 分布式 </tag>
             
@@ -919,9 +919,9 @@
             
             <tag> 主从复制 </tag>
             
-            <tag> 高可用 </tag>
-            
             <tag> 读写分离 </tag>
+            
+            <tag> 高可用 </tag>
             
             <tag> 分布式 </tag>
             
@@ -956,9 +956,9 @@
             
             <tag> 主从复制 </tag>
             
-            <tag> 高可用 </tag>
-            
             <tag> 读写分离 </tag>
+            
+            <tag> 高可用 </tag>
             
             <tag> 分布式 </tag>
             
@@ -991,9 +991,9 @@
             
             <tag> 主从复制 </tag>
             
-            <tag> 高可用 </tag>
-            
             <tag> 读写分离 </tag>
+            
+            <tag> 高可用 </tag>
             
         </tags>
       
@@ -1022,9 +1022,9 @@
             
             <tag> 主从复制 </tag>
             
-            <tag> MHA </tag>
-            
             <tag> 高可用 </tag>
+            
+            <tag> MHA </tag>
             
         </tags>
       
@@ -1053,9 +1053,9 @@
             
             <tag> 主从复制 </tag>
             
-            <tag> MHA </tag>
-            
             <tag> 高可用 </tag>
+            
+            <tag> MHA </tag>
             
         </tags>
       
