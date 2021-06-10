@@ -3,10 +3,12 @@ author: 饼铛
 cover: /images/pasted-6.png
 tags:
   - k8s
+  - 数据持久化
 categories:
   - Web集群
+  - ''
 abbrlink: 1051b489
-date: 2021-05-10 14:18:00
+date: 2021-05-09 22:18:00
 ---
 ## Volume
 在K8s上，Pod的生命周期可能是很短，它们会被频繁地销毁和创建，自然在容器销毁时，里面运行时新增的数据，如修改的配置及日志文件等也会被清除。解决这一问题时可以用K8s volume来持久化保存容器的数据，Volume的生命周期独立于容器，Pod中的容器可能被销毁重建，但Volume会被保留。
@@ -182,7 +184,7 @@ spec:
     path: /nfs_dir/pv1     # <--  5
     server: 10.0.1.201
 ```
-1. capacity 指定 PV 的容量为 1G。
+1. capacity 指定 PV 的容量为 1G。单位以1000进制时使用(E, P, T, G, M, K, m)，以1024进制时使用(Ei, Pi, Ti, Gi, Mi, Ki)
 2. accessModes 指定访问模式为 ReadWriteOnce，支持的访问模式有： 
   - ReadWriteOnce – PV 能以 read-write 模式 mount 到单个节点。 
   - ReadOnlyMany – PV 能以 read-only 模式 mount 到多个节点。
@@ -223,6 +225,7 @@ spec:
   selector:
     matchLabels:
       type: test-claim
+# pvc会被namespace限制
 ```
 ```bash
 # kubectl apply -f pvc1.yaml          
