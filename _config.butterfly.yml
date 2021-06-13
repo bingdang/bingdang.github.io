@@ -658,7 +658,7 @@ aside:
       enable: true
       icon: fab fa-github
       text: Follow Me
-      link: https://github.com/bingdang
+      link: https://github.com/
   card_announcement:
     enable: true
     content: 2021年2月博客改版。本地容器化
