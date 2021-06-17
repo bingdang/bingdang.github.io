@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>k8s企业级DevOps实践-Prometheus监控k8s集群</title>
+      <link href="forward/3144df58.html"/>
+      <url>forward/3144df58.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> Web集群 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> k8s </tag>
+            
+            <tag> Prometheus </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>k8s企业级DevOps实践-HPA容器的弹性伸缩</title>
       <link href="forward/2aa52898.html"/>
       <url>forward/2aa52898.html</url>
@@ -733,9 +760,9 @@
       
         <tags>
             
-            <tag> 主从复制 </tag>
-            
             <tag> NoSQL </tag>
+            
+            <tag> 主从复制 </tag>
             
             <tag> 高可用 </tag>
             
@@ -766,9 +793,9 @@
       
         <tags>
             
-            <tag> 主从复制 </tag>
-            
             <tag> NoSQL </tag>
+            
+            <tag> 主从复制 </tag>
             
             <tag> 高可用 </tag>
             
@@ -880,9 +907,9 @@
       
         <tags>
             
-            <tag> 主从复制 </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> 主从复制 </tag>
             
             <tag> 读写分离 </tag>
             
@@ -917,9 +944,9 @@
       
         <tags>
             
-            <tag> 主从复制 </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> 主从复制 </tag>
             
             <tag> 读写分离 </tag>
             
@@ -954,9 +981,9 @@
       
         <tags>
             
-            <tag> 主从复制 </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> 主从复制 </tag>
             
             <tag> 读写分离 </tag>
             
@@ -989,9 +1016,9 @@
       
         <tags>
             
-            <tag> 主从复制 </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> 主从复制 </tag>
             
             <tag> 读写分离 </tag>
             
@@ -1020,9 +1047,9 @@
       
         <tags>
             
-            <tag> 主从复制 </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> 主从复制 </tag>
             
             <tag> 高可用 </tag>
             
@@ -1051,9 +1078,9 @@
       
         <tags>
             
-            <tag> 主从复制 </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> 主从复制 </tag>
             
             <tag> 高可用 </tag>
             
@@ -1082,9 +1109,9 @@
       
         <tags>
             
-            <tag> 主从复制 </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> 主从复制 </tag>
             
         </tags>
       
@@ -1109,9 +1136,9 @@
       
         <tags>
             
-            <tag> 主从复制 </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> 主从复制 </tag>
             
         </tags>
       
@@ -1136,9 +1163,9 @@
       
         <tags>
             
-            <tag> 主从复制 </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> 主从复制 </tag>
             
         </tags>
       
