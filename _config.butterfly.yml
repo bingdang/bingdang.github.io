@@ -636,7 +636,7 @@ subtitle:
   # 開頭不允許轉義字元，如需要，請把整個句子用雙引號包住
   # 如果關閉打字效果，subtitle只會顯示sub的第一行文字
   sub:
-    - 念念不忘&#44必有回响。;
+    - 念念不忘 &#44必有回响。;
     - Never give up the faith.
 
 # Loading Animation (加載動畫)
@@ -653,7 +653,7 @@ aside:
   position: right # left or right
   card_author:
     enable: true
-    description: 经几场圆滑换锋芒
+    description: Man proposes, God disposes.
     button:
       enable: true
       icon: fab fa-github
