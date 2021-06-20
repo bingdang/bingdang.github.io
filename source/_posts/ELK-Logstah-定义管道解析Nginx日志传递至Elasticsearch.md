@@ -154,10 +154,9 @@ output {
 新建自己的配置文件
 
 ```bash
-vim config/wikibit_ngx.conf
 input {
   beats {
-  port => 9999
+  port => 8888
   codec=> plain{charset=>"UTF-8"}
   }
 }
@@ -166,25 +165,25 @@ filter {
      mutate {
          add_field => {"[@metadata][target_index]" => ""}
      }
-     if "wikibit_ngx_access" in [tags] {
+     if "k8s_access" in [tags] {
          grok {
-            match => { "message" => "%{IPORHOST:client_ip} - %{USER:auth} \[%{HTTPDATE:timestamp}\] \"(?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:http_version})?|-)\" (%{IPORHOST:domain}|%{URIHOST:domain}|-) %{NUMBER:response} %{NUMBER:bytes} %{QS:referrer} %{QS:agent} \"(%{IP:x_forword}|%{GREEDYDATA:x_forword})\" (\[|)(%{URIHOST:upstream_host}|%{NOTSPACE:upstream_host}|-)(\]|) %{NUMBER:upstream_host_status} (%{WORD:upstream_cache_status}|-) %{QS:upstream_content_type} (%{NUMBER:upstream_response_time}|-) > %{NUMBER:request_time}" }
+            match => { "message" => "%{IPORHOST:client_ip} - %{USER:auth} \[%{HTTPDATE:timestamp}\] \"(?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:http_version})?|-)\" (%{IPORHOST:domain}|%{URIHOST:domain}|-) %{NUMBER:response} %{NUMBER:bytes} %{QS:referrer} %{QS:user_agent} \"(%{IP:x_forword}|%{GREEDYDATA:x_forword})\" (\[|)(%{URIHOST:upstream_host}|%{NOTSPACE:upstream_host}|-)(\]|) %{NUMBER:upstream_host_status} (%{WORD:upstream_cache_status}|-) %{QS:upstream_content_type} (%{NUMBER:upstream_response_time:float}|-) > %{NUMBER:request_time:float}" }
          }
          date {
              match => [ "timestamp" , "dd/MMM/YYYY:HH:mm:ss Z" ]
          }
 
          mutate {
-             update => {"[@metadata][target_index]" => "wikibit_ngx_access-%{+YYYY.MM}"}
+             update => {"[@metadata][target_index]" => "k8s_access-%{+YYYY.MM}"}
          }
      }
 }
 output {
     elasticsearch {
      index => "%{[@metadata][target_index]}"
-     hosts => ["192.168.200.148:9200"]
+     hosts => ["es-cn-0pp16xvo90009zf49.elasticsearch.aliyuncs.com:9200"]
      user =>elastic
-     password =>elastic1234
+     password =>Logs1234
     }
 }
 ```
@@ -205,6 +204,11 @@ output {
   tags: wikibit_ngx_access
 ########################################
 ```
+
+- 处理数字类型字段
+管道配置文件中，匹配出的字段默认为文本类型，如果有数字类型的字段（比如响应时间）需要拿来做排序查询。只需要在匹配时在字段末尾加入`:float | :int`。那么es建立mapping时会给指定类型建立成数字类型。
+
+![int](/images/pasted-59.png)
 
 完成上面这一切后，请通过以下命令测试并重新加载logstash和：
 
