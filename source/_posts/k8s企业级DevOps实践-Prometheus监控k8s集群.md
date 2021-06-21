@@ -94,28 +94,145 @@ kubectl delete --ignore-not-found=true -f manifests/ -f manifests/setup
 访问下prometheus的UI
 ```bash
 
-# 修改下prometheus UI的service模式，便于我们访问
+# 修改下prometheus UI的service模式，便于访问
 # kubectl -n monitoring patch svc prometheus-k8s -p '{"spec":{"type":"NodePort"}}'
 service/prometheus-k8s patched
 
 # kubectl -n monitoring get svc prometheus-k8s 
-NAME             TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
-prometheus-k8s   NodePort   10.68.23.79   <none>        9090:22129/TCP   7m43s
+NAME             TYPE       CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE
+prometheus-k8s   NodePort   10.0.0.11    <none>        9090:32736/TCP   72m
 ```
-点击上方菜单栏Status --- Targets ，我们发现kube-controller-manager和kube-scheduler未发现
+点击上方菜单栏Status --- Targets ，发现kube-controller-manager和kube-scheduler未发现
 ```bash
 monitoring/kube-controller-manager/0 (0/0 up) 
 monitoring/kube-scheduler/0 (0/0 up) 
 ```
-接下来我们解决下这一个碰到的问题吧
+
+![error01](/images/pasted-62.png)
+接下来解决下这个碰到的问题吧
 
 注：如果发现下面不是监控的127.0.0.1，并且通过下面地址可以获取metric指标输出，那么这个改IP这一步可以不用操作
 ```bash
-curl 10.0.1.201:10251/metrics curl 10.0.1.201:10252/metrics
+curl 172.19.244.101:10251/metrics
+curl 172.19.244.102:10251/metrics
 
-# 这里我们发现这两服务监听的IP是127.0.0.1
+# 这里发现这两服务监听的IP是127.0.0.1
 # ss -tlnp|egrep 'controller|schedule'
-LISTEN     0      32768  127.0.0.1:10251                    *:*                   users:(("kube-scheduler",pid=567,fd=5))
-LISTEN     0      32768  127.0.0.1:10252                    *:*                   users:(("kube-controller",pid=583,fd=5))
-问题定位到了，接下来先把两个组件的监听地址改为0.0.0.0
+LISTEN     0      4096   127.0.0.1:10257                    *:*                   users:(("kube-controller",pid=7224,fd=7))
+LISTEN     0      4096   127.0.0.1:10259                    *:*                   users:(("kube-scheduler",pid=7269,fd=7))
 ```
+问题定位到了，接下来先把两个组件的监听地址改为0.0.0.0
+```bash
+# 如果大家前面是按我设计的4台NODE节点，其中2台作master的话，那就在这2台master上把systemcd配置改一下
+# 我这里第一台master  172.19.244.101
+# vi /opt/kubernetes/cfg/kube-scheduler.conf
+# vi /opt/kubernetes/cfg/kube-controller-manager.conf
+# systemctl daemon-reload
+# systemctl restart kube-controller-manager.service
+# systemctl restart kube-scheduler.service 
+
+# 我这里第二台master  172.19.244.102
+# vi /opt/kubernetes/cfg/kube-scheduler.conf
+# vi /opt/kubernetes/cfg/kube-controller-manager.conf
+# systemctl daemon-reload
+# systemctl restart kube-controller-manager.service
+# systemctl restart kube-scheduler.service 
+
+# 获取下metrics指标看看
+curl 172.19.244.101:10251/metrics
+curl 172.19.244.102:10251/metrics
+```
+
+因为K8s的这两上核心组件我们是以二进制形式部署的，为了能让K8s上的prometheus能发现，我们还需要来创建相应的service和endpoints来将其关联起来
+
+注意：我们需要将endpoints里面的NODE IP换成我们实际情况的
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: kube-system
+  name: kube-controller-manager
+  labels:
+    k8s-app: kube-controller-manager
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: http-metrics
+    port: 10252
+    targetPort: 10252
+    protocol: TCP
+
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  labels:
+    k8s-app: kube-controller-manager
+  name: kube-controller-manager
+  namespace: kube-system
+subsets:
+- addresses:
+  - ip: 172.19.244.101
+  - ip: 172.19.244.102
+  ports:
+  - name: http-metrics
+    port: 10252
+    protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: kube-system
+  name: kube-scheduler
+  labels:
+    k8s-app: kube-scheduler
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: http-metrics
+    port: 10251
+    targetPort: 10251
+    protocol: TCP
+
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  labels:
+    k8s-app: kube-scheduler
+  name: kube-scheduler
+  namespace: kube-system
+subsets:
+- addresses:
+  - ip: 172.19.244.101
+  - ip: 172.19.244.102
+  ports:
+  - name: http-metrics
+    port: 10251
+    protocol: TCP
+```
+将上面的yaml配置保存为repair-prometheus.yaml，然后创建它
+`kubectl apply -f repair-prometheus.yaml`
+
+还需要修改一个地方
+```bash
+# kubectl -n monitoring edit servicemonitors.monitoring.coreos.com kube-scheduler 
+# 将下面两个地方的https换成http
+    port: https-metrics
+    scheme: https
+
+# kubectl -n monitoring edit servicemonitors.monitoring.coreos.com kube-controller-manager
+# 将下面两个地方的https换成http
+    port: https-metrics
+    scheme: https
+然后再返回prometheus UI处，耐心等待几分钟，就能看到已经被发现了
+```
+monitoring/kube-controller-manager/0 (2/2 up) 
+monitoring/kube-scheduler/0 (2/2 up) 
+
+![INFO](/images/pasted-63.png)
