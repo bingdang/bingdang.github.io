@@ -230,9 +230,10 @@ subsets:
 # 将下面两个地方的https换成http
     port: https-metrics
     scheme: https
-然后再返回prometheus UI处，耐心等待几分钟，就能看到已经被发现了
 ```
+然后再返回prometheus UI处，耐心等待几分钟，就能看到已经被发现了
+```bash
 monitoring/kube-controller-manager/0 (2/2 up) 
 monitoring/kube-scheduler/0 (2/2 up) 
-
+```
 ![INFO](/images/pasted-63.png)
