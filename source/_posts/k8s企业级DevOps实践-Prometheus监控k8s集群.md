@@ -237,3 +237,115 @@ monitoring/kube-controller-manager/0 (2/2 up)
 monitoring/kube-scheduler/0 (2/2 up) 
 ```
 ![INFO](/images/pasted-63.png)
+
+## 监控ingress-nginx
+前面部署过ingress-nginx，这个是整个K8s上所有服务的流量入口组件很关键，因此把它的metrics指标收集到prometheus来做好相关监控至关重要，因为前面ingress-nginx服务是以daemonset形式部署的，并且映射了自己的端口到宿主机上，那么我可以直接用pod运行NODE上的IP来看下metrics
+```bash
+curl 172.19.244.103:10254/metrics
+curl 172.19.244.104:10254/metrics
+
+# kubectl -n ingress-nginx get pod -l app.kubernetes.io/name=ingress-nginx
+NAME                                        READY   STATUS    RESTARTS   AGE
+nginx-ingress-controller-7f4c44d946-bhhgr   1/1     Running   0          8d
+nginx-ingress-controller-7f4c44d946-zvhlx   1/1     Running   2          8d
+```
+创建 servicemonitor配置让prometheus能发现ingress-nginx的metrics
+```yaml
+# vim servicemonitor-service.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: ingress
+  name: nginx-ingress-scraping
+  namespace: ingress-nginx
+spec:
+  endpoints:
+  - interval: 30s
+    path: /metrics
+    port: http-metrics
+  jobLabel: app
+  namespaceSelector:
+    matchNames:
+    - ingress-nginx
+  selector:
+    matchLabels:
+      k8s-app: ingress-nginx-metrics #匹配对应的Service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ingress-nginx
+  name: ingress-nginx-metrics
+  labels:
+    k8s-app: ingress-nginx-metrics
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: http-metrics
+    port: 10254
+    targetPort: 10254
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+```
+创建它
+```bash
+[root@node001 ingress-ps]# kubectl create -f servicemonitor.yaml
+servicemonitor.monitoring.coreos.com/nginx-ingress-scraping created
+[root@node001 ingress-ps]# kubectl -n ingress-nginx get servicemonitors.monitoring.coreos.com 
+NAME                     AGE
+nginx-ingress-scraping   16s
+```
+指标没有收集，检查proemtheus错误日志
+```bash
+# kubectl -n monitoring logs prometheus-k8s-0 -c prometheus |grep error
+level=error ts=2021-06-23T10:39:34.158Z caller=klog.go:94 component=k8s_client_runtime func=ErrorDepth msg="/app/discovery/kubernetes/kubernetes.go:263: Failed to list *v1.Pod: pods is forbidden: User \"system:serviceaccount:monitoring:prometheus-k8s\" cannot list resource \"pods\" in API group \"\" in the namespace \"ingress-nginx\""
+```
+需要修改prometheus的clusterrole
+```yaml
+# kubectl edit clusterrole prometheus-k8s
+---原始
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - nodes/metrics
+  verbs:
+  - get
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+
+---
+
+---修改后
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  - services
+  - endpoints
+  - pods
+  - nodes/proxy
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - nodes/metrics
+  verbs:
+  - get
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+```
+结果：
+![info](/images/pasted-64.png)
