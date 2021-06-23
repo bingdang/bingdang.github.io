@@ -6,7 +6,7 @@ tags:
 categories:
   - tools
 cover: /images/img-73.png
-abbrlink: 3e0eb03c
+abbrlink: download
 date: 2019-03-05 04:03:00
 ---
 |Name        |System|Passwd        | Links  |
