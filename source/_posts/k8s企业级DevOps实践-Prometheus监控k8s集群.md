@@ -4,10 +4,10 @@ cover: /images/pasted-58.png
 abbrlink: dc57d8c5
 tags:
   - k8s
-  - workload
+  - Prometheus
 categories:
   - Web集群
-date: 2021-06-20 14:16:00
+date: 2021-06-20 06:16:00
 ---
 ## 服务监控
 对于运维开发人员来说，不管是哪个平台服务，监控都是非常关键重要的。在传统服务里面，我们通常会到zabbix、open-falcon、netdata来做服务的监控，但对于目前主流的K8s平台来说，由于服务pod会被调度到任何机器上运行，且pod挂掉后会被自动重启，并且我们也需要有更好的自动服务发现功能来实现服务报警的自动接入，实现更高效的运维报警，这里需要用到K8s的监控实现Prometheus，它是基于Google内部监控系统的开源实现。

@@ -22,7 +22,7 @@
             
             <tag> k8s </tag>
             
-            <tag> workload </tag>
+            <tag> Prometheus </tag>
             
         </tags>
       
@@ -911,9 +911,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 读写分离 </tag>
-            
             <tag> 高可用 </tag>
+            
+            <tag> 读写分离 </tag>
             
             <tag> 分布式 </tag>
             
@@ -948,9 +948,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 读写分离 </tag>
-            
             <tag> 高可用 </tag>
+            
+            <tag> 读写分离 </tag>
             
             <tag> 分布式 </tag>
             
@@ -985,9 +985,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 读写分离 </tag>
-            
             <tag> 高可用 </tag>
+            
+            <tag> 读写分离 </tag>
             
             <tag> 分布式 </tag>
             
@@ -1020,9 +1020,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 读写分离 </tag>
-            
             <tag> 高可用 </tag>
+            
+            <tag> 读写分离 </tag>
             
         </tags>
       
@@ -1051,9 +1051,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 高可用 </tag>
-            
             <tag> MHA </tag>
+            
+            <tag> 高可用 </tag>
             
         </tags>
       
@@ -1082,9 +1082,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 高可用 </tag>
-            
             <tag> MHA </tag>
+            
+            <tag> 高可用 </tag>
             
         </tags>
       
