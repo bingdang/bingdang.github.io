@@ -261,14 +261,14 @@ metadata:
   namespace: ingress-nginx
 spec:
   endpoints:
-  - interval: 30s
+  - interval: 30s # 每30s获取一次信息
     path: /metrics
-    port: http-metrics
+    port: http-metrics # 对应service的端口名
   jobLabel: app
-  namespaceSelector:
+  namespaceSelector: # 表示去匹配某一命名空间中的service，如果想从所有的namespace中匹配用any: true
     matchNames:
     - ingress-nginx
-  selector:
+  selector: # 匹配的 Service 的labels，如果使用mathLabels，则下面的所有标签都匹配时才会匹配该service，如果使用matchExpressions，则至少匹配一个标签的service都会被选择
     matchLabels:
       k8s-app: ingress-nginx-metrics #匹配对应的Service
 ---
@@ -349,3 +349,142 @@ rules:
 ```
 结果：
 ![info](/images/pasted-64.png)
+## 监控ETCD集群
+作为K8s所有资源存储的关键服务ETCD，也有必要把它给监控起来，正好借这个机会，完整的演示利用Prometheus来监控非K8s集群服务的步骤
+
+在前面部署K8s集群的时候，是用二进制的方式部署的ETCD集群，并且利用自签证书来配置访问ETCD，现在关键的服务基本都会留有指标metrics接口支持prometheus的监控，利用下面命令，我们可以看到ETCD都暴露出了哪些监控指标出来。
+
+```bash
+curl --cacert /opt/etcd/ssl/ca.pem --cert /opt/etcd/ssl/server.pem --key /opt/etcd/ssl/server-key.pem https://172.19.244.101:2379/metrics
+curl --cacert /opt/etcd/ssl/ca.pem --cert /opt/etcd/ssl/server.pem --key /opt/etcd/ssl/server-key.pem https://172.19.244.102:2379/metrics
+curl --cacert /opt/etcd/ssl/ca.pem --cert /opt/etcd/ssl/server.pem --key /opt/etcd/ssl/server-key.pem https://172.19.244.103:2379/metrics
+```
+上面查看没问题后，接下来我们开始进行配置使ETCD能被prometheus发现并监控
+```bash
+# 首先把ETCD的证书创建为secret
+kubectl -n monitoring create secret generic etcd-certs --from-file=/opt/etcd/ssl/server.pem   --from-file=/opt/etcd/ssl/server-key.pem   --from-file=/opt/etcd/ssl/ca.pem
+
+# 接着在prometheus里面引用这个secrets
+kubectl -n monitoring edit prometheus k8s 
+
+spec:
+...
+  secrets:
+  - etcd-certs
+
+# 保存退出后，prometheus会自动重启服务pod以加载这个secret配置，过一会，我们进pod来查看下是不是已经加载到ETCD的证书了
+# kubectl -n monitoring exec -it prometheus-k8s-0 -c prometheus  -- sh
+/prometheus $ ls /etc/prometheus/secrets/etcd-certs/
+ca.pem          server-key.pem  server.pem
+```
+接下来准备创建service、endpoints以及ServiceMonitor的yaml配置
+> 注意替换下面的NODE节点IP为实际ETCD所在NODE内网IP
+
+```yaml
+# vim prometheus-etcd.yaml 
+apiVersion: v1
+kind: Service
+metadata:
+  name: etcd-k8s
+  namespace: monitoring
+  labels:
+    k8s-app: etcd
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: api
+    port: 2379
+    protocol: TCP
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: etcd-k8s
+  namespace: monitoring
+  labels:
+    k8s-app: etcd
+subsets:
+- addresses:
+  - ip: 172.19.244.101
+  - ip: 172.19.244.102
+  - ip: 172.19.244.103
+  ports:
+  - name: api
+    port: 2379
+    protocol: TCP
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: etcd-k8s
+  namespace: monitoring
+  labels:
+    k8s-app: etcd-k8s
+spec:
+  jobLabel: k8s-app
+  endpoints:
+  - port: api
+    interval: 30s
+    scheme: https
+    tlsConfig:
+      caFile: /etc/prometheus/secrets/etcd-certs/ca.pem
+      certFile: /etc/prometheus/secrets/etcd-certs/server.pem
+      keyFile: /etc/prometheus/secrets/etcd-certs/server-key.pem
+      #use insecureSkipVerify only if you cannot use a Subject Alternative Name
+      insecureSkipVerify: true 
+  selector:
+    matchLabels:
+      k8s-app: etcd
+  namespaceSelector:
+    matchNames:
+    - monitoring
+```
+开始创建上面的资源
+```bash
+# kubectl apply -f prometheus-etcd.yaml
+service/etcd-k8s created
+endpoints/etcd-k8s created
+servicemonitor.monitoring.coreos.com/etcd-k8s created
+```
+过一会，就可以在prometheus UI上面看到ETCD集群被监控了
+![info](/images/pasted-65.png)
+
+接下来我们用grafana来展示被监控的ETCD指标
+```bash
+# vi manifests/grafana-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: grafana
+  name: grafana
+  namespace: monitoring
+spec:
+  ports:
+  - name: http
+    port: 3000
+    targetPort: http
+  selector:
+    app: grafana
+  type: NodePort
+  
+# kubectl apply -f manifests/grafana-service.yaml
+# kubectl -n monitoring get svc | grep grafana
+grafana                 NodePort    10.0.0.95    <none>        3000:32216/TCP               2d6h
+```
+![grafana](/images/pasted-66.png)
+```bash
+1. 在grafana官网模板中心搜索etcd，下载这个json格式的模板文件
+https://grafana.com/dashboards/3070
+
+2.然后打开自己先部署的grafana首页，
+点击左边菜单栏四个小正方形方块HOME --- Manage
+再点击右边 Import dashboard --- 
+点击Upload .json File 按钮，上传上面下载好的json文件 etcd_rev3.json，
+然后在prometheus选择数据来源
+点击Import，即可显示etcd集群的图形监控信息
+```
+![grafana](/images/pasted-67.png)
+
+![etcd by prometheus](/images/pasted-68.png)
