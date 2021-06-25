@@ -762,11 +762,11 @@
             
             <tag> NoSQL </tag>
             
+            <tag> 主从复制 </tag>
+            
             <tag> 高可用 </tag>
             
             <tag> 分布式 </tag>
-            
-            <tag> 主从复制 </tag>
             
             <tag> Redis </tag>
             
@@ -795,9 +795,9 @@
             
             <tag> NoSQL </tag>
             
-            <tag> 高可用 </tag>
-            
             <tag> 主从复制 </tag>
+            
+            <tag> 高可用 </tag>
             
             <tag> Redis </tag>
             
@@ -907,6 +907,8 @@
       
         <tags>
             
+            <tag> 主从复制 </tag>
+            
             <tag> MySQL </tag>
             
             <tag> 读写分离 </tag>
@@ -916,8 +918,6 @@
             <tag> 分布式 </tag>
             
             <tag> MyCAT </tag>
-            
-            <tag> 主从复制 </tag>
             
             <tag> 水平拆分 </tag>
             
@@ -944,6 +944,8 @@
       
         <tags>
             
+            <tag> 主从复制 </tag>
+            
             <tag> MySQL </tag>
             
             <tag> 读写分离 </tag>
@@ -955,8 +957,6 @@
             <tag> MyCAT </tag>
             
             <tag> 垂直拆分 </tag>
-            
-            <tag> 主从复制 </tag>
             
         </tags>
       
@@ -981,6 +981,8 @@
       
         <tags>
             
+            <tag> 主从复制 </tag>
+            
             <tag> MySQL </tag>
             
             <tag> 读写分离 </tag>
@@ -990,8 +992,6 @@
             <tag> 分布式 </tag>
             
             <tag> MyCAT </tag>
-            
-            <tag> 主从复制 </tag>
             
         </tags>
       
@@ -1016,13 +1016,13 @@
       
         <tags>
             
+            <tag> 主从复制 </tag>
+            
             <tag> MySQL </tag>
             
             <tag> 读写分离 </tag>
             
             <tag> 高可用 </tag>
-            
-            <tag> 主从复制 </tag>
             
         </tags>
       
@@ -1047,11 +1047,11 @@
       
         <tags>
             
+            <tag> 主从复制 </tag>
+            
             <tag> MySQL </tag>
             
             <tag> 高可用 </tag>
-            
-            <tag> 主从复制 </tag>
             
             <tag> MHA </tag>
             
@@ -1078,11 +1078,11 @@
       
         <tags>
             
+            <tag> 主从复制 </tag>
+            
             <tag> MySQL </tag>
             
             <tag> 高可用 </tag>
-            
-            <tag> 主从复制 </tag>
             
             <tag> MHA </tag>
             
@@ -1109,9 +1109,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> 主从复制 </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -1136,9 +1136,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> 主从复制 </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -1163,9 +1163,9 @@
       
         <tags>
             
-            <tag> MySQL </tag>
-            
             <tag> 主从复制 </tag>
+            
+            <tag> MySQL </tag>
             
         </tags>
       
