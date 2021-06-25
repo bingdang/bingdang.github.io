@@ -1,4 +1,4 @@
-title: k8s企业级DevOps实践-Prometheus监控k8s集群
+title: k8s企业级DevOps实践-Prometheus监控k8s集群、事件收集告警
 author: 饼铛
 cover: /images/pasted-58.png
 abbrlink: dc57d8c5
@@ -840,3 +840,137 @@ spec:
 ```
 测试：
 ![INFO](/images/pasted-70.png)
+
+## 事件监控告警
+在Kubernetes中，事件分为两种，一种是Warning事件，表示产生这个事件的状态转换是在非预期的状态之间产生的；另外一种是Normal事件，表示期望到达的状态，和目前达到的状态是一致的。我们用一个Pod的生命周期进行举例，当创建一个Pod的时候，首先Pod会进入Pending的状态，等待镜像的拉取，当镜像录取完毕并通过健康检查的时候，Pod的状态就变为Running。此时会生成Normal的事件。而如果在运行中，由于OOM或者其他原因造成Pod宕掉，进入Failed的状态，而这种状态是非预期的，那么此时会在Kubernetes中产生Warning的事件。那么针对这种场景而言，如果我们能够通过监控事件的产生就可以非常及时的查看到一些容易被资源监控忽略的问题。
+
+一个标准的Kubernetes事件有如下几个重要的属性，通过这些属性可以更好地诊断和告警问题。
+
+Namespace：产生事件的对象所在的命名空间。
+Kind：绑定事件的对象的类型，例如：Node、Pod、Namespace、Componenet等等。
+Timestamp：事件产生的时间等等。
+Reason：产生这个事件的原因。
+Message: 事件的具体描述。
+```bash
+[root@node001 ~]# kubectl get event --all-namespaces 
+NAMESPACE     LAST SEEN   TYPE      REASON              OBJECT                               MESSAGE
+baseservice   7m26s       Normal    Killing             pod/ipinversion-d64864cf7-m2cvg      Stopping container ipinversion
+baseservice   7m20s       Warning   Unhealthy           pod/ipinversion-d64864cf7-m2cvg      Readiness probe failed: Get http://10.244.4.93:8031/swagger/index.html: net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+baseservice   7m26s       Normal    SuccessfulDelete    replicaset/ipinversion-d64864cf7     Deleted pod: ipinversion-d64864cf7-m2cvg
+baseservice   7m26s       Normal    ScalingReplicaSet   deployment/ipinversion               Scaled down replica set ipinversion-d64864cf7 to 2
+...
+```
+### ali kube-eventer
+针对Kubernetes的事件监控场景，Kuernetes社区在Heapter中提供了简单的事件离线能力，后来随着Heapster的废弃，相关的能力也一起被归档了。为了弥补事件监控场景的缺失，阿里云容器服务发布并开源了kubernetes事件离线工具kube-eventer。支持离线kubernetes事件到钉钉机器人、飞书机器人、SLS日志服务、Kafka开源消息队列、InfluxDB时序数据库等等。
+
+GitHub地址：[https://github.com/AliyunContainerService/kube-eventer](https://github.com/AliyunContainerService/kube-eventer)
+
+Webhook 配置说明：
+[https://github.com/AliyunContainerService/kube-eventer/blob/master/docs/en/webhook-sink.md]https://github.com/AliyunContainerService/kube-eventer/blob/master/docs/en/webhook-sink.md
+
+下面是以飞书机器人告警发送为例：
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: kube-eventer
+  name: kube-eventer
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-eventer
+  template:
+    metadata:
+      labels:
+        app: kube-eventer
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      dnsPolicy: ClusterFirstWithHostNet
+      serviceAccount: kube-eventer
+      containers:
+        - image: registry.aliyuncs.com/acs/kube-eventer-amd64:v1.2.0-484d9cd-aliyun
+          name: kube-eventer
+          command:
+            - "/kube-eventer"
+            - "--source=kubernetes:https://kubernetes.default"
+            ## .e.g,dingtalk sink demo
+            #- --sink=dingtalk:[your_webhook_url]&label=[your_cluster_id]&level=[Normal or Warning(default)]
+            #- --sink=webhook:https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=07055f32-a04e-4ad7-9cb1-d22352769e1c&level=Warning&label=oa-k8s
+            - --sink=webhook:https://open.feishu.cn/open-apis/bot/v2/hook/beb78afe-0658-47ef-a2d9-2xxxxxxx8?level=Normal&header=Convtent-Type=application/json&custom_body_configmap=custom-webhook-body&custom_body_configmap_namespace=kube-system&method=POST
+            - --sink=webhook:https://open.feishu.cn/open-apis/bot/v2/hook/beb78afe-0658-47ef-a2d9-2xxxxxxx8?level=Warning&header=Convtent-Type=application/json&custom_body_configmap=custom-webhook-body&custom_body_configmap_namespace=kube-system&method=POST
+          env:
+          # If TZ is assigned, set the TZ value as the time zone
+          - name: TZ
+            value: "Asia/Shanghai"
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: zoneinfo
+              mountPath: /usr/share/zoneinfo
+              readOnly: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 500m
+              memory: 250Mi
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: zoneinfo
+          hostPath:
+            path: /usr/share/zoneinfo
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kube-eventer
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - events
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kube-eventer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kube-eventer
+subjects:
+  - kind: ServiceAccount
+    name: kube-eventer
+    namespace: kube-system
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kube-eventer
+  namespace: kube-system
+---
+apiVersion: v1
+data:
+  content: >-
+    {"msg_type":"interactive","card":{"config":{"wide_screen_mode":true},"header":{"title":{"tag":"plain_text","content":"EventType:{{ .Type }} In Shanghai k8s"},"template":"blue"},"elements":[{"tag":"markdown","content":"**EventNamespace**:{{ .InvolvedObject.Namespace }} \n**EventKind**:{{ .InvolvedObject.Kind }} \n**EventObject**:{{ .InvolvedObject.Name }} \n**EventReason**:{{ .Reason }} \n**EventTime**:{{ .LastTimestamp }} \n**EventMessage**:{{ .Message }} \n[k8s面板](https://ops.xxxx.com:4433/)|[Grafana集群监控](https://ops.xxxx.com:4434/login) \n<at id=6833974120049278977></at><at id=6795355516563357697></at>\n ---"}]}}
+kind: ConfigMap
+metadata:
+  name: custom-webhook-body
+  namespace: kube-system
+```
+测试：
+![INFO](/images/pasted-71.png)
+这样我们就能感知k8s集群中的风吹草动了
