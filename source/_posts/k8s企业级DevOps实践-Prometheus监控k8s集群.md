@@ -866,7 +866,7 @@ baseservice   7m26s       Normal    ScalingReplicaSet   deployment/ipinversion  
 GitHub地址：[https://github.com/AliyunContainerService/kube-eventer](https://github.com/AliyunContainerService/kube-eventer)
 
 Webhook 配置说明：
-[https://github.com/AliyunContainerService/kube-eventer/blob/master/docs/en/webhook-sink.md]https://github.com/AliyunContainerService/kube-eventer/blob/master/docs/en/webhook-sink.md
+[https://github.com/AliyunContainerService/kube-eventer/blob/master/docs/en/webhook-sink.md](https://github.com/AliyunContainerService/kube-eventer/blob/master/docs/en/webhook-sink.md)
 
 下面是以飞书机器人告警发送为例：
 ```yaml
