@@ -594,7 +594,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: nfs
   nfs:
-    path: /data/prometheus/grafana/
+    path: /prometheus/grafana/
     server: 3xxxxxxxxnghai.nas.aliyuncs.com
 
 ---
@@ -609,6 +609,10 @@ spec:
   resources:
     requests:
       storage: 1Pi
+  storageClassName: nfs
+  selector:
+    matchLabels:
+      type: grafanapv
 ```
 查看
 ```bash
