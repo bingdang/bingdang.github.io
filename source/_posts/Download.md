@@ -21,5 +21,6 @@ date: 2019-03-05 04:03:00
 |VNCViewer|<i class="fab fa-apple"></i>||[Download](https://www.lanzoui.com/ib07yqd)|
 |Termius|<i class="fab fa-apple"></i>||[Download](https://www.lanzoui.com/ib0ql5i)|
 |IObit Uninstaller|<i class="fab fa-windows"></i>||[Download](https://www.lanzoui.com/ib2qg2h)|
+|Another Redis Desktop Manager|<i class="fab fa-windows"></i> <i class="fab fa-apple"></i> <i class="fab fa-linux"></i>||[Download](https://github.com/qishibo/AnotherRedisDesktopManager/releases)|
 
 > 以上的所有软件和资料仅供个人学习和研究使用，不得用于任何商业用途。如有侵犯您商标权、著作权或其他合法权利的，请按照网站右侧提供的联系方式联系站长并提供相关证明材料，站长将在第一时间对此进行核实并处理。
