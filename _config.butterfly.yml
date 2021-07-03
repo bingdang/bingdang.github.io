@@ -661,7 +661,7 @@ aside:
       link: https://github.com/
   card_announcement:
     enable: true
-    content: 2021年2月博客改版。本地容器化
+    content: 2021年2月博客改版。本地容器化，支持：全站https，http/3，Gzip，Brotli压缩，页面压缩
   card_recent_post:
     enable: true
     limit: 5 # if set 0 will show all
