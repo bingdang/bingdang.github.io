@@ -27,4 +27,6 @@ date: 2019-03-05 04:03:00
 
 {% hideToggle 免责声明 %}
 以上的所有软件和资料仅供个人学习和研究使用，不得用于任何商业用途。如有侵犯您商标权、著作权或其他合法权利的，请按照网站右侧提供的联系方式联系站长并提供相关证明材料，站长将在第一时间对此进行核实并处理。
+---
+All the above software and materials are for personal study and research only, and shall not be used for any commercial purpose. In case of infringement of your trademark, copyright or other legal rights, please contact the webmaster according to the contact information provided on the right side of the website and provide relevant supporting materials. The webmaster will verify and deal with it at the first time.
 {% endhideToggle %}
