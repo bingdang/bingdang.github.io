@@ -4,10 +4,12 @@ cover: /images/pasted-6.png
 abbrlink: dc57d8c4
 tags:
   - k8s
-  - workload
+  - Workload
+  - Noshow
+  - ''
 categories:
   - Web集群
-date: 2021-05-08 14:16:00
+date: 2021-05-08 06:16:00
 ---
 只使用Pod, 将会面临如下需求:
 

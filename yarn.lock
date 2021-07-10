@@ -2554,6 +2554,11 @@
     "serve-static" "^1.4.0"
     "write-good" "^0.10.0"
 
+"hexo-blog-encrypt@^3.1.6":
+  "integrity" "sha1-lT2xssj0FaciTbI6AsrnoGOmX+I="
+  "resolved" "https://registry.nlark.com/hexo-blog-encrypt/download/hexo-blog-encrypt-3.1.6.tgz"
+  "version" "3.1.6"
+
 "hexo-bunyan@^1.0.0":
   "integrity" "sha1-shBrJlR7Iy8BlduGPLXV/4Un/TY="
   "resolved" "https://registry.npm.taobao.org/hexo-bunyan/download/hexo-bunyan-1.0.0.tgz"

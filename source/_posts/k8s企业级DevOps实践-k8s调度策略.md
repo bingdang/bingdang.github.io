@@ -5,9 +5,10 @@ abbrlink: 1758bdeb
 tags:
   - k8s
   - 调度策略
+  - Noshow
 categories:
   - Web集群
-date: 2021-05-09 00:54:00
+date: 2021-05-08 16:54:00
 ---
 ###  为何要控制Pod应该如何调度 
 

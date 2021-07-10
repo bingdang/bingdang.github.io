@@ -5,9 +5,10 @@ abbrlink: 6b4e4d76
 tags:
   - k8s
   - 容器编排
+  - Noshow
 categories:
   - Web集群
-date: 2021-04-28 07:04:00
+date: 2021-04-27 23:04:00
 ---
 ## 核心组件
 **静态Pod的方式：**

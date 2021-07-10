@@ -5,9 +5,10 @@ abbrlink: 2aa52898
 tags:
   - k8s
   - 弹性伸缩
+  - Noshow
 categories:
   - Web集群
-date: 2021-06-01 17:35:00
+date: 2021-06-01 09:35:00
 ---
 ## HPA概述
 Horizontal Pod Autoscaler(HPA)是根据资源利用率或者自定义指标自动调整replication controller, Deployment 或 ReplicaSet，实现部署的水平自动扩缩容，让部署的规模接近于实际服务的负载。如果是DaemonSet这种无法缩放的对象，他是不支持的。

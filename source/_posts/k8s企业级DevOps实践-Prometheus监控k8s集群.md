@@ -5,6 +5,7 @@ abbrlink: dc57d8c5
 tags:
   - k8s
   - Prometheus
+  - Noshow
 categories:
   - Web集群
 date: 2021-06-20 06:16:00

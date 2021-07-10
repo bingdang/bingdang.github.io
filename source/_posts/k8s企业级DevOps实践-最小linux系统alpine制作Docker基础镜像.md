@@ -4,10 +4,11 @@ cover: /images/pasted-56.png
 tags:
   - Docker
   - k8s
+  - Noshow
 categories:
   - Web集群
 abbrlink: 8cd3cd17
-date: 2021-05-11 14:18:00
+date: 2021-05-11 06:18:00
 ---
 [Alpine](https://www.alpinelinux.org/)简称高山的 是一款非常适合做k8s基础镜像的linux
 1. 小巧：基于Musl libc和busybox，和busybox一样小巧，最小的Docker镜像只有5MB；

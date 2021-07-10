@@ -4,11 +4,11 @@ cover: /images/pasted-6.png
 tags:
   - k8s
   - 数据持久化
+  - Noshow
 categories:
   - Web集群
-  - ''
 abbrlink: 1051b489
-date: 2021-05-09 22:18:00
+date: 2021-05-09 14:18:00
 ---
 ## Volume
 在K8s上，Pod的生命周期可能是很短，它们会被频繁地销毁和创建，自然在容器销毁时，里面运行时新增的数据，如修改的配置及日志文件等也会被清除。解决这一问题时可以用K8s volume来持久化保存容器的数据，Volume的生命周期独立于容器，Pod中的容器可能被销毁重建，但Volume会被保留。

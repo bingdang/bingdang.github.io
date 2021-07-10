@@ -3,10 +3,11 @@ author: 饼铛
 cover: images/pasted-6.png
 tags:
   - k8s
+  - Noshow
 categories:
   - Web集群
 abbrlink: 57e2aa11
-date: 2021-04-25 17:44:00
+date: 2021-04-25 09:44:00
 ---
 ## Kubernetes架构
 ### 引言
