@@ -175,10 +175,10 @@ live2d:
 # Security
 encrypt: # hexo-blog-encrypt
   abstract: 有东西被加密了, 请输入密码查看.
-  message: 您好, 这里需要密码.
+  message: Please enter the passphrase to unlock your token. 
   tags:
   - {name: Noshow, password: 12345687@}
   - {name: tagName, password: 密码B}
   theme: wave
-  wrong_pass_message: 抱歉, 这个密码看着不太对, 请再试试.
-  wrong_hash_message: 抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容.
+  wrong_pass_message: Sorry, this password doesn't look right. Please try again
+  wrong_hash_message: Sorry, this article can't be checked, but you can still see the decrypted content
