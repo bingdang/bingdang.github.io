@@ -601,7 +601,7 @@ beautify:
 font:
   global-font-size:
   code-font-size:
-  font-family: -apple-system, "Segoe UI", BlinkMacSystemFont, Titillium Web, "Helvetica Neue", Lato, Roboto, "PingFang SC", "Microsoft JhengHei", "Microsoft YaHei", sans-serif
+  font-family: -apple-system, "lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif
   code-font-family: Menlo, consolas, "PingFang SC", "Microsoft JhengHei", "Microsoft YaHei", sans-serif
 
 # Font settings for the site title and site subtitle
