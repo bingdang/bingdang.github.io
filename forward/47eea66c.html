@@ -1,0 +1,385 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ELK-Logstah 定义管道解析Nginx日志传递至Elasticsearch | Maxbit</title><meta name="keywords" content="ELK,Logstash,Nginx"><meta name="author" content="饼铛"><meta name="copyright" content="饼铛"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="通过filebeat读取日志后传送至logstash进行处理，处理完成再保存在elasticsearch中。其中最重要的一步就是logstash的处理，我们需要根据日志的格式编写相关的匹配代码，以便logstash进行匹配处理。 在这里我使用过滤插件中的Grok插件，具体技术文档请点击以下链接：https:&#x2F;&#x2F;www.elastic.co&#x2F;guide&#x2F;en&#x2F;logstash&#x2F;current&#x2F;plu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELK-Logstah 定义管道解析Nginx日志传递至Elasticsearch">
+<meta property="og:url" content="https://cakepanit.com/forward/47eea66c.html">
+<meta property="og:site_name" content="Maxbit">
+<meta property="og:description" content="通过filebeat读取日志后传送至logstash进行处理，处理完成再保存在elasticsearch中。其中最重要的一步就是logstash的处理，我们需要根据日志的格式编写相关的匹配代码，以便logstash进行匹配处理。 在这里我使用过滤插件中的Grok插件，具体技术文档请点击以下链接：https:&#x2F;&#x2F;www.elastic.co&#x2F;guide&#x2F;en&#x2F;logstash&#x2F;current&#x2F;plu">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cakepanit.com/images/img-156.png">
+<meta property="article:published_time" content="2021-04-12T01:55:00.000Z">
+<meta property="article:modified_time" content="2021-10-12T04:30:24.488Z">
+<meta property="article:author" content="饼铛">
+<meta property="article:tag" content="ELK">
+<meta property="article:tag" content="Logstash">
+<meta property="article:tag" content="Nginx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cakepanit.com/images/img-156.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://cakepanit.com/forward/47eea66c"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":200,"languages":{"author":"作者: 饼铛","link":"链接: ","source":"来源: Maxbit","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'ELK-Logstah 定义管道解析Nginx日志传递至Elasticsearch',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-10-12 12:30:24'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    document.addEventListener('pjax:complete', detectApple)})(window)</script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-clock/lib/clock.min.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-file-image"></i><span> Gallery</span></a></li><li><a class="site-page child" href="/status"><i class="fa-fw fab fa-accessible-icon"></i><span> Status</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/img-156.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Maxbit</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-file-image"></i><span> Gallery</span></a></li><li><a class="site-page child" href="/status"><i class="fa-fw fab fa-accessible-icon"></i><span> Status</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">ELK-Logstah 定义管道解析Nginx日志传递至Elasticsearch</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-04-12T01:55:00.000Z" title="发表于 2021-04-12 09:55:00">2021-04-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-10-12T04:30:24.488Z" title="更新于 2021-10-12 12:30:24">2021-10-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Web%E9%9B%86%E7%BE%A4/">Web集群</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="ELK-Logstah 定义管道解析Nginx日志传递至Elasticsearch"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>通过filebeat读取日志后传送至logstash进行处理，处理完成再保存在elasticsearch中。其中最重要的一步就是logstash的处理，我们需要根据日志的格式编写相关的匹配代码，以便logstash进行匹配处理。</p>
+<p>在这里我使用过滤插件中的Grok插件，具体技术文档请点击以下链接：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.elastic.co/guide/en/logstash/current/plugins-filters-grok.html">https://www.elastic.co/guide/en/logstash/current/plugins-filters-grok.html</a></p>
+<p>在编写grok捕获规则时，可以使用以下网站进行辅助：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://grokdebug.herokuapp.com/">https://grokdebug.herokuapp.com/</a></p>
+<p>相关的语法可以参考以下GitHub页面：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/elastic/logstash/blob/v1.4.2/patterns/grok-patterns">https://github.com/elastic/logstash/blob/v1.4.2/patterns/grok-patterns</a></p>
+<p>Logstash Reference [7.12] » Filter plugins<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.elastic.co/guide/en/logstash/current/filter-plugins.html">https://www.elastic.co/guide/en/logstash/current/filter-plugins.html</a></p>
+<h2 id="nginx日志分析"><a href="#nginx日志分析" class="headerlink" title="nginx日志分析"></a>nginx日志分析</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; $http_host $status $body_bytes_sent &quot;$http_referer&quot; &quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot; &quot;$upstream_addr&quot; &quot;$upstream_status&quot; $upstream_cache_status &quot;$upstream_http_content_type&quot; &quot;$upstream_response_time&quot; &gt; $request_time&#x27;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">110.110.110.110 - - [18/Jun/2020:18:36:51 +0800] &quot;GET /forward/61316209.html HTTP/1.1&quot; pincheng.org 200 158441 &quot;https://pincheng.org/&quot; &quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36&quot; &quot;120.120.120.120&quot; &quot;127.0.0.1:8080&quot; &quot;200&quot; MISS &quot;text/html; charset=UTF-8&quot; &quot;1.884&quot; &gt; 2.189</span><br></pre></td></tr></table></figure>
+
+<p>字段分析：<br>用以记录客户端的ip地址:<br><code>$remote_addr 110.110.110.110</code></p>
+<p>用以记录短破折号，无意义<code>-</code></p>
+<p>用来记录客户端用户名称(Nginx用户认证):<br><code>$remote_user -</code></p>
+<p>用来记录访问时间与时区:<br><code>$time_local [18/Jun/2020:18:36:51 +0800]</code></p>
+<p>用来记录请求的url与http协议:<br><code>$request &quot;GET /forward/61316209.html  HTTP/1.1&quot;</code></p>
+<p>用来记录请求地址：<br><code>$http_host pincheng.org</code></p>
+<p>用来记录请求状态成功是200:<br><code>$status 200</code></p>
+<p>记录发送给客户端文件主体内容大小:<br><code>$body_bytes_sent 158441</code></p>
+<p>用来记录从那个页面链接访问过来的:<br><code>$http_referer &quot;https://pincheng.org/&quot;</code></p>
+<p>记录客户端浏览器的相关信息:<br><code>$http_user_agent &quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36&quot;</code></p>
+<p>记录前端代理时HTTP 客户端的真实 IP<br><code>$http_x_forwarded_for &quot;-&quot;</code></p>
+<p>记录后台upstream的地址，即真正提供服务的主机地址(可能为多个)<br><code>$upstream_addr &quot;127.0.0.1:8080&quot;</code></p>
+<p>记录upstream状态(可能为多个)<br><code>$upstream_status &quot;200&quot;</code></p>
+<p>记录是否命中缓存<br><code>$upstream_cache_status MISS</code></p>
+<p>记录页面类型<br><code>$upstream_http_content_type &quot;text/html; charset=UTF-8&quot;</code></p>
+<p>记录从Nginx向后端建立连接开始到接受完数据然后关闭连接为止的时间/s(可能为多个)<br><code>$upstream_response_time &quot;1.884&quot;</code></p>
+<p>记录从接受用户请求的第一个字节到发送完响应数据的时间/s<br><code>$request_time 2.189</code></p>
+<h2 id="筛选处理"><a href="#筛选处理" class="headerlink" title="筛选处理"></a>筛选处理</h2><p>输入和输出在logstash配置中是很简单的一步，而对数据进行匹配处理则显得异常复杂。匹配当行日志是入门水平需要掌握的，而多行甚至不规则的日志则可能需要ruby的协助。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%&#123;IPORHOST:client_ip&#125; - %&#123;USER:auth&#125; \[%&#123;HTTPDATE:timestamp&#125;\] \&quot;(?:%&#123;WORD:verb&#125; %&#123;NOTSPACE:request&#125;(?: HTTP/%&#123;NUMBER:http_version&#125;)?|-)\&quot; (%&#123;IPORHOST:domain&#125;|%&#123;URIHOST:domain&#125;|-) %&#123;NUMBER:response&#125; %&#123;NUMBER:bytes&#125; \&quot;(%&#123;GREEDYDATA:referrer&#125;)\&quot; \&quot;(%&#123;GREEDYDATA:user_agent&#125;)\&quot; \&quot;(%&#123;IP:x_forword&#125;|%&#123;GREEDYDATA:x_forword&#125;)\&quot; \&quot;(%&#123;GREEDYDATA:upstream_host&#125;)\&quot; \&quot;(%&#123;GREEDYDATA:upstream_host_status&#125;)\&quot; (%&#123;WORD:upstream_cache_status&#125;|-) \&quot;%&#123;GREEDYDATA:upstream_content_type&#125;\&quot; \&quot;(%&#123;GREEDYDATA:upstream_response_time&#125;)\&quot; &gt; %&#123;NUMBER:request_time:<span class="built_in">float</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输入和输出在logstash配置中是很简单的一步，而对数据进行匹配处理则显得异常复杂。匹配当行日志是入门水平需要掌握的，而多行甚至不规则的日志则可能需要ruby的协助。<br><img src="/images/pasted-26.png" alt="elk"></p>
+<table>
+<thead>
+<tr>
+<th>grok-patterns</th>
+<th>解释</th>
+<th>适用于</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IPORHOST (?:%{HOSTNAME}&#124;%{IP})</td>
+<td>匹配主机名或IP</td>
+<td>匹配客户端ip或主机名</td>
+</tr>
+<tr>
+<td>USER %{USERNAME}</td>
+<td>匹配用户名</td>
+<td>匹配用户名</td>
+</tr>
+<tr>
+<td>HTTPDATE %{MONTHDAY}/%{MONTH}/%{YEAR}:%{TIME} %{INT}</td>
+<td>匹配带时区的日期</td>
+<td>匹配http请求头中的时间</td>
+</tr>
+<tr>
+<td>WORD \b\w+\b</td>
+<td>匹配一个单词</td>
+<td>匹配请求类型、缓存状态码</td>
+</tr>
+<tr>
+<td>NOTSPACE \S+</td>
+<td>匹配非空白就匹配(没有空格的一段)</td>
+<td>匹配请求URL</td>
+</tr>
+<tr>
+<td>NUMBER (?:%{BASE10NUM})</td>
+<td>匹配十进制数字(包括整数、小数)</td>
+<td>匹配http版本、状态码、发送字节数、响应时间</td>
+</tr>
+<tr>
+<td>URIHOST %{IPORHOST}(?::%{POSINT:port})?</td>
+<td>匹配（主机名或IP）或（带端口的域名或ip）</td>
+<td>匹配请求的域名</td>
+</tr>
+<tr>
+<td>QS %{QUOTEDSTRING}</td>
+<td>匹配用双引号包裹的数据</td>
+<td>匹配来源页面、客户端UA</td>
+</tr>
+</tbody></table>
+<h2 id="logstash"><a href="#logstash" class="headerlink" title="logstash"></a>logstash</h2><p>安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@es-node03 /application]<span class="comment"># wget https://repo.huaweicloud.com/logstash/7.4.0/logstash-7.4.0.tar.gz</span></span><br><span class="line">[root@es-node03 /application]<span class="comment"># tar -xf logstash-7.4.0.tar.gz </span></span><br><span class="line">[root@es-node03 /application]<span class="comment"># ls</span></span><br><span class="line">logstash-7.4.0  logstash-7.4.0.tar.gz</span><br><span class="line">[root@es-node03 /application]<span class="comment"># cd logstash-7.4.0/</span></span><br></pre></td></tr></table></figure>
+
+<p>里面应该有一个有配置监听信息的文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@es-node03 /application/logstash-7.4.0]<span class="comment"># cat config/logstash-sample.conf </span></span><br><span class="line"><span class="comment"># Sample Logstash configuration for creating a simple</span></span><br><span class="line"><span class="comment"># Beats -&gt; Logstash -&gt; Elasticsearch pipeline.</span></span><br><span class="line"></span><br><span class="line">input &#123;</span><br><span class="line">  beats &#123;</span><br><span class="line">    port =&gt; 5044</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">output &#123;</span><br><span class="line">  elasticsearch &#123;</span><br><span class="line">    hosts =&gt; [<span class="string">&quot;http://localhost:9200&quot;</span>]</span><br><span class="line">    index =&gt; <span class="string">&quot;%&#123;[@metadata][beat]&#125;-%&#123;[@metadata][version]&#125;-%&#123;+YYYY.MM.dd&#125;&quot;</span></span><br><span class="line">    <span class="comment">#user =&gt; &quot;elastic&quot;</span></span><br><span class="line">    <span class="comment">#password =&gt; &quot;changeme&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>新建自己的配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">  beats &#123;</span><br><span class="line">  port =&gt; 8888</span><br><span class="line">  codec=&gt; plain&#123;charset=&gt;<span class="string">&quot;UTF-8&quot;</span>&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">filter &#123;</span><br><span class="line">     mutate &#123;</span><br><span class="line">         add_field =&gt; &#123;<span class="string">&quot;[@metadata][target_index]&quot;</span> =&gt; <span class="string">&quot;&quot;</span>&#125;</span><br><span class="line">         remove_tag =&gt; [<span class="string">&quot;beats_input_codec_plain_applied&quot;</span>]</span><br><span class="line">         remove_field =&gt; [<span class="string">&quot;[agent][type]&quot;</span>,<span class="string">&quot;[agent][version]&quot;</span>,<span class="string">&quot;[log][offset]&quot;</span>,<span class="string">&quot;[log][file][path]&quot;</span>,<span class="string">&quot;[input][type]&quot;</span>,<span class="string">&quot;[agent][ephemeral_id]&quot;</span>,<span class="string">&quot;[agent][id]&quot;</span>,<span class="string">&quot;[agent][hostname]&quot;</span>,<span class="string">&quot;[ecs][version]&quot;</span>]</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">if</span> <span class="string">&quot;k8s_access&quot;</span> <span class="keyword">in</span> [tags] &#123;</span><br><span class="line">         grok &#123;</span><br><span class="line">            match =&gt; &#123; <span class="string">&quot;message&quot;</span> =&gt; <span class="string">&quot;%&#123;IPORHOST:client_ip&#125; - %&#123;USER:auth&#125; \[%&#123;HTTPDATE:timestamp&#125;\] \&quot;(?:%&#123;WORD:verb&#125; %&#123;NOTSPACE:request&#125;(?: HTTP/%&#123;NUMBER:http_version&#125;)?|-)\&quot; (%&#123;IPORHOST:domain&#125;|%&#123;URIHOST:domain&#125;|-) %&#123;NUMBER:response&#125; %&#123;NUMBER:bytes&#125; \&quot;(%&#123;GREEDYDATA:referrer&#125;)\&quot; \&quot;(%&#123;GREEDYDATA:user_agent&#125;)\&quot; \&quot;(%&#123;IP:x_forword&#125;|%&#123;GREEDYDATA:x_forword&#125;)\&quot; \&quot;(%&#123;GREEDYDATA:upstream_host&#125;)\&quot; \&quot;(%&#123;GREEDYDATA:upstream_host_status&#125;)\&quot; (%&#123;WORD:upstream_cache_status&#125;|-) \&quot;%&#123;GREEDYDATA:upstream_content_type&#125;\&quot; \&quot;(%&#123;GREEDYDATA:upstream_response_time&#125;)\&quot; &gt; %&#123;NUMBER:request_time:float&#125;&quot;</span> &#125;</span><br><span class="line">         &#125;</span><br><span class="line">         date &#123;</span><br><span class="line">             match =&gt; [ <span class="string">&quot;timestamp&quot;</span> , <span class="string">&quot;dd/MMM/YYYY:HH:mm:ss Z&quot;</span> ]</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         mutate &#123;</span><br><span class="line">             update =&gt; &#123;<span class="string">&quot;[@metadata][target_index]&quot;</span> =&gt; <span class="string">&quot;k8s_access-%&#123;+YYYY.MM&#125;-%&#123;+YYYY.ww&#125;&quot;</span>&#125;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">    elasticsearch &#123;</span><br><span class="line">     index =&gt; <span class="string">&quot;%&#123;[@metadata][target_index]&#125;&quot;</span></span><br><span class="line">     hosts =&gt; [<span class="string">&quot;es-cn-0pp16xvo90009zf49.elasticsearch.aliyuncs.com:9200&quot;</span>]</span><br><span class="line">     user =&gt;elastic</span><br><span class="line">     password =&gt;Logs1234</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>date：将日志中的时间作为logstash处理的时间</li>
+</ul>
+<p>配置文件中还有以下这句判断：<code>if &quot;wikibit_ngx_access&quot; in [tags]</code></p>
+<p>因为各种各样的日志都通过logstash分析，所以在filebeat添加了自定义tags以便区分不同的log：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@web conf.d]<span class="comment"># cat /etc/filebeat/filebeat.yml</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">########################################</span></span><br><span class="line">- input_type: <span class="built_in">log</span></span><br><span class="line">  paths:</span><br><span class="line">    - /var/<span class="built_in">log</span>/nginx/access.log</span><br><span class="line">  tags: wikibit_ngx_access</span><br><span class="line"><span class="comment">########################################</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>处理数字类型字段<br>管道配置文件中，匹配出的字段默认为文本类型，如果有数字类型的字段（比如响应时间）需要拿来做排序查询。只需要在匹配时在字段末尾加入<code>:float | :int</code>。那么es建立mapping时会给指定类型建立成数字类型。</li>
+</ul>
+<p><img src="/images/pasted-59.png" alt="int"></p>
+<p>完成上面这一切后，请通过以下命令测试并重新加载logstash和：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@web conf.d]<span class="comment"># /application/logstash-7.4.0/bin/logstash -f config/wikibit_ngx.conf</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p><img src="/images/pasted-27.png" alt="elk"></p>
+<blockquote>
+<p>编写匹配代码是最麻烦的一步，要经过很多次的调整才能完美匹配。</p>
+</blockquote>
+<p>特别鸣谢资深软件系统架构师：<strong>Evan</strong></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined" rel="external nofollow noreferrer">饼铛</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://cakepanit.com/forward/47eea66c.html">https://cakepanit.com/forward/47eea66c.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://cakepanit.com" target="_blank">Maxbit</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ELK/">ELK</a><a class="post-meta__tags" href="/tags/Logstash/">Logstash</a><a class="post-meta__tags" href="/tags/Nginx/">Nginx</a></div><div class="post_share"><div class="social-share" data-image="/images/img-156.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/DGaBgCC38vJiNnurYYFbtahoFWFNDF4hc6.png" target="_blank"><img class="post-qr-code-img" src="/img/DGaBgCC38vJiNnurYYFbtahoFWFNDF4hc6.png" alt="狗狗币(DogeCoin)"/></a><div class="post-qr-code-desc">狗狗币(DogeCoin)</div></li><li class="reward-item"><a href="/img/bc1qj9u4lk9nj8jgmq6rzcddc70ppqjq9vldrjngct.png" target="_blank"><img class="post-qr-code-img" src="/img/bc1qj9u4lk9nj8jgmq6rzcddc70ppqjq9vldrjngct.png" alt="比特币(BitCoin)"/></a><div class="post-qr-code-desc">比特币(BitCoin)</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/forward/eb065b59.html"><img class="prev-cover" src="/images/img-156.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">ELK-Logstash 按周创建Elasticsearch索引</div></div></a></div><div class="next-post pull-right"><a href="/forward/61316209.html"><img class="next-cover" src="/images/pasted-6.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">k8s企业级DevOps实践-虚拟化介绍和Docker原理深入</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/forward/eb065b59.html" title="ELK-Logstash 按周创建Elasticsearch索引"><img class="cover" src="/images/img-156.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-13</div><div class="title">ELK-Logstash 按周创建Elasticsearch索引</div></div></a></div><div><a href="/forward/17b35260.html" title="ELK-Elasticsearch介绍与安装"><img class="cover" src="/images/img-156.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2019-05-26</div><div class="title">ELK-Elasticsearch介绍与安装</div></div></a></div><div><a href="/forward/131c756.html" title="ELK-Filebeat7.4.0单机多实例"><img class="cover" src="/images/img-156.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-06-12</div><div class="title">ELK-Filebeat7.4.0单机多实例</div></div></a></div><div><a href="/forward/ad8d3f77.html" title="k8s企业级DevOps实践-Kubernetes中DaemonSet启动日志收集"><img class="cover" src="/images/pasted-6.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-08</div><div class="title">k8s企业级DevOps实践-Kubernetes中DaemonSet启动日志收集</div></div></a></div><div><a href="/forward/ae362167.html" title="Nginx负载调度策略和一致性hash算法"><img class="cover" src="/images/pasted-36.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-16</div><div class="title">Nginx负载调度策略和一致性hash算法</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">饼铛</div><div class="author-info__description">Do one's level best and leave the rest to God's will.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://t.me/joinchat/c_ParmoHMmU5MDM9" rel="external nofollow noreferrer" target="_blank" title="Telegram"><i class="fab fa-telegram-plane"></i></a><a class="social-icon" href="https://qm.qq.com/cgi-bin/qm/qr?k=Q1N9l3isk8O_i5awFwO-blAoPH7PUeb4&amp;noverify=0" rel="external nofollow noreferrer" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:flybaf740@gmail.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://music.163.com/playlist?id=5434811591" rel="external nofollow noreferrer" target="_blank" title="Netease"><i class="fas fa-record-vinyl"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">2021年2月博客改版。本地容器化，支持：全站https，http/3，Gzip，Brotli压缩，页面压缩</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#nginx%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">nginx日志分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%9B%E9%80%89%E5%A4%84%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">筛选处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#logstash"><span class="toc-number">3.</span> <span class="toc-text">logstash</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C"><span class="toc-number">4.</span> <span class="toc-text">结果</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/forward/852a3e1.html" title="GitLab-CI/CD"><img src="/images/pasted-90.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="GitLab-CI/CD"/></a><div class="content"><a class="title" href="/forward/852a3e1.html" title="GitLab-CI/CD">GitLab-CI/CD</a><time datetime="2021-08-25T02:27:00.000Z" title="发表于 2021-08-25 10:27:00">2021-08-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/forward/ff7280bd.html" title="GitLab-CI语法"><img src="/images/pasted-90.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="GitLab-CI语法"/></a><div class="content"><a class="title" href="/forward/ff7280bd.html" title="GitLab-CI语法">GitLab-CI语法</a><time datetime="2021-08-24T05:25:00.000Z" title="发表于 2021-08-24 13:25:00">2021-08-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/forward/d12df344.html" title="Golang-函数"><img src="/images/pasted-2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Golang-函数"/></a><div class="content"><a class="title" href="/forward/d12df344.html" title="Golang-函数">Golang-函数</a><time datetime="2021-08-23T10:27:00.000Z" title="发表于 2021-08-23 18:27:00">2021-08-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/forward/55d102bd.html" title="k8s企业级DevOps实践-Kong的两种打开方式"><img src="/images/pasted-84.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="k8s企业级DevOps实践-Kong的两种打开方式"/></a><div class="content"><a class="title" href="/forward/55d102bd.html" title="k8s企业级DevOps实践-Kong的两种打开方式">k8s企业级DevOps实践-Kong的两种打开方式</a><time datetime="2021-08-16T06:53:00.000Z" title="发表于 2021-08-16 14:53:00">2021-08-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/forward/b36ee5af.html" title="k8s企业级DevOps实践-Kong in kubernetes"><img src="/images/pasted-84.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="k8s企业级DevOps实践-Kong in kubernetes"/></a><div class="content"><a class="title" href="/forward/b36ee5af.html" title="k8s企业级DevOps实践-Kong in kubernetes">k8s企业级DevOps实践-Kong in kubernetes</a><time datetime="2021-08-11T14:10:00.000Z" title="发表于 2021-08-11 22:10:00">2021-08-11</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/img-156.png')"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2021 By 饼铛</div><div class="footer_custom_text"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral"><img class="icp-icon" src="/img/yp.png"><span>提供CDN加速</span></a><span class="footer-separator">|</span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://beian.miit.gov.cn/"><img class="icp-icon" src="/img/ba.png"><span>皖ICP备2021005605</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><div class="aplayer no-destroy" data-id="5434811591" data-server="netease" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="false" data-order="random" data-preload="none" data-autoplay="false" muted></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+  window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="/img/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://cdn.jsdelivr.net/npm/hexo-butterfly-clock/lib/clock.min.js"></script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/haru02.model.json"},"bottom":-40,"display":{"position":"right","width":190,"height":380,"hOffset":80},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>

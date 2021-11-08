@@ -1,0 +1,664 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MySQL-数据备份&amp;恢复&amp;迁移 | Maxbit</title><meta name="keywords" content="MySQL,日志管理,数据备份"><meta name="author" content="饼铛"><meta name="copyright" content="饼铛"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="知识点回顾：1、存储引擎(1)InnoDB（默认使用引擎，也是企业常用的） 热备 独立表空间（每个表一个表空间） redo：重做日志，用来前滚 undo：回滚日志，用来回滚（未提交的事务） 行级别锁，基于索引来实现的，GAP锁 支持事务。  (2)MyISAM 温备 三个文件构成 表级锁  2、二进制日志(1)记录的是什么？ DDL、DCL这些种类语句，记录的就是操作语句 DML：他记录的已提交的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL-数据备份&amp;恢复&amp;迁移">
+<meta property="og:url" content="https://cakepanit.com/forward/5c41384a.html">
+<meta property="og:site_name" content="Maxbit">
+<meta property="og:description" content="知识点回顾：1、存储引擎(1)InnoDB（默认使用引擎，也是企业常用的） 热备 独立表空间（每个表一个表空间） redo：重做日志，用来前滚 undo：回滚日志，用来回滚（未提交的事务） 行级别锁，基于索引来实现的，GAP锁 支持事务。  (2)MyISAM 温备 三个文件构成 表级锁  2、二进制日志(1)记录的是什么？ DDL、DCL这些种类语句，记录的就是操作语句 DML：他记录的已提交的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cakepanit.com/images/img-71.png">
+<meta property="article:published_time" content="2020-04-16T05:56:00.000Z">
+<meta property="article:modified_time" content="2021-08-02T01:48:36.843Z">
+<meta property="article:author" content="饼铛">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="日志管理">
+<meta property="article:tag" content="数据备份">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cakepanit.com/images/img-71.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://cakepanit.com/forward/5c41384a"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":200,"languages":{"author":"作者: 饼铛","link":"链接: ","source":"来源: Maxbit","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'MySQL-数据备份&恢复&迁移',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-08-02 09:48:36'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    document.addEventListener('pjax:complete', detectApple)})(window)</script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-clock/lib/clock.min.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-file-image"></i><span> Gallery</span></a></li><li><a class="site-page child" href="/status"><i class="fa-fw fab fa-accessible-icon"></i><span> Status</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/img-71.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Maxbit</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-file-image"></i><span> Gallery</span></a></li><li><a class="site-page child" href="/status"><i class="fa-fw fab fa-accessible-icon"></i><span> Status</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">MySQL-数据备份&amp;恢复&amp;迁移</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-04-16T05:56:00.000Z" title="发表于 2020-04-16 13:56:00">2020-04-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-08-02T01:48:36.843Z" title="更新于 2021-08-02 09:48:36">2021-08-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/DBA/">DBA</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">7.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>30分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="MySQL-数据备份&amp;恢复&amp;迁移"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="知识点回顾："><a href="#知识点回顾：" class="headerlink" title="知识点回顾："></a>知识点回顾：</h2><h3 id="1、存储引擎"><a href="#1、存储引擎" class="headerlink" title="1、存储引擎"></a>1、<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/3053135c.html#4-InnoDB-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7%EF%BC%9A">存储引擎</a></h3><h4 id="1-InnoDB（默认使用引擎，也是企业常用的）"><a href="#1-InnoDB（默认使用引擎，也是企业常用的）" class="headerlink" title="(1)InnoDB（默认使用引擎，也是企业常用的）"></a>(1)<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/3053135c.html#8-0-InnoDB%E6%A0%B8%E5%BF%83%E5%8F%82%E6%95%B0">InnoDB</a>（默认使用引擎，也是企业常用的）</h4><ul>
+<li>热备</li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/3053135c.html#6-1-3-%E7%8B%AC%E7%AB%8B%E8%A1%A8%E7%A9%BA%E9%97%B4">独立表空间</a>（每个表一个表空间）</li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/bc8a646.html#3-2-redo-log">redo</a>：重做日志，用来前滚</li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/bc8a646.html#3-2-undo-%E5%9B%9E%E6%BB%9A%E6%97%A5%E5%BF%97">undo</a>：回滚日志，用来回滚（未提交的事务）</li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/49de8711.html#1-2InnoDB%E9%94%81%E7%BA%A7%E5%88%AB">行级别锁</a>，基于索引来实现的，GAP锁</li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/bc8a646.html#%E4%BA%8B%E5%8A%A1%E7%9A%84ACID%E7%89%B9%E6%80%A7">支持事务</a>。</li>
+</ul>
+<h4 id="2-MyISAM"><a href="#2-MyISAM" class="headerlink" title="(2)MyISAM"></a>(2)MyISAM</h4><ul>
+<li>温备</li>
+<li>三个文件构成</li>
+<li>表级锁</li>
+</ul>
+<h3 id="2、二进制日志"><a href="#2、二进制日志" class="headerlink" title="2、二进制日志"></a>2、<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/663d93c2.html">二进制日志</a></h3><h4 id="1-记录的是什么？"><a href="#1-记录的是什么？" class="headerlink" title="(1)记录的是什么？"></a>(1)记录的是什么？</h4><ul>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/3c4a0863.html#3-%E6%95%B0%E6%8D%AE%E5%AE%9A%E4%B9%89%E8%AF%AD%E8%A8%80DDL">DDL</a>、<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/3c4a0863.html#4-%E6%95%B0%E6%8D%AE%E6%8E%A7%E5%88%B6%E8%AF%AD%E8%A8%80DCL">DCL</a>这些种类语句，记录的就是操作语句</li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/3c4a0863.html#2-%E6%95%B0%E6%8D%AE%E6%93%8D%E7%BA%B5%E8%AF%AD%E8%A8%80DML">DML</a>：他记录的已提交的事务日志，并支持多种格式记录（row、statement、mixed）</li>
+</ul>
+<h4 id="2-事件"><a href="#2-事件" class="headerlink" title="(2)事件"></a>(2)<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/663d93c2.html#1-2-4-%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%97%A5%E5%BF%97%E4%BA%8B%E4%BB%B6%EF%BC%88event%EF%BC%89">事件</a></h4><ul>
+<li>开始位置（at xxx）</li>
+<li>结束位置(下一个at)</li>
+<li>一个事务，有多个事件做成（begin到commit）</li>
+</ul>
+<h4 id="3-截取二进制日志"><a href="#3-截取二进制日志" class="headerlink" title="(3)截取二进制日志"></a>(3)<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/663d93c2.html#1-2-6-%E5%9F%BA%E4%BA%8E%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%97%A5%E5%BF%97%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D%E6%A1%88%E4%BE%8B">截取二进制日志</a></h4><ul>
+<li>1、分析二进制日志<ul>
+<li>找到要截取日志的开始位置（start-position）和结束位置（stop-position）</li>
+<li>解码查看：mysqlbinlog –base64-output=decode=rows -vvv</li>
+</ul>
+</li>
+<li>2、截取日志<ul>
+<li>mysqlbinlog –start-position=xxx –stop-position=xxx。//<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/663d93c2.html#%E6%8C%89%E9%9C%80%E6%88%AA%E5%8F%96%E6%97%A5%E5%BF%97">基于position号截取</a></li>
+<li>mysqlbinlog –skip-gtids –include-gtids=’UUID:gitd号’ //<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/93ea067.html#1-5%E5%9F%BA%E4%BA%8EGTDI%E6%88%AA%E5%8F%96">基于gtid号截取</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="1-运维DBA-在数据库备份恢复方面的职责"><a href="#1-运维DBA-在数据库备份恢复方面的职责" class="headerlink" title="1.运维DBA 在数据库备份恢复方面的职责"></a>1.运维DBA 在数据库备份恢复方面的职责</h2><h3 id="1-1设计备份策略"><a href="#1-1设计备份策略" class="headerlink" title="1.1设计备份策略"></a>1.1设计备份策略</h3><p><strong>全备/增量</strong>：</p>
+<ul>
+<li>数据量大：<ul>
+<li>定期全量+每天增量的方式</li>
+</ul>
+</li>
+<li>数据量小：<ul>
+<li>可直接每天全量</li>
+</ul>
+</li>
+</ul>
+<p><strong>时间</strong>：触发时间，业务低谷。一般为晚上<br><strong>自动</strong>：可crontab+rersync</p>
+<h3 id="1-2日常备份检查"><a href="#1-2日常备份检查" class="headerlink" title="1.2日常备份检查"></a>1.2日常备份检查</h3><ul>
+<li><strong>备份存在性</strong></li>
+<li><strong>备份空间够用否</strong></li>
+</ul>
+<h3 id="1-3定期恢复演练（测试库）"><a href="#1-3定期恢复演练（测试库）" class="headerlink" title="1.3定期恢复演练（测试库）"></a>1.3定期恢复演练（测试库）</h3><p>一季度 或 半年</p>
+<h3 id="1-4故障恢复"><a href="#1-4故障恢复" class="headerlink" title="1.4故障恢复"></a>1.4故障恢复</h3><p>通过现有备份,能够将数据库恢复到故障之前的时间点</p>
+<h3 id="1-5迁移"><a href="#1-5迁移" class="headerlink" title="1.5迁移"></a>1.5迁移</h3><ol>
+<li>停机时间</li>
+<li>回退方案</li>
+</ol>
+<h3 id="1-6备份是为了什么？"><a href="#1-6备份是为了什么？" class="headerlink" title="1.6备份是为了什么？"></a>1.6备份是为了什么？</h3><p>为了防止数据库损坏</p>
+<h3 id="1-7数据库损坏"><a href="#1-7数据库损坏" class="headerlink" title="1.7数据库损坏"></a>1.7数据库损坏</h3><ul>
+<li>物理损坏<ul>
+<li>高可用架构可以很好解决</li>
+</ul>
+</li>
+<li>逻辑损坏<ul>
+<li>只能用备份就解决</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-备份类型"><a href="#2-备份类型" class="headerlink" title="2.备份类型"></a>2.备份类型</h2><ul>
+<li>冷备份<ul>
+<li>在数据库未工作时进行备份。数据一致性高，可靠性高。影响所有读写。</li>
+</ul>
+</li>
+<li>温备份<ul>
+<li>数据库不停止工作，只是在备份时对表进行加锁，不影响读，但是影响写操作。（myisam）</li>
+</ul>
+</li>
+<li>热备份<ul>
+<li>数据库不停止工作，基于事务的特点进行数据库在线备份，读写影响小。受限于存储引擎类型（innoDB）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-备份工具介绍"><a href="#3-备份工具介绍" class="headerlink" title="3.备份工具介绍"></a>3.备份工具介绍</h2><h3 id="3-1-逻辑备份工具"><a href="#3-1-逻辑备份工具" class="headerlink" title="3.1 逻辑备份工具"></a>3.1 逻辑备份工具</h3><p>基于SQL语句进行备份</p>
+<ul>
+<li>mysqldump（MDP）</li>
+<li>mysqlbinlog</li>
+</ul>
+<h3 id="3-2-物理备份工具"><a href="#3-2-物理备份工具" class="headerlink" title="3.2 物理备份工具"></a>3.2 物理备份工具</h3><p>基于磁盘数据文件备份</p>
+<ul>
+<li>xtrabackup(XBK) ：Percona 第三方  </li>
+<li>MySQL Enterprise Backup（MEB）</li>
+</ul>
+<h2 id="4-备份策略"><a href="#4-备份策略" class="headerlink" title="4.备份策略"></a>4.备份策略</h2><h3 id="4-1逻辑备份和物理备份比较"><a href="#4-1逻辑备份和物理备份比较" class="headerlink" title="4.1逻辑备份和物理备份比较"></a>4.1逻辑备份和物理备份比较</h3><h4 id="4-1-1mysqldump（MDP）"><a href="#4-1-1mysqldump（MDP）" class="headerlink" title="4.1.1mysqldump（MDP）"></a>4.1.1mysqldump（MDP）</h4><p><strong>优点</strong>：</p>
+<ol>
+<li>不需要单独下载安装</li>
+<li>备份出来的是SQL脚本，文本格式。可读性高，便于备份处理</li>
+<li>压缩比较高，节省备份的磁盘空间</li>
+</ol>
+<p><strong>缺点</strong>：</p>
+<ol>
+<li>依赖于数据库引擎，需要从磁盘把数据读出，然后转换成SQL进行转储，比较耗费资源，数据量大的话效率较低</li>
+</ol>
+<p><strong>建议</strong>：</p>
+<ul>
+<li>100G以内的数据量级，可以使用mysqldump</li>
+<li>超过TB以上，我们也可能选择的是mysqldump，配合分布式的系统<ul>
+<li>1EB  =1024 PB = 1000000 TB</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-1-2xtrabackup-XBK"><a href="#4-1-2xtrabackup-XBK" class="headerlink" title="4.1.2xtrabackup(XBK)"></a>4.1.2xtrabackup(XBK)</h4><p><strong>优点</strong>：</p>
+<ol>
+<li>类似于直接cp数据文件，不需要管逻辑结构，相对来说性能较高</li>
+</ol>
+<p><strong>缺点</strong>：<br>2. 可读性差<br>3. 压缩比低，需要更多磁盘空间</p>
+<p><strong>建议</strong>：</p>
+<ul>
+<li><blockquote>
+<p>100G&lt;TB</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="4-2-备份方式："><a href="#4-2-备份方式：" class="headerlink" title="4.2 备份方式："></a>4.2 备份方式：</h3><ul>
+<li>全备:全库备份，备份所有数据</li>
+<li>增量:备份变化的数据</li>
+<li>逻辑备份=mysqldump(全备)+mysqlbinlog(增量)</li>
+<li>物理备份=xtrabackup_full(全备)+xtrabackup_incr(增量)+binlog   或者   xtrabackup_full(全备)+binlog(增量)</li>
+</ul>
+<h3 id="4-3备份周期"><a href="#4-3备份周期" class="headerlink" title="4.3备份周期"></a>4.3备份周期</h3><p>根据数据量设计备份周期</p>
+<ul>
+<li>比如：周日全备，周1-周6增量</li>
+<li>其他：通过主从复制备份（实时复制）</li>
+</ul>
+<h3 id="4-4逻辑备份工具-mysqldump"><a href="#4-4逻辑备份工具-mysqldump" class="headerlink" title="4.4逻辑备份工具-mysqldump"></a>4.4逻辑备份工具-mysqldump</h3><h4 id="4-4-1-客户端通用参数【和连接有关】"><a href="#4-4-1-客户端通用参数【和连接有关】" class="headerlink" title="4.4.1 客户端通用参数【和连接有关】"></a>4.4.1 客户端通用参数【和连接有关】</h4><ul>
+<li>-u 用户名</li>
+<li>-p 密码</li>
+<li>-S sock文件</li>
+<li>-h 主机</li>
+<li>-P 端口号</li>
+</ul>
+<h5 id="4-4-1-1本地备份连接方式"><a href="#4-4-1-1本地备份连接方式" class="headerlink" title="4.4.1.1本地备份连接方式"></a>4.4.1.1本地备份连接方式</h5><p><code>mysqldump -uroot -pxxx -S /tmp/mysql.sock</code></p>
+<h5 id="4-4-1-2远程备份的连接方式"><a href="#4-4-1-2远程备份的连接方式" class="headerlink" title="4.4.1.2远程备份的连接方式"></a>4.4.1.2远程备份的连接方式</h5><p><code>mysqldump -uroot -pxxx -S /tmp/mysql.sock</code></p>
+<h4 id="4-4-2基本备份参数"><a href="#4-4-2基本备份参数" class="headerlink" title="4.4.2基本备份参数"></a>4.4.2基本备份参数</h4><ul>
+<li><code>-A</code> 全库备份<br><code>mysqldump -uroot -p123 -A -S /data/3307/mysql.sock &gt; /data/backup/full.sql</code></li>
+<li><code>-B</code> 单个、多个库备份&lt;注意不能加-B，-B后面只能全是数据库&gt;<br><code>mysqldump -uroot -p123 -B oldboy world -S /data/3307/mysql.sock &gt; /data/backup/db.sql</code></li>
+<li> 库名 表名<br><code>mysqldump -uroot -p123 world city country -S /data/3307/mysql.sock &gt; /data/backup/tab.sql</code><br>注意：此种方法只会备份建表+insert语句。所以恢复前需要吧库建好，并提前use到库中进行恢复。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">** 思考并验证以下命令的区别：</span><br><span class="line">mysqldump -uroot -p123 -B world &gt;/backup/world.sql</span><br><span class="line">与</span><br><span class="line">mysqldump -uroot -p123 world &gt;/backup/world1.sql</span><br><span class="line"></span><br><span class="line">vimdiff wordpres.sql world1.sql</span><br><span class="line"></span><br><span class="line">结论：</span><br><span class="line">1、-B 在备份时，会添加create database和use语句</span><br><span class="line">2、-B的备份恢复时，直接<span class="built_in">source</span></span><br><span class="line">3、不加-B备份恢复时，需要事先创建好数据库，use进去进行<span class="built_in">source</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">如果备份对象下的数据库绝大多数都是myisam类型表，为了保证数据的一致性，备份时需要锁定表</span><br><span class="line">如果是针对innodb的表进行备份由于innodb是事务型的引擎，会话与会话之间是隔离的，所以备份的时候不影响数据库的正常使用，无需锁表</span><br><span class="line"></span><br><span class="line">如果添加了此参数，会自动对备份的表加锁，对于加了--single-transaction参数的时候，</span><br><span class="line">如果是innodb表则会实行“热备”</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-4-3必加参数-lt-1-gt"><a href="#4-4-3必加参数-lt-1-gt" class="headerlink" title="4.4.3必加参数&lt;1&gt;"></a>4.4.3必加参数&lt;1&gt;</h4><p><code>—R</code>在备份是，同时备份存储过程和函数，如果没有会自动忽略(mysql人为开发的代码块，类系统中shell脚本)<br><code>-E</code>在备份时，同时备份EVENT，如果没有会自动忽略(类系统 crontab)<br><code>--triggers</code> 在备份时，同时备份触发器，如果没有会自动忽略</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -uroot -p123 —R -E --triggers world city country -S /data/3307/mysql.sock &gt; /data/backup/tab.sql</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-4-4必加参数-lt-2-gt"><a href="#4-4-4必加参数-lt-2-gt" class="headerlink" title="4.4.4必加参数&lt;2&gt;"></a>4.4.4必加参数&lt;2&gt;</h4><ul>
+<li><code>--master-data=1</code> //记录增加binlog日志文件名和 对应的位置点可执行的语句</li>
+<li><code>--master-data=2</code> //记录备份开始时 <code>position</code>号,可作为将来做日志截取的起点<br>配合-F参数，备份时前滚一个binlog<br>二者区别：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">30 CHANGE MASTER TO MASTER_LOG_FILE=<span class="string">&#x27;mysql-bin.000014&#x27;</span>, MASTER_LOG_POS=194;|30 -- CHANGE MASTER TO MASTER_LOG_FILE=<span class="string">&#x27;mysql-bin.000013&#x27;</span>, MASTER_LOG_POS=194; </span><br><span class="line">1：表示前滚一个日志，写入到备份文件中</span><br><span class="line">2：以注释的方式写入</span><br></pre></td></tr></table></figure>
+功能： </li>
+</ul>
+<ol>
+<li>记录备份时的<code>position</code> </li>
+<li>自动锁表 </li>
+<li>配合<code>--single-transaction</code>，减少锁的时间(innodb引擎不锁表)</li>
+</ol>
+<p><code>--single-transaction</code> //针对innodb表，在备份时生成一个事务生成原始数据的快照（undo技术），备份的是快照不是原表数据。不锁表（快照备份”热备份”）<br>例子：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">[root@db01 ~]<span class="comment"># ll /data/3307/mysql-bin.0* | wc -l</span></span><br><span class="line">11</span><br><span class="line">[root@db01 ~]<span class="comment"># mysqldump -uroot -p123 -S /data/3307/mysql.sock -A -R --triggers --master-data=2 --single-transaction  -F |gzip &gt;/tmp/alL_$(date +%F).sql.gz</span></span><br><span class="line">[root@db01 ~]<span class="comment"># ll /data/3307/mysql-bin.0* | wc -l</span></span><br><span class="line">12</span><br><span class="line">[root@db01 /tmp]<span class="comment"># ll /data/3307/mysql-bin.0* | wc -l13</span></span><br><span class="line">[root@db01 /tmp]<span class="comment"># gzip -d alL_2020-04-16.sql.gz </span></span><br><span class="line">-- CHANGE MASTER TO MASTER_LOG_FILE=<span class="string">&#x27;mysql-bin.000013&#x27;</span>, MASTER_LOG_POS=194;</span><br><span class="line">//加上-F --master-data=2 后向后滚动了一个日志，最后一个事务的结束position就是将来日常恢复要找的第一个postition起点</span><br><span class="line"></span><br><span class="line">[root@db01 /tmp]<span class="comment"># mysqlbinlog /data/3307/mysql-bin.000013</span></span><br><span class="line">/*!50530 SET @@SESSION.PSEUDO_SLAVE_MODE=1*/;</span><br><span class="line">/*!50003 SET @OLD_COMPLETION_TYPE=@@COMPLETION_TYPE,COMPLETION_TYPE=0*/;</span><br><span class="line">DELIMITER /*!*/;</span><br><span class="line"><span class="comment"># at 4</span></span><br><span class="line"><span class="comment">#200416 23:11:20 server id 7  end_log_pos 123 CRC32 0x32b19ec2  Start: binlog v 4, server v 5.7.26-log created 200416 23:11:20</span></span><br><span class="line"><span class="comment"># Warning: this binlog is either in use or was not closed properly.</span></span><br><span class="line">BINLOG <span class="string">&#x27;</span></span><br><span class="line"><span class="string">mHWYXg8HAAAAdwAAAHsAAAABAAQANS43LjI2LWxvZwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</span></span><br><span class="line"><span class="string">AAAAAAAAAAAAAAAAAAAAAAAAEzgNAAgAEgAEBAQEEgAAXwAEGggAAAAICAgCAAAACgoKKioAEjQA</span></span><br><span class="line"><span class="string">AcKesTI=</span></span><br><span class="line"><span class="string">&#x27;</span>/*!*/;</span><br><span class="line"><span class="comment"># at 123</span></span><br><span class="line"><span class="comment">#200416 23:11:20 server id 7  end_log_pos 194 CRC32 0x7213cfc8  Previous-GTIDs</span></span><br><span class="line"><span class="comment"># cca7bb3f-687e-11ea-b0d9-0800273e0795:1-14</span></span><br><span class="line">SET @@SESSION.GTID_NEXT= <span class="string">&#x27;AUTOMATIC&#x27;</span> /* added by mysqlbinlog */ /*!*/;</span><br><span class="line">DELIMITER ;</span><br><span class="line"><span class="comment"># End of log file</span></span><br><span class="line">/*!50003 SET COMPLETION_TYPE=@OLD_COMPLETION_TYPE*/;</span><br><span class="line">/*!50530 SET @@SESSION.PSEUDO_SLAVE_MODE=0*/;</span><br></pre></td></tr></table></figure>
+<p>mysqldump 热备的实现原理是什么？<br>1、热备的前提是，只能对innodb表才能实现的<br>2、热备的实现原理，基于时间点的的快照<br>3、我的理解是，给全体员工（mysql数据）拍个照（快照），对照片上的人数进行统计（备份）。</p>
+<h4 id="4-4-5其他参数"><a href="#4-4-5其他参数" class="headerlink" title="4.4.5其他参数"></a>4.4.5其他参数</h4><p><code>-F</code> //前滚binlog，默认按库的个数进行前滚</p>
+<p><code>--set-gtid-purged=auto</code>|auto|on|off :忽略或打开gtid</p>
+<p><code>--max-allowed-packet=128M</code><br>使用场景:</p>
+<ol>
+<li>–set-gtid-purged=OFF,可以使用在日常备份参数中.</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -uroot -p123 -S /data/3307/mysql.sock -A -R -E -F --triggers --master-data=2  --max-allowed-packet=128M --single-transaction --set-gtid-purged=OFF  |gzip &gt;/tmp/alL_$(date +%F)2.sql.gz</span><br><span class="line">参数解释</span><br><span class="line">-A：全量备份     </span><br><span class="line">-R：同时备份数据库中的代码块     </span><br><span class="line">-E：同时备份事件</span><br><span class="line">-F：备份时前滚日志</span><br><span class="line">--triggers：同时备份触发器    </span><br><span class="line">--master-data=2：备份当前时刻字节偏移量，即最后一个position号    </span><br><span class="line">--max-allowed-packet=128M：备份大表时调整数据包的阀值</span><br><span class="line">--single-transaction：针对innodb引擎，减少锁表时间&amp;开启快照备份（“热备”）</span><br><span class="line">--set-gtid-purged=OFF：普通环境下备份时忽略gtid，可不加。即恢复时对恢复的数据产生新的gtid和position号</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>auto , on:在构建主从复制环境时需要的参数配置</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysqldump -uroot -p123 -S /data/3307/mysql.sock -A -R -E -F --triggers --master-data=2  --max-allowed-packet=128M --single-transaction --set-gtid-purged=ON  |gzip &gt;/tmp/alL_$(date +%F)2.sql.gz</span><br><span class="line">参数解释</span><br><span class="line">-A：全量备份     </span><br><span class="line">-R：同时备份数据库中的代码块     </span><br><span class="line">-E：同时备份事件</span><br><span class="line">-F：备份时前滚日志</span><br><span class="line">--triggers：同时备份触发器 </span><br><span class="line">--master-data=2：备份当前时刻字节偏移量，即最后一个position号  </span><br><span class="line">--max-allowed-packet=128M：备份大表时调整数据包的阀值</span><br><span class="line">--single-transaction：针对innodb引擎，减少锁表时间&amp;开启快照备份（“热备”）</span><br><span class="line">--set-gtid-purged=ON：针对主从环境下的数据备份，必须设置成ON，备份GTID号.在恢复数据时采用原有的GTID和position号。确保主从环境中数据的一致性</span><br></pre></td></tr></table></figure>
+
+<p>二者备份完成后的区别：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">--set-gtid-purged=ON                                                                                    --set-gtid-purged=OFF</span><br><span class="line">    17 SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;                                      |       ------------------------------------------------------------------------------------------</span><br><span class="line">    18 SET @@SESSION.SQL_LOG_BIN= 0;                                                             |       ------------------------------------------------------------------------------------------</span><br><span class="line">    19                                                                                           |       ------------------------------------------------------------------------------------------</span><br><span class="line">    20 --                                                                                        |       ------------------------------------------------------------------------------------------</span><br><span class="line">    21 -- GTID state at the beginning of the backup                                              |       ------------------------------------------------------------------------------------------</span><br><span class="line">    22 --                                                                                        |       ------------------------------------------------------------------------------------------</span><br><span class="line">    23                                                                                           |       ------------------------------------------------------------------------------------------</span><br><span class="line">    24 SET @@GLOBAL.GTID_PURGED=<span class="string">&#x27;cca7bb3f-687e-11ea-b0d9-0800273e0795:1-14&#x27;</span>;                     |       ------------------------------------------------------------------------------------------</span><br><span class="line">    </span><br><span class="line">    1623 SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;                                    |       ------------------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="5-企业备份恢复案例（mysqldump-binlog）："><a href="#5-企业备份恢复案例（mysqldump-binlog）：" class="headerlink" title="5.企业备份恢复案例（mysqldump+binlog）："></a>5.企业备份恢复案例（mysqldump+binlog）：</h2><h3 id="5-1-frm误删除"><a href="#5-1-frm误删除" class="headerlink" title="5.1 frm误删除"></a>5.1 frm误删除</h3><h4 id="有全备情况下"><a href="#有全备情况下" class="headerlink" title="有全备情况下"></a>有全备情况下</h4><ol>
+<li>找出建表语句，在测试库中进行恢复。</li>
+<li>拷贝恢复好的frm文件到误删的数据库中进行恢复。</li>
+<li><code>chmod mysql.mysql /data/3307/data/world/*</code> 不要忘记授权</li>
+</ol>
+<h4 id="没有全备情况下"><a href="#没有全备情况下" class="headerlink" title="没有全备情况下"></a>没有全备情况下</h4><p>参照：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/3053135c.html#7-0-%E8%A1%A8%E7%A9%BA%E9%97%B4%E8%BF%81%E7%A7%BB">表空间迁移</a><br>思路：找到建表语句，测试库恢复表结构。–&gt;恢复数据</p>
+<h3 id="5-2-年终故障恢复演练。"><a href="#5-2-年终故障恢复演练。" class="headerlink" title="5.2 年终故障恢复演练。"></a>5.2 年终故障恢复演练。</h3><p><strong>案例背景</strong>： 某中小型互联网公司。MySQL 5.7.26 ，Centos 7.6 ，数据量级80G，每日数据增量5-6M，开启了<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/93ea067.html">GTID</a>。<br><strong>备份策略</strong>： 每天mysqldump全备+binlog备份，每天23:00进行。<br><strong>故障描述</strong>： 周三下午2点，数据由于某原因数据损坏。<br><strong>处理思路</strong>： </p>
+<ol>
+<li>挂出维护页</li>
+<li>评估一下数据损坏状态</li>
+</ol>
+<ul>
+<li>2.1 全部丢失–&gt;推荐直接生产恢复</li>
+<li>2.2 部分丢失<ul>
+<li>(1)从备份中导出单表数据  </li>
+<li>(2)测试库进行全备恢复</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li> 恢复全备，将数据追溯到周二晚上23:00状态</li>
+<li> 截取并恢复从备份时刻，到下午两点误删除之前binlog。</li>
+<li> 校验数据一致性</li>
+<li> 撤维护页，恢复生产。</li>
+</ol>
+<p><strong>处理结果</strong>：</p>
+<ol>
+<li> 经过30-40分钟处理，业务恢复</li>
+<li> 评估此次故障的处理的合理性和实用性</li>
+</ol>
+<h4 id="灾后恢复具体过程："><a href="#灾后恢复具体过程：" class="headerlink" title="灾后恢复具体过程："></a>灾后恢复具体过程：</h4><ol>
+<li><strong>模拟前一天全备[参数解释见：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/7cf8b47.html#3-4%E9%80%BB%E8%BE%91%E5%A4%87%E4%BB%BD%E5%B7%A5%E5%85%B7-mysqldump">mysqldump</a>]</strong></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">show master status;</span><br><span class="line">    mysql-bin.000021</span><br><span class="line"></span><br><span class="line">mysqldump -uroot -p123 -S /data/3307/mysql.sock -A -R -E -F --triggers --master-data=2  --max-allowed-packet=128M --single-transaction |gzip &gt;/tmp/alL_$(date +%F).sql.gz</span><br><span class="line"></span><br><span class="line">show master status;</span><br><span class="line">    mysql-bin.000022 //执行完成后binlog向前滚动了一个日志</span><br></pre></td></tr></table></figure>
+
+<p>2.<strong>查看备份数据</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gzip -d /tmp/alL_2020-04-20.sql.gz </span><br><span class="line"></span><br><span class="line">[root@db01 ~]<span class="comment"># vim /tmp/alL_2020-04-20.sql </span></span><br><span class="line">SET @@GLOBAL.GTID_PURGED=<span class="string">&#x27;cca7bb3f-687e-11ea-b0d9-0800273e0795:1-14&#x27;</span>;   //记录了备份数据时刻最后的gtid号</span><br><span class="line">-- CHANGE MASTER TO MASTER_LOG_FILE=<span class="string">&#x27;mysql-bin.000022&#x27;</span>, MASTER_LOG_POS=194;    //记录了binlog在备份时刻使用的日志文件和结束位置的position号</span><br></pre></td></tr></table></figure>
+
+<p>3.<strong>全备之后到下午两点前业务操作</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create database mdp charset utf8mb4;</span><br><span class="line">mysql&gt; use mdp</span><br><span class="line">mysql&gt; create table t1(id int);</span><br><span class="line">mysql&gt; insert into t1 values(1),(2),(3);</span><br><span class="line">mysql&gt; commit;</span><br><span class="line">mysql&gt; insert into t1 values(11),(12),(13);</span><br><span class="line">mysql&gt; commit;</span><br><span class="line">mysql&gt; update t1 <span class="built_in">set</span> id=20 <span class="built_in">where</span> id&gt;10;</span><br><span class="line">mysql&gt; commit;</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t1;</span><br><span class="line">+------+</span><br><span class="line">| id   |</span><br><span class="line">+------+</span><br><span class="line">|    1 |</span><br><span class="line">|    2 |</span><br><span class="line">|    3 |</span><br><span class="line">|   20 |</span><br><span class="line">|   20 |</span><br><span class="line">|   20 |</span><br><span class="line">+------+</span><br></pre></td></tr></table></figure>
+
+<p>4.<strong>模拟数据库被删</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@db01 /data/3307/data]<span class="comment"># ls</span></span><br><span class="line">111    auto.cnf  binlog    ff              ibdata1      ib_logfile1  mdp    oldboy  performance_schema  sys    world</span><br><span class="line">aa_bb  _bb       db01.pid  ib_buffer_pool  ib_logfile0  ibtmp1       mysql  oldguo  school              test1  xyz</span><br><span class="line">[root@db01 /data/3307/data]<span class="comment"># \rm -rf *</span></span><br><span class="line">[root@db01 /data/3307/data]<span class="comment"># pkill mysqld</span></span><br><span class="line">[root@db01 /data/3307/data]<span class="comment"># ls</span></span><br><span class="line">ib_buffer_pool</span><br><span class="line">[root@db01 /data/3307/data]<span class="comment"># \rm -rf *</span></span><br></pre></td></tr></table></figure>
+
+<p>5.<strong>开始恢复</strong><br>5.1 重新初始化数据</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mysqld --initialize-insecure  --user=mysql --datadir=/data/3307/data --basedir=/application/mysql</span><br><span class="line">[root@db01 ~]<span class="comment"># ls /data/3307/data/</span></span><br><span class="line">auto.cnf  ib_buffer_pool  ibdata1  ib_logfile0  ib_logfile1  mysql  performance_schema  sys</span><br><span class="line"></span><br><span class="line">[root@db01 ~]<span class="comment"># systemctl restart mysqld3307</span></span><br><span class="line">[root@db01 ~]<span class="comment"># systemctl status mysqld3307</span></span><br><span class="line">● mysqld3307.service - MySQL Server</span><br><span class="line">   Loaded: loaded (/etc/systemd/system/mysqld3307.service; enabled; vendor preset: disabled)</span><br><span class="line">   Active: active (running) since 一 2020-04-20 16:00:59 CST; 12s ago</span><br><span class="line">     Docs: man:mysqld(8)</span><br><span class="line">           http://dev.mysql.com/doc/refman/en/using-systemd.html</span><br><span class="line"> Main PID: 1488 (mysqld)</span><br><span class="line">   CGroup: /system.slice/mysqld3307.service</span><br><span class="line">           └─1488 /application/mysql/bin/mysqld --defaults-file=/data/3307/my.cnf</span><br><span class="line"></span><br><span class="line">4月 20 16:00:59 db01 systemd[1]: Started MySQL Server.</span><br></pre></td></tr></table></figure>
+
+<p>5.2 前一天全备恢复</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">[root@db01 ~]<span class="comment"># mysql -S /data/3307/mysql.sock</span></span><br><span class="line">mysql&gt; <span class="built_in">set</span> sql_log_bin=0;  //临时关闭当前会话二进制日志记录</span><br><span class="line">mysql&gt; <span class="built_in">source</span> /tmp/alL_2020-04-20.sql</span><br><span class="line"></span><br><span class="line">mysql&gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| 111                |</span><br><span class="line">| _bb                |</span><br><span class="line">| aa_bb              |</span><br><span class="line">| binlog             |</span><br><span class="line">| ff                 |</span><br><span class="line">| mysql              |</span><br><span class="line">| oldboy             |</span><br><span class="line">| oldguo             |</span><br><span class="line">| performance_schema |</span><br><span class="line">| school             |</span><br><span class="line">| sys                |</span><br><span class="line">| test1              |</span><br><span class="line">| world              |</span><br><span class="line">| xyz                |</span><br><span class="line">+--------------------+</span><br><span class="line"></span><br><span class="line">mysql&gt; flush privileges; <span class="comment">#刷新权限</span></span><br><span class="line">mysql&gt; ^DBye</span><br><span class="line">[root@db01 ~]<span class="comment"># mysql -uroot -h 192.168.56.2 -P3307 -p //再次登陆就需要账号密码了</span></span><br><span class="line">Enter password:</span><br></pre></td></tr></table></figure>
+
+<p>5.3 截取备份时刻到宕机之前的binlog<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/93ea067.html#1-5%E5%9F%BA%E4%BA%8EGTDI%E6%88%AA%E5%8F%96">基于GTDI截取</a>：<br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/663d93c2.html#%E6%8C%89%E9%9C%80%E6%88%AA%E5%8F%96%E6%97%A5%E5%BF%97">基于Position截取</a>：查看备份文件的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show binlog events <span class="keyword">in</span> <span class="string">&quot;mysql-bin.000022&quot;</span>;</span><br><span class="line">根据全备中的binlog日志文件，和gtid号，找到全备之后到宕机之前的日志</span><br><span class="line">应当是：GTID=15开始 到最后结尾</span><br><span class="line"></span><br><span class="line">mysqlbinlog --skip-gtids --include-gtids=<span class="string">&#x27;cca7bb3f-687e-11ea-b0d9-0800273e0795:15-19&#x27;</span> /data/3307/mysql-bin.000022 &gt;/tmp/binlog-000022.sql</span><br><span class="line"></span><br><span class="line">或者</span><br><span class="line"></span><br><span class="line">mysqlbinlog --skip-gtids --start-position=194 --stop-position=1325 /data/3307/mysql-bin.000022 &gt;/tmp/bin.sql</span><br></pre></td></tr></table></figure>
+
+<p>5.4 binlog.sql恢复</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> sql_log_bin=0;</span><br><span class="line"><span class="built_in">source</span> /tmp/binlog-000022.sql</span><br><span class="line"></span><br><span class="line">mysql&gt; use mdp;</span><br><span class="line">Database changed</span><br><span class="line">mysql&gt; show tables;</span><br><span class="line">+---------------+</span><br><span class="line">| Tables_in_mdp |</span><br><span class="line">+---------------+</span><br><span class="line">| t1            |</span><br><span class="line">+---------------+</span><br><span class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from t1;</span><br><span class="line">+------+</span><br><span class="line">| id   |</span><br><span class="line">+------+</span><br><span class="line">|    1 |</span><br><span class="line">|    2 |</span><br><span class="line">|    3 |</span><br><span class="line">|   20 |</span><br><span class="line">|   20 |</span><br><span class="line">|   20 |</span><br><span class="line">+------+</span><br></pre></td></tr></table></figure>
+
+<h4 id="单表恢复具体过程："><a href="#单表恢复具体过程：" class="headerlink" title="单表恢复具体过程："></a>单表恢复具体过程：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; use world;</span><br><span class="line">mysql&gt; show tables;</span><br><span class="line">+-----------------+</span><br><span class="line">| Tables_in_world |</span><br><span class="line">+-----------------+</span><br><span class="line">| city            |</span><br><span class="line">| city1           |</span><br><span class="line">| country         |</span><br><span class="line">| countrylanguage |</span><br><span class="line">+-----------------+</span><br><span class="line">mysql&gt; drop table city1;</span><br></pre></td></tr></table></figure>
+
+<p>思路：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">从全备获取获取单库以及所有表的备份</span><br><span class="line"><span class="comment"># sed -n &#x27;/^-- Current Database: `world`/,/^-- Current Database: `/p&#x27; all.sql &gt;world.sql</span></span><br><span class="line">只截取db1库的二进制日志</span><br><span class="line"><span class="comment"># mysqlbinlog -d db1 --stop-position=974 /data/mysql/mysql-bin.000003 &gt;/tmp/part.sql</span></span><br><span class="line">获得表结构</span><br><span class="line"><span class="comment"># sed -e&#x27;/./&#123;H;$!d;&#125;&#x27; -e &#x27;x;/CREATE TABLE `city1`/!d;q&#x27;  alL_2020-04-20.sql&gt;city1.sql</span></span><br><span class="line">获得INSERT INTO 语句，用于数据的恢复</span><br><span class="line"><span class="comment"># grep -i &#x27;INSERT INTO `city1`&#x27;  alL_2020-04-20.sql &gt;city1_data.sql</span></span><br></pre></td></tr></table></figure>
+
+<p>恢复：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; <span class="built_in">set</span> sql_log_bin=0;</span><br><span class="line">mysql&gt; <span class="built_in">source</span> /tmp/city1.sql;</span><br><span class="line">mysql&gt; <span class="built_in">source</span> /tmp/city1_data.sql</span><br><span class="line">Query OK, 20395 rows affected (0.25 sec)</span><br><span class="line">Records: 20395  Duplicates: 0  Warnings: 0</span><br><span class="line">mysql&gt; select * from city1;</span><br><span class="line">+-------+------------------------------------+-------------+------------------------+------------+</span><br><span class="line">| ID    | Name                               | CountryCode | District               | Population |</span><br><span class="line">+-------+------------------------------------+-------------+------------------------+------------+</span><br><span class="line">|     1 | Kabul                              | AFG         | Kabol                  |    1780000 |</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-XtraBackup简介及安装"><a href="#6-XtraBackup简介及安装" class="headerlink" title="6.XtraBackup简介及安装"></a>6.XtraBackup简介及安装</h2><h3 id="6-1安装"><a href="#6-1安装" class="headerlink" title="6.1安装"></a>6.1安装</h3><p>安装依赖包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</span><br><span class="line">yum -y install perl perl-devel libaio libaio-devel perl-Time-HiRes perl-DBD-MySQL libev</span><br></pre></td></tr></table></figure>
+<p>安装rpm包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CentOS7:</span><br><span class="line">wget https://www.percona.com/downloads/XtraBackup/Percona-XtraBackup-2.4.12/binary/redhat/7/x86_64/percona-xtrabackup-24-2.4.12-1.el7.x86_64.rpm</span><br><span class="line">CentOS6:</span><br><span class="line">https://www.percona.com/downloads/XtraBackup/Percona-XtraBackup-2.4.4/binary/redhat/6/x86_64/percona-xtrabackup-24-2.4.4-1.el6.x86_64.rpm</span><br><span class="line"></span><br><span class="line">[root@db01 ~]<span class="comment"># yum -y install percona-xtrabackup-24-2.4.4-1.el6.x86_64.rpm </span></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2备份命令介绍"><a href="#6-2备份命令介绍" class="headerlink" title="6.2备份命令介绍:"></a>6.2备份命令介绍:</h3><p>xtrabackup<br>innobackupex    ******</p>
+<h3 id="6-3-备份方式——物理备份"><a href="#6-3-备份方式——物理备份" class="headerlink" title="6.3 备份方式——物理备份"></a>6.3 备份方式——物理备份</h3><p>（1）对于非Innodb表（比如 myisam）是，锁表cp数据文件，属于一种温备份。<br>（2）对于Innodb的表（支持事务的），不锁表，拷贝数据页(触发<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/bc8a646.html">CKPT</a>将脏页也刷写到磁盘)，最终以数据文件的方式保存下来，把一部分redo和undo一并备走，属于热备方式。</p>
+<p><strong>面试题</strong>： xbk 在innodb表备份恢复的流程<br>0、xbk备份执行的瞬间,立即触发ckpt,已提交的数据脏页,从内存刷写到磁盘,并记录此时的LSN号<br>1、备份时，拷贝磁盘数据页，并且记录备份过程中产生的redo和undo一起拷贝走,也就是checkpoint LSN之后的日志<br>2、在恢复之前，模拟Innodb“自动故障恢复”的过程，将redo（前滚）与undo（回滚）进行应用<br>3、恢复过程是cp 备份到原来数据目录下</p>
+<p><strong>备份过程</strong>：</p>
+<ol>
+<li>ckpt ，记录ckpt后LSN ,to  lsn</li>
+<li>拷贝数据页 ，保存为数据文件</li>
+<li>自动将备份过程redo，会一并备份走，提取redo当中最后的last LSN</li>
+</ol>
+<p><strong>恢复</strong>： </p>
+<ol>
+<li>其实就是模拟了<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pincheng.org/forward/bc8a646.html">CSR</a>过程</li>
+<li>对比LAST LSN ,to lsn</li>
+<li>使用redo进行前滚，对未提交的事务进行回滚</li>
+<li>最后得到一个一致性备份</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">物理备份，类型cp 数据目录下的数据文件到备份路径</span><br><span class="line">MyIsam，进行锁表备份</span><br><span class="line">innodb，进行热备，备份数据的同时，会将备份过程中产生的数据变化(redo+undo)。</span><br><span class="line">在恢复时，提前进行备份准备，“合并”redo和undo到全备数据文件，前滚和回滚的过程。</span><br><span class="line">模拟的MySQL的CSR</span><br></pre></td></tr></table></figure>
+<h3 id="6-3-innobackupex使用"><a href="#6-3-innobackupex使用" class="headerlink" title="6.3 innobackupex使用"></a>6.3 innobackupex使用</h3><h3 id="6-4全备"><a href="#6-4全备" class="headerlink" title="6.4全备"></a>6.4全备</h3><p><code>[root@db01 backup]# innobackupex --user=root --password=123  /data/bak</code><br>//依赖于mysql的配置文件，否则需要手工指定</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@db01 ~]<span class="comment"># mkdir -p /tmp/my_bak/</span></span><br><span class="line"></span><br><span class="line">vim /data/3307/my.cnf</span><br><span class="line">注意：</span><br><span class="line">备份工具是依赖于/etc/my.cnf   </span><br><span class="line">[mysqld] </span><br><span class="line">[client]</span><br><span class="line">socket=/data/3307/mysql.sock //依赖</span><br><span class="line">或</span><br><span class="line">[innobackupex]</span><br><span class="line">socket=/data/3307/mysql.sock</span><br></pre></td></tr></table></figure>
+
+<p>如果说配置文件没有在/etc  ，可以如下操作</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@db01 ~]<span class="comment"># innobackupex --defaults-file=/data/3307/my.cnf --user=root --password=123  /tmp/my_bak/</span></span><br><span class="line">200422 11:15:33 completed OK!</span><br></pre></td></tr></table></figure>
+<p>自主定制备份路径名<br><code>[root@db01 backup]# innobackupex --defaults-file=/data/3307/my.cnf --user=root --password=123 --no-timestamp /data/bak/full_$(date +%F)</code></p>
+<p>备份文件说明：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">[root@db01 /tmp/my_bak/2020-04-22_11-15-31]<span class="comment"># ll</span></span><br><span class="line">总用量 12344</span><br><span class="line">-rw-r----- 1 root root       63 4月  22 11:15 xtrabackup_binlog_info</span><br><span class="line">mysql-bin.000024        194     cca7bb3f-687e-11ea-b0d9-0800273e0795:1-19</span><br><span class="line">//二进制日志文件        position号    GTID</span><br><span class="line">//记录的是备份时刻，binlog的文件名字和当时的结束的position，可以用来作为截取binlog时的起点。</span><br><span class="line"></span><br><span class="line">-rw-r----- 1 root root      115 4月  22 11:15 xtrabackup_checkpoints</span><br><span class="line">backup_type = full-backuped</span><br><span class="line">from_lsn = 0    //上次所到达的LSN号(对于全备就是从0开始,对于增量有别的显示方法)</span><br><span class="line">to_lsn = 11690217    //备份开始时间(ckpt)点数据页的LSN  </span><br><span class="line">last_lsn = 11690226    //备份结束后，redo日志最终的LSN（前后差9个，其实是一样的。被gtid占用。在5.7以后的版本）</span><br><span class="line">compact = 0</span><br><span class="line">recover_binlog_info = 0</span><br><span class="line">//LSN号的记录，用于恢复后进行CSR。保证恢复后数据的一致性</span><br><span class="line"></span><br><span class="line">-rw-r----- 1 root root      574 4月  22 11:15 xtrabackup_info</span><br><span class="line">uuid = 86e77f87-8447-11ea-a606-0800273e0795</span><br><span class="line">name = </span><br><span class="line">tool_name = innobackupex</span><br><span class="line">tool_command = --defaults-file=/data/3307/my.cnf --user=root --password=... /tmp/my_bak/</span><br><span class="line">tool_version = 2.4.12</span><br><span class="line">ibbackup_version = 2.4.12</span><br><span class="line">server_version = 5.7.26-log</span><br><span class="line">start_time = 2020-04-22 11:15:31</span><br><span class="line">end_time = 2020-04-22 11:15:32</span><br><span class="line">lock_time = 0</span><br><span class="line">binlog_pos = filename <span class="string">&#x27;mysql-bin.000024&#x27;</span>, position <span class="string">&#x27;194&#x27;</span>, GTID of the last change <span class="string">&#x27;cca7bb3f-687e-11ea-b0d9-0800273e0795:1-19&#x27;</span></span><br><span class="line">innodb_from_lsn = 0</span><br><span class="line">innodb_to_lsn = 11690217</span><br><span class="line">partial = N</span><br><span class="line">incremental = N</span><br><span class="line">format = file</span><br><span class="line">compact = N</span><br><span class="line">compressed = N</span><br><span class="line">encrypted = N</span><br><span class="line">//总体信息</span><br><span class="line"></span><br><span class="line">-rw-r----- 1 root root     2560 4月  22 11:15 xtrabackup_logfile</span><br><span class="line">//部分rudo的数据，在备份过程中产生的新的数据变化</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-5全备恢复"><a href="#6-5全备恢复" class="headerlink" title="6.5全备恢复"></a>6.5全备恢复</h3><p>利用xtrabackup工具进行全备恢复的过程：</p>
+<ul>
+<li> 恢复了全备</li>
+<li> CSR利用备份中以备份好的部分redo和undo日志对备份进行前滚和回滚操作<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@db01 ~]<span class="comment"># pkill mysqld</span></span><br><span class="line">[root@db01 ~]<span class="comment"># mysql -uroot -h 192.168.56.2 -P3307 -p</span></span><br><span class="line">Enter password: </span><br><span class="line">ERROR 2003 (HY000): Can<span class="string">&#x27;t connect to MySQL server on &#x27;</span>192.168.56.2<span class="string">&#x27; (111)</span></span><br><span class="line"><span class="string">[root@db01 ~]# \rm -rf /data/3307/data/*</span></span><br><span class="line"><span class="string">[root@db01 ~]# ls /data/3307/data/</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>prepare阶段：</p>
+<ul>
+<li>在备份完成后，数据不能直接用于生产恢复操作，因为备份的数据中可能会包含尚未提交的事务或已经提交但尚未同步至数据文件中的事务。</li>
+<li>因此，此时数据文件仍处于不一致状态。“准备”的主要作用正是通过回滚未提交的事务及同步已经提交的事务至数据文件也使得数据文件处于一致性状态（追平LSN号）。</li>
+<li>将redo进行重做，已提交的写到数据文件，未提交的使用undo回滚掉。模拟了CSR的过程<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@db01 ~]<span class="comment"># innobackupex --apply-log /tmp/my_bak/2020-04-22_11-15-31/</span></span><br><span class="line">200422 14:12:27 completed OK!</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>恢复备份</strong><br>前提：</p>
+<ul>
+<li>被恢复的目录是空</li>
+<li>被恢复的数据库的实例是关闭<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@db01 ~]<span class="comment"># cp -a /tmp/my_bak/2020-04-22_11-15-31/* /data/3307/data/</span></span><br><span class="line">[root@db01 ~]<span class="comment"># chown -R mysql.mysql /data/3307/data/</span></span><br><span class="line">[root@db01 ~]<span class="comment"># systemctl restart mysqld3307</span></span><br><span class="line">[root@db01 ~]<span class="comment"># mysql -uroot -h 192.168.56.2 -P3307 -p</span></span><br><span class="line">Enter password: </span><br><span class="line">mysql&gt; show databases;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="6-6XBK增量备份"><a href="#6-6XBK增量备份" class="headerlink" title="6.6XBK增量备份"></a>6.6XBK增量备份</h3><p><strong>备份方式</strong>：基于上次的备份的增量<br><strong>恢复方式</strong>：增量备份不能单独恢复，必须合并到全备中，一起恢复</p>
+<h4 id="6-6-1-周日全备"><a href="#6-6-1-周日全备" class="headerlink" title="6.6.1 周日全备"></a>6.6.1 周日全备</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">innobackupex --defaults-file=/data/3307/my.cnf --user=root --password=123 --no-timestamp /tmp/my_bak/full_$(date +%F)</span><br><span class="line">200422 15:00:24 completed OK!</span><br></pre></td></tr></table></figure>
+<h4 id="6-6-1-模拟周一变化"><a href="#6-6-1-模拟周一变化" class="headerlink" title="6.6.1 模拟周一变化"></a>6.6.1 模拟周一变化</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">create database xbk charset utf8mb4;	</span><br><span class="line">use xbk</span><br><span class="line">create table t1(id int);</span><br><span class="line">insert into t1 values(1),(2),(3);</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-6-2-模拟周一晚上的增量备份"><a href="#6-6-2-模拟周一晚上的增量备份" class="headerlink" title="6.6.2 模拟周一晚上的增量备份"></a>6.6.2 模拟周一晚上的增量备份</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">innobackupex --defaults-file=/data/3307/my.cnf --user=root --password=123 --no-timestamp --incremental --incremental-basedir=/tmp/my_bak/full_2020-04-22/ /tmp/my_bak/inc1_$(date +%F)</span><br><span class="line">200422 15:06:36 completed OK!</span><br><span class="line">--no-timestamp //备份目录不带时间戳</span><br><span class="line">--incremental //增量备份</span><br><span class="line">--incremental-basedir //指定上一次备份的路径</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-6-3-模拟周二变化"><a href="#6-6-3-模拟周二变化" class="headerlink" title="6.6.3 模拟周二变化"></a>6.6.3 模拟周二变化</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use xbk</span><br><span class="line">create table t2(id int);</span><br><span class="line">insert into t2 values(1),(2),(3);</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-6-4-模拟周二晚上的增量备份"><a href="#6-6-4-模拟周二晚上的增量备份" class="headerlink" title="6.6.4 模拟周二晚上的增量备份"></a>6.6.4 模拟周二晚上的增量备份</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">innobackupex --defaults-file=/data/3307/my.cnf --user=root --password=123 --no-timestamp --incremental --incremental-basedir=/tmp/my_bak/inc1_2020-04-22/ /tmp/my_bak/inc2_$(date +%F)</span><br><span class="line">200422 15:12:38 completed OK!</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-6-4-检查备份"><a href="#6-6-4-检查备份" class="headerlink" title="6.6.4 检查备份"></a>6.6.4 检查备份</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@db01 ~]<span class="comment"># cat /tmp/my_bak/full_2020-04-22/xtrabackup_checkpoints /tmp/my_bak/inc1_2020-04-22/xtrabackup_checkpoints /tmp/my_bak/inc2_2020-04-22/xtrabackup_checkpoints</span></span><br><span class="line">backup_type = full-backuped</span><br><span class="line">from_lsn = 0</span><br><span class="line">to_lsn = 11692091</span><br><span class="line">last_lsn = 11692100 //减9 比较下一个from_lsn</span><br><span class="line">compact = 0</span><br><span class="line">recover_binlog_info = 0</span><br><span class="line"></span><br><span class="line">backup_type = incremental</span><br><span class="line">from_lsn = 11692091 //加9 比较上一个last_lsn</span><br><span class="line">to_lsn = 11707474</span><br><span class="line">last_lsn = 11707483  //减9 比较下一个from_lsn</span><br><span class="line">compact = 0</span><br><span class="line">recover_binlog_info = 0</span><br><span class="line">backup_type = incremental</span><br><span class="line"></span><br><span class="line">from_lsn = 11707474  //加9 比较上一个last_lsn</span><br><span class="line">to_lsn = 11713070</span><br><span class="line">last_lsn = 11713079</span><br><span class="line">compact = 0</span><br><span class="line">recover_binlog_info = 0</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-7XBK增量恢复"><a href="#6-7XBK增量恢复" class="headerlink" title="6.7XBK增量恢复"></a>6.7XBK增量恢复</h3><p><strong>思路</strong>：合并所以增量到全备，每个XBK备份都需要恢复准备（prepare）<br>–apply-log（该回滚的回滚，该前滚的前滚）   –redo-only（防止LSN号出现断点，防止回滚）</p>
+<h4 id="1-整理全备："><a href="#1-整理全备：" class="headerlink" title="1. 整理全备："></a>1. 整理全备：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@db01 ~]<span class="comment"># innobackupex --apply-log --redo-only /tmp/my_bak/full_2020-04-22/</span></span><br><span class="line">200422 15:44:55 completed OK!</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-合并周一增量并整理到全备"><a href="#2-合并周一增量并整理到全备" class="headerlink" title="2. 合并周一增量并整理到全备"></a>2. 合并周一增量并整理到全备</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@db01 ~]<span class="comment"># innobackupex --apply-log --redo-only --incremental-dir=/tmp/my_bak/inc1_2020-04-22/ /tmp/my_bak/full_2020-04-22/</span></span><br><span class="line">                               追平LSN。   防止UNDO     需要合并的增备                                  合并到哪里</span><br><span class="line">200422 16:32:04 completed OK!</span><br><span class="line">此时 5.4.2中 block1的last_lsn应该等于block2的last_lsn</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-合并周二增量并整理到全备"><a href="#3-合并周二增量并整理到全备" class="headerlink" title="3. 合并周二增量并整理到全备"></a>3. 合并周二增量并整理到全备</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@db01 ~]<span class="comment"># innobackupex --apply-log --incremental-dir=/tmp/my_bak/inc2_2020-04-22/ /tmp/my_bak/full_2020-04-22/</span></span><br><span class="line">200422 16:38:30 completed OK!</span><br><span class="line">最后一次合并不需要加--redo-only</span><br><span class="line"></span><br><span class="line">此时 5.4.2中 block1的last_lsn应该等于block3的last_lsn</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-再次整理全备"><a href="#4-再次整理全备" class="headerlink" title="4. 再次整理全备"></a>4. 再次整理全备</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">innobackupex --apply-log /tmp/my_bak/full_2020-04-22/</span><br><span class="line">200422 16:42:39 completed OK!</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-全备-增量恢复"><a href="#5-全备-增量恢复" class="headerlink" title="5. 全备+增量恢复"></a>5. 全备+增量恢复</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">恢复：</span><br><span class="line">[root@db01 ~]<span class="comment"># innobackupex --defaults-file=/data/3307/my.cnf --copy-back /tmp/my_bak/full_2020-04-22/</span></span><br><span class="line">                             这个参数必须放第一位</span><br><span class="line">200422 16:47:40 completed OK!</span><br><span class="line">授权：</span><br><span class="line">[root@db01 ~]<span class="comment"># chown -R mysql.mysql /data/3307/data/</span></span><br><span class="line">[root@db01 ~]<span class="comment"># systemctl restart mysqld3307</span></span><br><span class="line">[root@db01 ~]<span class="comment"># mysql -uroot -h 192.168.56.2 -P3307 -p</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-8-企业备份恢复案例（XBK-full-inc-binlog）"><a href="#5-8-企业备份恢复案例（XBK-full-inc-binlog）" class="headerlink" title="5.8 企业备份恢复案例（XBK full+inc+binlog）"></a>5.8 企业备份恢复案例（XBK full+inc+binlog）</h3><p><strong>案例背景</strong>： 某中型互联网公司。MySQL 5.7.26 ，Centos 7.6 ，数据量级600G，每日数据增量15-50M<br><strong>备份策略</strong>： 周日XBK全备+周一到周六inc增量+binlog备份，每天23:00进行。<br><strong>故障描述</strong>： 周三下午2点，数据由于某原因数据损坏。<br><strong>处理思路</strong>： </p>
+<ol>
+<li>挂出维护页</li>
+<li>评估一下数据损坏状态</li>
+</ol>
+<ul>
+<li>2.1 全部丢失–&gt;推荐直接生产恢复</li>
+<li>2.2 部分丢失</li>
+</ul>
+<ol start="3">
+<li>整理合并所有备份：full+inc1+inc2 </li>
+<li>截取 周二晚上到周三下午午故障点的binlog日志</li>
+<li>恢复全备，恢复binlog</li>
+<li>检查数据完整性</li>
+<li>恢复业务</li>
+</ol>
+<p><strong>处理结果</strong>：</p>
+<ol>
+<li>经过70-80分钟处理，业务恢复</li>
+<li>评估此次故障的处理的合理性和实用性</li>
+</ol>
+<p><strong>案例模拟</strong>：</p>
+<h4 id="1-模拟周日的全备"><a href="#1-模拟周日的全备" class="headerlink" title="1. 模拟周日的全备"></a>1. 模拟周日的全备</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">innobackupex --defaults-file=/data/3307/my.cnf --user=root --password=123 --no-timestamp /tmp/my_bak/full //全备</span><br><span class="line"></span><br><span class="line">cat /tmp/my_bak/full/xtrabackup_checkpoints //检查备份</span><br><span class="line">backup_type = full-backuped</span><br><span class="line">from_lsn = 0</span><br><span class="line">to_lsn = 11713915</span><br><span class="line">last_lsn = 11713924</span><br><span class="line">compact = 0</span><br><span class="line">recover_binlog_info = 0</span><br></pre></td></tr></table></figure>
+<h4 id="2-模拟周一的数据变化"><a href="#2-模拟周一的数据变化" class="headerlink" title="2. 模拟周一的数据变化"></a>2. 模拟周一的数据变化</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create database hisoss charset utf8mb4;</span><br><span class="line">mysql&gt; use hisoss</span><br><span class="line">mysql&gt; create table his_order(id int);</span><br><span class="line">mysql&gt; insert into his_order values(1),(2),(3);</span><br><span class="line">mysql&gt; commit;</span><br></pre></td></tr></table></figure>
+<h4 id="3-模拟周一晚上增量备份"><a href="#3-模拟周一晚上增量备份" class="headerlink" title="3. 模拟周一晚上增量备份"></a>3. 模拟周一晚上增量备份</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">innobackupex --defaults-file=/data/3307/my.cnf --user=root --password=123 --no-timestamp --incremental --incremental-basedir=/tmp/my_bak/full/ /tmp/my_bak/inc1</span><br><span class="line"></span><br><span class="line">检查备份：</span><br><span class="line">[root@db01 ~]<span class="comment"># cat /tmp/my_bak/full/xtrabackup_checkpoints </span></span><br><span class="line">backup_type = full-backuped</span><br><span class="line">from_lsn = 0</span><br><span class="line">to_lsn = 11713915</span><br><span class="line">last_lsn = 11713924 //</span><br><span class="line">compact = 0</span><br><span class="line">recover_binlog_info = 0</span><br><span class="line">[root@db01 ~]<span class="comment"># cat /tmp/my_bak/inc1/xtrabackup_checkpoints </span></span><br><span class="line">backup_type = incremental</span><br><span class="line">from_lsn = 11713915 //</span><br><span class="line">to_lsn = 11720266</span><br><span class="line">last_lsn = 11720275</span><br><span class="line">compact = 0</span><br><span class="line">recover_binlog_info = 0</span><br></pre></td></tr></table></figure>
+<h4 id="4-模拟周二的数据变化"><a href="#4-模拟周二的数据变化" class="headerlink" title="4. 模拟周二的数据变化"></a>4. 模拟周二的数据变化</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">insert into his_order values(11),(22),(33);</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
+<h4 id="5-模拟周二晚上增量备份"><a href="#5-模拟周二晚上增量备份" class="headerlink" title="5. 模拟周二晚上增量备份"></a>5. 模拟周二晚上增量备份</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">innobackupex --defaults-file=/data/3307/my.cnf --user=root --password=123 --no-timestamp --incremental --incremental-basedir=/tmp/my_bak/inc1 /tmp/my_bak/inc2</span><br><span class="line"></span><br><span class="line">检查备份：</span><br><span class="line">[root@db01 ~]<span class="comment"># cat /tmp/my_bak/full/xtrabackup_checkpoints backup_type = full-backuped</span></span><br><span class="line">from_lsn = 0</span><br><span class="line">to_lsn = 11713915</span><br><span class="line">last_lsn = 11713924 //</span><br><span class="line">compact = 0</span><br><span class="line">recover_binlog_info = 0</span><br><span class="line">[root@db01 ~]<span class="comment"># cat /tmp/my_bak/inc1/xtrabackup_checkpoints backup_type = incremental</span></span><br><span class="line">from_lsn = 11713915  //</span><br><span class="line">to_lsn = 11720266</span><br><span class="line">last_lsn = 11720275  //</span><br><span class="line">compact = 0</span><br><span class="line">recover_binlog_info = 0</span><br><span class="line">[root@db01 ~]<span class="comment"># cat /tmp/my_bak/inc2/xtrabackup_checkpoints </span></span><br><span class="line">backup_type = incremental</span><br><span class="line">from_lsn = 11720266  //</span><br><span class="line">to_lsn = 11722449</span><br><span class="line">last_lsn = 11722458</span><br><span class="line">compact = 0</span><br><span class="line">recover_binlog_info = 0</span><br></pre></td></tr></table></figure>
+<h4 id="6-模拟周三的数据变化"><a href="#6-模拟周三的数据变化" class="headerlink" title="6. 模拟周三的数据变化"></a>6. 模拟周三的数据变化</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">insert into his_order values(111),(222),(333);</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-有一个傻子，把数据库data目录给rm掉了"><a href="#7-有一个傻子，把数据库data目录给rm掉了" class="headerlink" title="7. 有一个傻子，把数据库data目录给rm掉了"></a>7. 有一个傻子，把数据库data目录给rm掉了</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pkill mysqld</span><br><span class="line">\rm -rf /data/3307/data/*</span><br></pre></td></tr></table></figure>
+
+<h4 id="8-整理-合并-备份"><a href="#8-整理-合并-备份" class="headerlink" title="8.整理 合并 备份"></a>8.整理 合并 备份</h4><p>（1）整理全备 <code>innobackupex --apply-log --redo-only /tmp/my_bak/full/</code><br>（2）inc1 合并并整理到full <code>innobackupex --apply-log --redo-only --incremental-dir=/tmp/my_bak/inc1 /tmp/my_bak/full/</code><br>（3）inc2 合并并整理到full <code>innobackupex --apply-log --redo-only --incremental-dir=/tmp/my_bak/inc2 /tmp/my_bak/full/</code><br>（4）检查备份是否整理完整</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat /tmp/my_bak/full/xtrabackup_checkpoints /tmp/my_bak/inc2/xtrabackup_checkpoints</span><br><span class="line"></span><br><span class="line">last_lsn = 11722458</span><br><span class="line"></span><br><span class="line">last_lsn = 11722458</span><br></pre></td></tr></table></figure>
+<p>（5）整体整理在做一次<code>innobackupex --apply-log /tmp/my_bak/full/</code></p>
+<h4 id="9-恢复备份数据"><a href="#9-恢复备份数据" class="headerlink" title="9. 恢复备份数据"></a>9. 恢复备份数据</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp -na /tmp/my_bak/full/* /data/3307/data/  拷贝</span><br><span class="line">chown -R mysql.mysql /data/3307/data/* 授权</span><br><span class="line">systemctl restart mysqld3307</span><br></pre></td></tr></table></figure>
+
+<h4 id="10-从最后一次增备中查看binlog起点"><a href="#10-从最后一次增备中查看binlog起点" class="headerlink" title="10. 从最后一次增备中查看binlog起点"></a>10. 从最后一次增备中查看binlog起点</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">[root@db01 ~]<span class="comment"># cat /tmp/my_bak/inc2/xtrabackup_binlog_info </span></span><br><span class="line">mysql-bin.000027        1136    bd623560-8476-11ea-ba73-0800273e0795:1-4, //看这个，在数据库中也是这个UUID:GTID</span><br><span class="line">cca7bb3f-687e-11ea-b0d9-0800273e0795:1-19,</span><br><span class="line">dd4ce0c3-8463-11ea-9af9-0800273e0795:1-8</span><br><span class="line">[root@db01 ~]<span class="comment"># mysql -uroot -h 192.168.56.2 -P3307 -p</span></span><br><span class="line">Enter password: </span><br><span class="line">mysql&gt; show binlog events <span class="keyword">in</span> <span class="string">&#x27;mysql-bin.000027&#x27;</span>;</span><br><span class="line">| mysql-bin.000027 | 1136 | Gtid           |         7 |        1201 | SET @@SESSION.GTID_NEXT= <span class="string">&#x27;bd623560-8476-11ea-ba73-0800273e0795:5&#x27;</span>                  </span><br><span class="line">| mysql-bin.000027 | 1201 | Query          |         7 |        1275 | BEGIN                                                                               </span><br><span class="line">| mysql-bin.000027 | 1275 | Table_map      |         7 |        1329 | table_id: 482 (hisoss.his_order)                                                    </span><br><span class="line">| mysql-bin.000027 | 1329 | Write_rows     |         7 |        1379 | table_id: 482 flags: STMT_END_F                                                     </span><br><span class="line">| mysql-bin.000027 | 1379 | Xid            |         7 |        1410 | COMMIT /* xid=91 */                                                                 </span><br><span class="line">| mysql-bin.000027 | 1410 | Stop           |         7 |        1433 |                                                                                     </span><br><span class="line"></span><br><span class="line">//分析：通过检查最后一次增备中记录的binlog日志文件（000027）信息，和最后一个GTID号为4。所以我们只需要截取 GTID=4 往后的日志内容。这里只有一个事务 GTID=5. </span><br><span class="line"></span><br><span class="line">截取日志：</span><br><span class="line">[root@db01 ~]<span class="comment"># mysqlbinlog --skip-gtids --include-gtids=&#x27;bd623560-8476-11ea-ba73-0800273e0795:5&#x27; /data/3307/mysql-bin.000027 &gt; /tmp/my_bak/bin.sql</span></span><br><span class="line"></span><br><span class="line">恢复：</span><br><span class="line">mysql&gt; <span class="built_in">set</span> sql_log_bin=0;</span><br><span class="line">mysql&gt; <span class="built_in">source</span> /tmp/my_bak/bin.sql</span><br><span class="line"></span><br><span class="line">检查：</span><br><span class="line">mysql&gt; use hisoss;</span><br><span class="line">Reading table information <span class="keyword">for</span> completion of table and column names</span><br><span class="line">You can turn off this feature to get a quicker startup with -A</span><br><span class="line"></span><br><span class="line">Database changed</span><br><span class="line">mysql&gt; show tables;</span><br><span class="line">+------------------+</span><br><span class="line">| Tables_in_hisoss |</span><br><span class="line">+------------------+</span><br><span class="line">| his_order        |</span><br><span class="line">+------------------+</span><br><span class="line">1 row <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from his_order;</span><br><span class="line">+------+</span><br><span class="line">| id   |</span><br><span class="line">+------+</span><br><span class="line">|    1 |</span><br><span class="line">|    2 |</span><br><span class="line">|    3 |//周一</span><br><span class="line">|   11 |</span><br><span class="line">|   22 |</span><br><span class="line">|   33 |//周二</span><br><span class="line">|  111 |</span><br><span class="line">|  222 |</span><br><span class="line">|  333 |//周三</span><br><span class="line">+------+</span><br><span class="line">9 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h4 id="11-部分数据丢失处理方法"><a href="#11-部分数据丢失处理方法" class="headerlink" title="11. 部分数据丢失处理方法"></a>11. 部分数据丢失处理方法</h4><p>假如，只是少量数据被损坏，以上方法有哪些不妥的地方？</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">处理方法：</span><br><span class="line">    找到表结构，建表语句。</span><br><span class="line">    从备份中提取指定表的ibd文件</span><br><span class="line">进行表空间迁移</span><br><span class="line">alter table t1  discard tablespace</span><br><span class="line">alter table t1  import  tablespace</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">innobackupex --user=root --password=123 --defaults-file=/etc/my.cnf --no-timestamp --stream=tar --use-memory=256M  --parallel=8 /data/mysql_backup | gzip | ssh root@10.0.0.52 <span class="string">&quot; cat - &gt; /data/mysql_backup.tar.gz&quot;</span></span><br><span class="line"></span><br><span class="line"> --stream=tar //启用流的压缩方式进行备份</span><br><span class="line"> --use-memory=256M  //指定划分部分内存大小</span><br><span class="line"> --parallel=8  //开启并发备份</span><br><span class="line"> --ssh root@10.0.0.52 <span class="string">&quot; cat - &gt; /data/mysql_backup.tar.gz&quot;</span>  //将本地备份好的备份，推送到远程服务器上</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-MySQL数据迁移"><a href="#7-MySQL数据迁移" class="headerlink" title="7.MySQL数据迁移"></a>7.MySQL数据迁移</h2><h3 id="7-2技术方面"><a href="#7-2技术方面" class="headerlink" title="7.2技术方面"></a>7.2技术方面</h3><ul>
+<li>工具选择，MDP/XBK<h3 id="7-3其他"><a href="#7-3其他" class="headerlink" title="7.3其他"></a>7.3其他</h3></li>
+<li>停机时间</li>
+<li>回退方案</li>
+</ul>
+<h3 id="7-1更换服务器"><a href="#7-1更换服务器" class="headerlink" title="7.1更换服务器"></a>7.1更换服务器</h3><h4 id="7-1-1数据量小"><a href="#7-1-1数据量小" class="headerlink" title="7.1.1数据量小"></a>7.1.1数据量小</h4><p>思路：</p>
+<ol>
+<li>在线进行 MDP，XBK备份处理，scp到目标进行恢复</li>
+<li>追加所有备份后的binlog日志</li>
+<li>申请停机</li>
+<li>剩余部分的binlog继续恢复（搭建主从的方式替代）</li>
+<li>校验数据，进行业务各界割接</li>
+</ol>
+<h4 id="7-1-2数据量大"><a href="#7-1-2数据量大" class="headerlink" title="7.1.2数据量大"></a>7.1.2数据量大</h4><ol>
+<li>XBK备份处理，scp到目标进行恢复</li>
+<li>搭建主从的方式</li>
+<li>申请停机15分钟</li>
+<li>校验数据，进行业务各界割接</li>
+</ol>
+<h3 id="7-3换版本升级（如5-6–-gt-5-7）"><a href="#7-3换版本升级（如5-6–-gt-5-7）" class="headerlink" title="7.3换版本升级（如5.6–&gt;5.7）"></a>7.3换版本升级（如5.6–&gt;5.7）</h3><ol>
+<li>安装新版本 </li>
+<li>替换旧的环境变量</li>
+<li>mysqld_safe //启动到维护模式拉起数据</li>
+<li>mysql_upgrade //重建数据字典<br>或：</li>
+<li>建议使用mysqldump逻辑备份方式，按业务库为单位进行备份（排除：information_schema,performance_schema,sys）。</li>
+<li>mysql_upgrade //重建数据字典</li>
+<li>追加日志<br>或：<br>不同版本进行主从复制，进行过滤复制，（排除：information_schema,performance_schema,sys）</li>
+</ol>
+<h3 id="7-4异构迁移（win-gt-linux）"><a href="#7-4异构迁移（win-gt-linux）" class="headerlink" title="7.4异构迁移（win-&gt;linux）"></a>7.4异构迁移（win-&gt;linux）</h3><p>只能用逻辑备份！</p>
+<h3 id="7-5异构迁移（数据库产品不同）"><a href="#7-5异构迁移（数据库产品不同）" class="headerlink" title="7.5异构迁移（数据库产品不同）"></a>7.5异构迁移（数据库产品不同）</h3><p>Oracle –OGG–&gt; MySQL<br>MySQL–到处为CSV格式–&gt;MongoDB<br>MySQL–JSON–&gt;MongoDB</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined" rel="external nofollow noreferrer">饼铛</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://cakepanit.com/forward/5c41384a.html">https://cakepanit.com/forward/5c41384a.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://cakepanit.com" target="_blank">Maxbit</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySQL/">MySQL</a><a class="post-meta__tags" href="/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/">日志管理</a><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD/">数据备份</a></div><div class="post_share"><div class="social-share" data-image="/images/img-71.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/DGaBgCC38vJiNnurYYFbtahoFWFNDF4hc6.png" target="_blank"><img class="post-qr-code-img" src="/img/DGaBgCC38vJiNnurYYFbtahoFWFNDF4hc6.png" alt="狗狗币(DogeCoin)"/></a><div class="post-qr-code-desc">狗狗币(DogeCoin)</div></li><li class="reward-item"><a href="/img/bc1qj9u4lk9nj8jgmq6rzcddc70ppqjq9vldrjngct.png" target="_blank"><img class="post-qr-code-img" src="/img/bc1qj9u4lk9nj8jgmq6rzcddc70ppqjq9vldrjngct.png" alt="比特币(BitCoin)"/></a><div class="post-qr-code-desc">比特币(BitCoin)</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/forward/69e1266e.html"><img class="prev-cover" src="/images/img-71.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">MySQL-主从复制基础&amp;故障分析</div></div></a></div><div class="next-post pull-right"><a href="/forward/62bf20bb.html"><img class="next-cover" src="/images/img-71.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">MySQL-日志管理[slowlog慢日志]</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/forward/62bf20bb.html" title="MySQL-日志管理[slowlog慢日志]"><img class="cover" src="/images/img-71.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-16</div><div class="title">MySQL-日志管理[slowlog慢日志]</div></div></a></div><div><a href="/forward/93ea067.html" title="MySQL-日志管理[GTID]"><img class="cover" src="/images/img-71.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-15</div><div class="title">MySQL-日志管理[GTID]</div></div></a></div><div><a href="/forward/1785d60f.html" title="MySQL-日志管理[bin_log原理&恢复案例]"><img class="cover" src="/images/img-71.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-15</div><div class="title">MySQL-日志管理[bin_log原理&恢复案例]</div></div></a></div><div><a href="/forward/3053135c.html" title="MySQL-InnoDB存储引擎&优化"><img class="cover" src="/images/img-71.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-11</div><div class="title">MySQL-InnoDB存储引擎&优化</div></div></a></div><div><a href="/forward/74c8159a.html" title="MySQL-MHA+Atlas+VIP+Binlog server实现MySQL的高可用和读写分离"><img class="cover" src="/images/img-71.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-30</div><div class="title">MySQL-MHA+Atlas+VIP+Binlog server实现MySQL的高可用和读写分离</div></div></a></div><div><a href="/forward/bbb9c58b.html" title="MySQL-MHA环境准备_搭建_故障恢复"><img class="cover" src="/images/img-71.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-28</div><div class="title">MySQL-MHA环境准备_搭建_故障恢复</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">饼铛</div><div class="author-info__description">Do one's level best and leave the rest to God's will.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">85</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">59</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://t.me/joinchat/c_ParmoHMmU5MDM9" rel="external nofollow noreferrer" target="_blank" title="Telegram"><i class="fab fa-telegram-plane"></i></a><a class="social-icon" href="https://qm.qq.com/cgi-bin/qm/qr?k=Q1N9l3isk8O_i5awFwO-blAoPH7PUeb4&amp;noverify=0" rel="external nofollow noreferrer" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:flybaf740@gmail.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://music.163.com/playlist?id=5434811591" rel="external nofollow noreferrer" target="_blank" title="Netease"><i class="fas fa-record-vinyl"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">2021年2月博客改版。本地容器化，支持：全站https，http/3，Gzip，Brotli压缩，页面压缩</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9%E5%9B%9E%E9%A1%BE%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">知识点回顾：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-number">1.1.</span> <span class="toc-text">1、存储引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-InnoDB%EF%BC%88%E9%BB%98%E8%AE%A4%E4%BD%BF%E7%94%A8%E5%BC%95%E6%93%8E%EF%BC%8C%E4%B9%9F%E6%98%AF%E4%BC%81%E4%B8%9A%E5%B8%B8%E7%94%A8%E7%9A%84%EF%BC%89"><span class="toc-number">1.1.1.</span> <span class="toc-text">(1)InnoDB（默认使用引擎，也是企业常用的）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-MyISAM"><span class="toc-number">1.1.2.</span> <span class="toc-text">(2)MyISAM</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%97%A5%E5%BF%97"><span class="toc-number">1.2.</span> <span class="toc-text">2、二进制日志</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E8%AE%B0%E5%BD%95%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.2.1.</span> <span class="toc-text">(1)记录的是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E4%BA%8B%E4%BB%B6"><span class="toc-number">1.2.2.</span> <span class="toc-text">(2)事件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%88%AA%E5%8F%96%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%97%A5%E5%BF%97"><span class="toc-number">1.2.3.</span> <span class="toc-text">(3)截取二进制日志</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%BF%90%E7%BB%B4DBA-%E5%9C%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E6%81%A2%E5%A4%8D%E6%96%B9%E9%9D%A2%E7%9A%84%E8%81%8C%E8%B4%A3"><span class="toc-number">2.</span> <span class="toc-text">1.运维DBA 在数据库备份恢复方面的职责</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1%E8%AE%BE%E8%AE%A1%E5%A4%87%E4%BB%BD%E7%AD%96%E7%95%A5"><span class="toc-number">2.1.</span> <span class="toc-text">1.1设计备份策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2%E6%97%A5%E5%B8%B8%E5%A4%87%E4%BB%BD%E6%A3%80%E6%9F%A5"><span class="toc-number">2.2.</span> <span class="toc-text">1.2日常备份检查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3%E5%AE%9A%E6%9C%9F%E6%81%A2%E5%A4%8D%E6%BC%94%E7%BB%83%EF%BC%88%E6%B5%8B%E8%AF%95%E5%BA%93%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">1.3定期恢复演练（测试库）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D"><span class="toc-number">2.4.</span> <span class="toc-text">1.4故障恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5%E8%BF%81%E7%A7%BB"><span class="toc-number">2.5.</span> <span class="toc-text">1.5迁移</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6%E5%A4%87%E4%BB%BD%E6%98%AF%E4%B8%BA%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">2.6.</span> <span class="toc-text">1.6备份是为了什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-7%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8D%9F%E5%9D%8F"><span class="toc-number">2.7.</span> <span class="toc-text">1.7数据库损坏</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%A4%87%E4%BB%BD%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.</span> <span class="toc-text">2.备份类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%A4%87%E4%BB%BD%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D"><span class="toc-number">4.</span> <span class="toc-text">3.备份工具介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E9%80%BB%E8%BE%91%E5%A4%87%E4%BB%BD%E5%B7%A5%E5%85%B7"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 逻辑备份工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E7%89%A9%E7%90%86%E5%A4%87%E4%BB%BD%E5%B7%A5%E5%85%B7"><span class="toc-number">4.2.</span> <span class="toc-text">3.2 物理备份工具</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%A4%87%E4%BB%BD%E7%AD%96%E7%95%A5"><span class="toc-number">5.</span> <span class="toc-text">4.备份策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1%E9%80%BB%E8%BE%91%E5%A4%87%E4%BB%BD%E5%92%8C%E7%89%A9%E7%90%86%E5%A4%87%E4%BB%BD%E6%AF%94%E8%BE%83"><span class="toc-number">5.1.</span> <span class="toc-text">4.1逻辑备份和物理备份比较</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-1mysqldump%EF%BC%88MDP%EF%BC%89"><span class="toc-number">5.1.1.</span> <span class="toc-text">4.1.1mysqldump（MDP）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-2xtrabackup-XBK"><span class="toc-number">5.1.2.</span> <span class="toc-text">4.1.2xtrabackup(XBK)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%A4%87%E4%BB%BD%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="toc-number">5.2.</span> <span class="toc-text">4.2 备份方式：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3%E5%A4%87%E4%BB%BD%E5%91%A8%E6%9C%9F"><span class="toc-number">5.3.</span> <span class="toc-text">4.3备份周期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4%E9%80%BB%E8%BE%91%E5%A4%87%E4%BB%BD%E5%B7%A5%E5%85%B7-mysqldump"><span class="toc-number">5.4.</span> <span class="toc-text">4.4逻辑备份工具-mysqldump</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-1-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%80%9A%E7%94%A8%E5%8F%82%E6%95%B0%E3%80%90%E5%92%8C%E8%BF%9E%E6%8E%A5%E6%9C%89%E5%85%B3%E3%80%91"><span class="toc-number">5.4.1.</span> <span class="toc-text">4.4.1 客户端通用参数【和连接有关】</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#4-4-1-1%E6%9C%AC%E5%9C%B0%E5%A4%87%E4%BB%BD%E8%BF%9E%E6%8E%A5%E6%96%B9%E5%BC%8F"><span class="toc-number">5.4.1.1.</span> <span class="toc-text">4.4.1.1本地备份连接方式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-4-1-2%E8%BF%9C%E7%A8%8B%E5%A4%87%E4%BB%BD%E7%9A%84%E8%BF%9E%E6%8E%A5%E6%96%B9%E5%BC%8F"><span class="toc-number">5.4.1.2.</span> <span class="toc-text">4.4.1.2远程备份的连接方式</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-2%E5%9F%BA%E6%9C%AC%E5%A4%87%E4%BB%BD%E5%8F%82%E6%95%B0"><span class="toc-number">5.4.2.</span> <span class="toc-text">4.4.2基本备份参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-3%E5%BF%85%E5%8A%A0%E5%8F%82%E6%95%B0-lt-1-gt"><span class="toc-number">5.4.3.</span> <span class="toc-text">4.4.3必加参数&lt;1&gt;</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-4%E5%BF%85%E5%8A%A0%E5%8F%82%E6%95%B0-lt-2-gt"><span class="toc-number">5.4.4.</span> <span class="toc-text">4.4.4必加参数&lt;2&gt;</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-5%E5%85%B6%E4%BB%96%E5%8F%82%E6%95%B0"><span class="toc-number">5.4.5.</span> <span class="toc-text">4.4.5其他参数</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%BC%81%E4%B8%9A%E5%A4%87%E4%BB%BD%E6%81%A2%E5%A4%8D%E6%A1%88%E4%BE%8B%EF%BC%88mysqldump-binlog%EF%BC%89%EF%BC%9A"><span class="toc-number">6.</span> <span class="toc-text">5.企业备份恢复案例（mysqldump+binlog）：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-frm%E8%AF%AF%E5%88%A0%E9%99%A4"><span class="toc-number">6.1.</span> <span class="toc-text">5.1 frm误删除</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%89%E5%85%A8%E5%A4%87%E6%83%85%E5%86%B5%E4%B8%8B"><span class="toc-number">6.1.1.</span> <span class="toc-text">有全备情况下</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B2%A1%E6%9C%89%E5%85%A8%E5%A4%87%E6%83%85%E5%86%B5%E4%B8%8B"><span class="toc-number">6.1.2.</span> <span class="toc-text">没有全备情况下</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E5%B9%B4%E7%BB%88%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D%E6%BC%94%E7%BB%83%E3%80%82"><span class="toc-number">6.2.</span> <span class="toc-text">5.2 年终故障恢复演练。</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%81%BE%E5%90%8E%E6%81%A2%E5%A4%8D%E5%85%B7%E4%BD%93%E8%BF%87%E7%A8%8B%EF%BC%9A"><span class="toc-number">6.2.1.</span> <span class="toc-text">灾后恢复具体过程：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%95%E8%A1%A8%E6%81%A2%E5%A4%8D%E5%85%B7%E4%BD%93%E8%BF%87%E7%A8%8B%EF%BC%9A"><span class="toc-number">6.2.2.</span> <span class="toc-text">单表恢复具体过程：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-XtraBackup%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%AE%89%E8%A3%85"><span class="toc-number">7.</span> <span class="toc-text">6.XtraBackup简介及安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1%E5%AE%89%E8%A3%85"><span class="toc-number">7.1.</span> <span class="toc-text">6.1安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2%E5%A4%87%E4%BB%BD%E5%91%BD%E4%BB%A4%E4%BB%8B%E7%BB%8D"><span class="toc-number">7.2.</span> <span class="toc-text">6.2备份命令介绍:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E5%A4%87%E4%BB%BD%E6%96%B9%E5%BC%8F%E2%80%94%E2%80%94%E7%89%A9%E7%90%86%E5%A4%87%E4%BB%BD"><span class="toc-number">7.3.</span> <span class="toc-text">6.3 备份方式——物理备份</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-innobackupex%E4%BD%BF%E7%94%A8"><span class="toc-number">7.4.</span> <span class="toc-text">6.3 innobackupex使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4%E5%85%A8%E5%A4%87"><span class="toc-number">7.5.</span> <span class="toc-text">6.4全备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-5%E5%85%A8%E5%A4%87%E6%81%A2%E5%A4%8D"><span class="toc-number">7.6.</span> <span class="toc-text">6.5全备恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6XBK%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD"><span class="toc-number">7.7.</span> <span class="toc-text">6.6XBK增量备份</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-6-1-%E5%91%A8%E6%97%A5%E5%85%A8%E5%A4%87"><span class="toc-number">7.7.1.</span> <span class="toc-text">6.6.1 周日全备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-6-1-%E6%A8%A1%E6%8B%9F%E5%91%A8%E4%B8%80%E5%8F%98%E5%8C%96"><span class="toc-number">7.7.2.</span> <span class="toc-text">6.6.1 模拟周一变化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-6-2-%E6%A8%A1%E6%8B%9F%E5%91%A8%E4%B8%80%E6%99%9A%E4%B8%8A%E7%9A%84%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD"><span class="toc-number">7.7.3.</span> <span class="toc-text">6.6.2 模拟周一晚上的增量备份</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-6-3-%E6%A8%A1%E6%8B%9F%E5%91%A8%E4%BA%8C%E5%8F%98%E5%8C%96"><span class="toc-number">7.7.4.</span> <span class="toc-text">6.6.3 模拟周二变化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-6-4-%E6%A8%A1%E6%8B%9F%E5%91%A8%E4%BA%8C%E6%99%9A%E4%B8%8A%E7%9A%84%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD"><span class="toc-number">7.7.5.</span> <span class="toc-text">6.6.4 模拟周二晚上的增量备份</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-6-4-%E6%A3%80%E6%9F%A5%E5%A4%87%E4%BB%BD"><span class="toc-number">7.7.6.</span> <span class="toc-text">6.6.4 检查备份</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-7XBK%E5%A2%9E%E9%87%8F%E6%81%A2%E5%A4%8D"><span class="toc-number">7.8.</span> <span class="toc-text">6.7XBK增量恢复</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%95%B4%E7%90%86%E5%85%A8%E5%A4%87%EF%BC%9A"><span class="toc-number">7.8.1.</span> <span class="toc-text">1. 整理全备：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%90%88%E5%B9%B6%E5%91%A8%E4%B8%80%E5%A2%9E%E9%87%8F%E5%B9%B6%E6%95%B4%E7%90%86%E5%88%B0%E5%85%A8%E5%A4%87"><span class="toc-number">7.8.2.</span> <span class="toc-text">2. 合并周一增量并整理到全备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%90%88%E5%B9%B6%E5%91%A8%E4%BA%8C%E5%A2%9E%E9%87%8F%E5%B9%B6%E6%95%B4%E7%90%86%E5%88%B0%E5%85%A8%E5%A4%87"><span class="toc-number">7.8.3.</span> <span class="toc-text">3. 合并周二增量并整理到全备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%86%8D%E6%AC%A1%E6%95%B4%E7%90%86%E5%85%A8%E5%A4%87"><span class="toc-number">7.8.4.</span> <span class="toc-text">4. 再次整理全备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E5%85%A8%E5%A4%87-%E5%A2%9E%E9%87%8F%E6%81%A2%E5%A4%8D"><span class="toc-number">7.8.5.</span> <span class="toc-text">5. 全备+增量恢复</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-8-%E4%BC%81%E4%B8%9A%E5%A4%87%E4%BB%BD%E6%81%A2%E5%A4%8D%E6%A1%88%E4%BE%8B%EF%BC%88XBK-full-inc-binlog%EF%BC%89"><span class="toc-number">7.9.</span> <span class="toc-text">5.8 企业备份恢复案例（XBK full+inc+binlog）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%A8%A1%E6%8B%9F%E5%91%A8%E6%97%A5%E7%9A%84%E5%85%A8%E5%A4%87"><span class="toc-number">7.9.1.</span> <span class="toc-text">1. 模拟周日的全备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%A8%A1%E6%8B%9F%E5%91%A8%E4%B8%80%E7%9A%84%E6%95%B0%E6%8D%AE%E5%8F%98%E5%8C%96"><span class="toc-number">7.9.2.</span> <span class="toc-text">2. 模拟周一的数据变化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%A8%A1%E6%8B%9F%E5%91%A8%E4%B8%80%E6%99%9A%E4%B8%8A%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD"><span class="toc-number">7.9.3.</span> <span class="toc-text">3. 模拟周一晚上增量备份</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E6%A8%A1%E6%8B%9F%E5%91%A8%E4%BA%8C%E7%9A%84%E6%95%B0%E6%8D%AE%E5%8F%98%E5%8C%96"><span class="toc-number">7.9.4.</span> <span class="toc-text">4. 模拟周二的数据变化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%A8%A1%E6%8B%9F%E5%91%A8%E4%BA%8C%E6%99%9A%E4%B8%8A%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD"><span class="toc-number">7.9.5.</span> <span class="toc-text">5. 模拟周二晚上增量备份</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-%E6%A8%A1%E6%8B%9F%E5%91%A8%E4%B8%89%E7%9A%84%E6%95%B0%E6%8D%AE%E5%8F%98%E5%8C%96"><span class="toc-number">7.9.6.</span> <span class="toc-text">6. 模拟周三的数据变化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-%E6%9C%89%E4%B8%80%E4%B8%AA%E5%82%BB%E5%AD%90%EF%BC%8C%E6%8A%8A%E6%95%B0%E6%8D%AE%E5%BA%93data%E7%9B%AE%E5%BD%95%E7%BB%99rm%E6%8E%89%E4%BA%86"><span class="toc-number">7.9.7.</span> <span class="toc-text">7. 有一个傻子，把数据库data目录给rm掉了</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-%E6%95%B4%E7%90%86-%E5%90%88%E5%B9%B6-%E5%A4%87%E4%BB%BD"><span class="toc-number">7.9.8.</span> <span class="toc-text">8.整理 合并 备份</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-%E6%81%A2%E5%A4%8D%E5%A4%87%E4%BB%BD%E6%95%B0%E6%8D%AE"><span class="toc-number">7.9.9.</span> <span class="toc-text">9. 恢复备份数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#10-%E4%BB%8E%E6%9C%80%E5%90%8E%E4%B8%80%E6%AC%A1%E5%A2%9E%E5%A4%87%E4%B8%AD%E6%9F%A5%E7%9C%8Bbinlog%E8%B5%B7%E7%82%B9"><span class="toc-number">7.9.10.</span> <span class="toc-text">10. 从最后一次增备中查看binlog起点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#11-%E9%83%A8%E5%88%86%E6%95%B0%E6%8D%AE%E4%B8%A2%E5%A4%B1%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95"><span class="toc-number">7.9.11.</span> <span class="toc-text">11. 部分数据丢失处理方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-MySQL%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB"><span class="toc-number">8.</span> <span class="toc-text">7.MySQL数据迁移</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2%E6%8A%80%E6%9C%AF%E6%96%B9%E9%9D%A2"><span class="toc-number">8.1.</span> <span class="toc-text">7.2技术方面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3%E5%85%B6%E4%BB%96"><span class="toc-number">8.2.</span> <span class="toc-text">7.3其他</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1%E6%9B%B4%E6%8D%A2%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">8.3.</span> <span class="toc-text">7.1更换服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#7-1-1%E6%95%B0%E6%8D%AE%E9%87%8F%E5%B0%8F"><span class="toc-number">8.3.1.</span> <span class="toc-text">7.1.1数据量小</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-1-2%E6%95%B0%E6%8D%AE%E9%87%8F%E5%A4%A7"><span class="toc-number">8.3.2.</span> <span class="toc-text">7.1.2数据量大</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3%E6%8D%A2%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7%EF%BC%88%E5%A6%825-6%E2%80%93-gt-5-7%EF%BC%89"><span class="toc-number">8.4.</span> <span class="toc-text">7.3换版本升级（如5.6–&gt;5.7）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-4%E5%BC%82%E6%9E%84%E8%BF%81%E7%A7%BB%EF%BC%88win-gt-linux%EF%BC%89"><span class="toc-number">8.5.</span> <span class="toc-text">7.4异构迁移（win-&gt;linux）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-5%E5%BC%82%E6%9E%84%E8%BF%81%E7%A7%BB%EF%BC%88%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%A7%E5%93%81%E4%B8%8D%E5%90%8C%EF%BC%89"><span class="toc-number">8.6.</span> <span class="toc-text">7.5异构迁移（数据库产品不同）</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/forward/852a3e1.html" title="GitLab-CI/CD"><img src="/images/pasted-90.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="GitLab-CI/CD"/></a><div class="content"><a class="title" href="/forward/852a3e1.html" title="GitLab-CI/CD">GitLab-CI/CD</a><time datetime="2021-08-25T02:27:00.000Z" title="发表于 2021-08-25 10:27:00">2021-08-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/forward/ff7280bd.html" title="GitLab-CI语法"><img src="/images/pasted-90.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="GitLab-CI语法"/></a><div class="content"><a class="title" href="/forward/ff7280bd.html" title="GitLab-CI语法">GitLab-CI语法</a><time datetime="2021-08-24T05:25:00.000Z" title="发表于 2021-08-24 13:25:00">2021-08-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/forward/d12df344.html" title="Golang-函数"><img src="/images/pasted-2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Golang-函数"/></a><div class="content"><a class="title" href="/forward/d12df344.html" title="Golang-函数">Golang-函数</a><time datetime="2021-08-23T10:27:00.000Z" title="发表于 2021-08-23 18:27:00">2021-08-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/forward/55d102bd.html" title="k8s企业级DevOps实践-Kong的两种打开方式"><img src="/images/pasted-84.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="k8s企业级DevOps实践-Kong的两种打开方式"/></a><div class="content"><a class="title" href="/forward/55d102bd.html" title="k8s企业级DevOps实践-Kong的两种打开方式">k8s企业级DevOps实践-Kong的两种打开方式</a><time datetime="2021-08-16T06:53:00.000Z" title="发表于 2021-08-16 14:53:00">2021-08-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/forward/b36ee5af.html" title="k8s企业级DevOps实践-Kong in kubernetes"><img src="/images/pasted-84.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="k8s企业级DevOps实践-Kong in kubernetes"/></a><div class="content"><a class="title" href="/forward/b36ee5af.html" title="k8s企业级DevOps实践-Kong in kubernetes">k8s企业级DevOps实践-Kong in kubernetes</a><time datetime="2021-08-11T14:10:00.000Z" title="发表于 2021-08-11 22:10:00">2021-08-11</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/img-71.png')"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2021 By 饼铛</div><div class="footer_custom_text"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral"><img class="icp-icon" src="/img/yp.png"><span>提供CDN加速</span></a><span class="footer-separator">|</span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://beian.miit.gov.cn/"><img class="icp-icon" src="/img/ba.png"><span>皖ICP备2021005605</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><div class="aplayer no-destroy" data-id="5434811591" data-server="netease" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="false" data-order="random" data-preload="none" data-autoplay="false" muted></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+  window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="/img/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://cdn.jsdelivr.net/npm/hexo-butterfly-clock/lib/clock.min.js"></script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/haru02.model.json"},"bottom":-40,"display":{"position":"right","width":190,"height":380,"hOffset":80},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
