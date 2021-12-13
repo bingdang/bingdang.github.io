@@ -5152,7 +5152,7 @@ blockquote footer cite:before {
   transform: rotate(360deg);
 }
 #vcomment textarea {
-  background: url("/img/infrastructure.png") 100% 100% no-repeat;
+  background: url("/img/comment_bg.gif") 100% 100% no-repeat;
 }
 #vcomment textarea:focus {
   background-image: none;
