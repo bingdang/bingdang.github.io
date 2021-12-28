@@ -28,12 +28,12 @@
 
     function window_resize() {
         //canvas铺满窗口
-        width = window.innerWidth;
-        height = 400;
+        //width = window.innerWidth;
+        //height = document.getElementById('page-header').offsetHeight;
         //如果需要铺满内容可以换下面这个
-        //var panel = document.getElementById('thumbnail_canvas');
-        //width=panel.offsetWidth;
-        //height=panel.offsetHeight;
+        var panel = document.getElementById('page-header');
+        width=panel.offsetWidth;
+        height=panel.offsetHeight;
         canvas.width = width;
         canvas.height = height;
     }
