@@ -4451,11 +4451,11 @@ body.read-mode #comment-barrage {
   pointer-events: none;
   display: flex;
   flex-wrap: nowrap;
-  -webkit-animation: scrollToRight 30s linear infinite;
-  -moz-animation: scrollToRight 30s linear infinite;
-  -ms-animation: scrollToRight 30s linear infinite;
-  -o-animation: scrollToRight 30s linear infinite;
-  animation: scrollToRight 30s linear infinite;
+  -webkit-animation: scrollToRight 55s linear infinite;
+  -moz-animation: scrollToRight 55s linear infinite;
+  -ms-animation: scrollToRight 55s linear infinite;
+  -o-animation: scrollToRight 55s linear infinite;
+  animation: scrollToRight 55s linear infinite;
   -webkit-transition: all .3s ease-in-out;
   -moz-transition: all .3s ease-in-out;
   -ms-transition: all .3s ease-in-out;
