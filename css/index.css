@@ -8705,8 +8705,8 @@ p.p.gray {
   color: var(--font-color);
 }
 :root {
-  --default-cursor: url(/css/fei/default.cur);
-  --pointer-cursor: url(/css/fei/pointer.cur);
+  --default-cursor: url(https://npm.elemecdn.com/eurkon-cdn/hexo/images/user/default.cur);
+  --pointer-cursor: url(https://npm.elemecdn.com/eurkon-cdn/hexo/images/user/pointer.cur);
   --theme-color: #1677B3;
   --global-bg: #F2F6FC;
   --global-bg-lighter: rgba(242, 246, 252, .4);
@@ -9083,7 +9083,7 @@ body.hidden-y {
 #recent-posts>.recent-post-item>.recent-post-info {
   height: 40%;
   width: 100%;
-  padding: .5rem .8rem;
+  padding: .6rem .8rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -9178,6 +9178,7 @@ a.article-title-new::after {
 
 #recent-posts>.recent-post-item>.recent-post-info>.article-meta-wrap {
   color: var(--font-color);
+  margin: 0;
   white-space: nowrap;
   display: flex;
   justify-content: space-between;
@@ -13069,6 +13070,15 @@ body.read-mode #comment-barrage {
   }
 }
 
+.home-card .skill-wrapper-container {
+  -webkit-transform: rotate(-30deg);
+  -moz-transform: rotate(-30deg);
+  -ms-transform: rotate(-30deg);
+  -o-transform: rotate(-30deg);
+  transform: rotate(-30deg);
+  margin-top: 5rem;
+}
+
 .author-card-skills .skill-card-wrapper {
   -webkit-animation: scrollToRight 20s linear infinite !important;
   -moz-animation: scrollToRight 20s linear infinite !important;
@@ -13129,50 +13139,34 @@ body.read-mode #comment-barrage {
   border-radius: calc(var(--border-radius) / 2) !important;
 }
 
-
-@keyframes scrollToRightRotate {
-  from {
-    -webkit-transform: rotate(-30deg) translate3d(-50%, 0, 0);
-    -moz-transform: rotate(-30deg) translate3d(-50%, 0, 0);
-    -ms-transform: rotate(-30deg) translate3d(-50%, 0, 0);
-    -o-transform: rotate(-30deg) translate3d(-50%, 0, 0);
-    transform: rotate(-30deg) translate3d(-50%, 0, 0);
-  }
-
-  to {
-    -webkit-transform: rotate(-30deg) translate3d(0%, 0, 0);
-    -moz-transform: rotate(-30deg) translate3d(0%, 0, 0);
-    -ms-transform: rotate(-30deg) translate3d(0%, 0, 0);
-    -o-transform: rotate(-30deg) translate3d(0%, 0, 0);
-    transform: rotate(-30deg) translate3d(0%, 0, 0);
-  }
-}
-
 .skill-card-container {
   position: relative;
   overflow: hidden;
   display: flex;
+  flex-direction: column;
   height: 18rem;
   padding: .5rem 0;
   border-radius: var(--border-radius);
+}
+
+.skill-wrapper-container {
+  display: flex;
 }
 
 .skill-card-wrapper {
   pointer-events: none;
   display: flex;
   flex-wrap: nowrap;
-  -webkit-animation: scrollToRightRotate 20s linear infinite;
-  -moz-animation: scrollToRightRotate 20s linear infinite;
-  -ms-animation: scrollToRightRotate 20s linear infinite;
-  -o-animation: scrollToRightRotate 20s linear infinite;
-  animation: scrollToRightRotate 20s linear infinite;
+  -webkit-animation: scrollToRight 30s linear infinite;
+  -moz-animation: scrollToRight 30s linear infinite;
+  -ms-animation: scrollToRight 30s linear infinite;
+  -o-animation: scrollToRight 30s linear infinite;
+  animation: scrollToRight 30s linear infinite;
   -webkit-transition: all .3s ease-in-out;
   -moz-transition: all .3s ease-in-out;
   -ms-transition: all .3s ease-in-out;
   -o-transition: all .3s ease-in-out;
   transition: all .3s ease-in-out;
-  width: 100%;
-  margin-top: 5rem;
 }
 
 .skill-card-wrapper .skill-icon-pair {
