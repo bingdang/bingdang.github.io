@@ -1407,6 +1407,13 @@
   </url>
   
   <url>
+    <loc>https://cakepanit.com/tags/place/</loc>
+    <lastmod>2024-02-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://cakepanit.com/tags/gRPC/</loc>
     <lastmod>2024-02-01</lastmod>
     <changefreq>weekly</changefreq>
@@ -1415,13 +1422,6 @@
   
   <url>
     <loc>https://cakepanit.com/tags/Kubernetes/</loc>
-    <lastmod>2024-02-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://cakepanit.com/tags/place/</loc>
     <lastmod>2024-02-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
