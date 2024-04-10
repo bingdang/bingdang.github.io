@@ -51,3 +51,4 @@ let lanstar = {
         setInterval(setTime, 1000);
     }
 }
+
