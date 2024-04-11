@@ -9124,6 +9124,13 @@ body.read-mode .layout>div:first-child {
   justify-content: center;
 }
 
+@media (min-width: 600px) {
+    .footer-banner {
+        display: flex;
+        align-items: center;
+    }
+}
+
 @media screen and (min-width: 1920px) {
   .layout.hide-aside {
     max-width: 1600px;
