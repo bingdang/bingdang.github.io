@@ -1,6 +1,3 @@
-let lanstar = {
-    
-    addCoupleTime: () => {
         function secondToDate(second) {
             if (!second) {
                 return 0;
@@ -49,6 +46,4 @@ let lanstar = {
         }
 
         setInterval(setTime, 1000);
-    }
-}
 
