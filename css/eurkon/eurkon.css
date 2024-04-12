@@ -290,7 +290,7 @@ body.read-mode .layout>div:first-child {
   justify-content: center;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 853px) {
     .footer-banner {
         display: flex;
         align-items: center;
