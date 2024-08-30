@@ -50,8 +50,34 @@ html {
 }
 
 body {
-  cursor: var(--default-cursor, default), default !important;
+    position: relative; /* 为了让伪元素的绝对定位生效 */
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* 使 body 高度占满视口 */
+    overflow: hidden; /* 隐藏溢出的部分 */
 }
+
+@media only screen and (min-width: 1200px) {
+    body::before {
+        width: 76%;
+    }
+}
+
+body::before {
+    position: absolute; 
+    content: '';
+    pointer-events: none; 
+    top: 0; 
+    right: 0; 
+    width: 35%; 
+    background: left top no-repeat; 
+    background-size: contain; 
+    background-image: url(/img/banner-shape-small.svg);
+    height: 100%; 
+    z-index: -1;
+}
+
+
 
 #recent-posts>.recent-post-item>.recent-post-info>.article-meta-wrap>.post-meta-date {
   cursor: var(--default-cursor, default), default !important;
@@ -176,7 +202,6 @@ i.scroll-down-effects {
 .layout {
   padding: 1rem;
   z-index: 1;
-  background: var(--global-bg);
 }
 
 #post-comment {
