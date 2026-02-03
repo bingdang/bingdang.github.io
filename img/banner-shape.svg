@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="952px" height="738px" viewBox="0 0 952 738" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Rectangle</title>
+    <defs>
+        <path d="M402.347468,360.550016 L2202.34747,360.550016 L2181.60445,1671.73261 C2090.85908,1846.38798 1978.4291,1939.96178 1844.31451,1952.454 C1643.14263,1971.19233 1646.88134,1928.09552 1381.86668,1944.67583 C1116.85202,1961.25613 891.488125,2168.47512 647.536285,2234.94316 C484.901725,2279.25519 409.948407,2163.52538 422.676329,1887.75373 L402.347468,360.550016 Z" id="path-1"></path>
+    </defs>
+    <g id="Final" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Pagina-1-Copy-15" transform="translate(-848.000000, 0.000000)">
+            <g id="pexels-markus-spiske-965345" transform="translate(760.000000, -1209.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="Rectangle" fill="#2777C2" transform="translate(1302.347468, 1302.347468) rotate(-315.000000) translate(-1302.347468, -1302.347468) " xlink:href="#path-1"></use>
+            </g>
+        </g>
+    </g>
+</svg>

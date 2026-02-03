@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>Uptime Status</title>
+  <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon" /> 
+  <script src="/status/config.js"></script>
+  <link href="/status/static/css/main.9d11a12e.css" rel="stylesheet" /> 
+ </head>
+ <body> 
+  <div id="app"></div>
+  <script src="/status/static/js/main.b23dcefe.js"></script> 
+
+  <style>
+/* 全局样式 */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0f0f23 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* 头部样式 */
+#header {
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#header .logo {
+    font-size: 20px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.5px;
+}
+
+#header .navi {
+    font-size: 14px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: all 0.3s ease;
+}
+
+#header .navi:hover {
+    background: linear-gradient(135deg, #a78bfa, #60a5fa);
+    -webkit-background-clip: text;
+    filter: brightness(1.2);
+}
+
+/* 主容器 */
+#uptime {
+    border: none;
+    background: transparent;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 卡片样式 */
+#uptime .item {
+    background: rgba(20, 20, 45, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+#uptime .item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(96, 165, 250, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 40px rgba(96, 165, 250, 0.1);
+}
+
+/* 服务名称 */
+#uptime .meta .name {
+    font-weight: 600;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: 0.3px;
+}
+
+/* 状态标签 */
+#uptime .meta .status {
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+#uptime .meta .status.ok {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+#uptime .meta .status.down {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* 时间线 */
+#uptime .timeline {
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3px;
+    margin: 16px 0 12px;
+    padding: 8px 0;
+}
+
+#uptime .timeline i {
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    flex: 1;
+    height: 100%;
+}
+
+#uptime .timeline i:hover {
+    transform: scaleY(1.15);
+    filter: brightness(1.2);
+}
+
+#uptime .timeline i.ok {
+    background: linear-gradient(180deg, #22c55e, #16a34a);
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.4);
+}
+
+#uptime .timeline i.down {
+    background: linear-gradient(180deg, #ef4444, #dc2626);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+}
+
+#uptime .timeline i.none {
+    background: rgba(148, 163, 184, 0.15);
+}
+
+/* 底部信息 */
+#uptime .foot {
+    color: rgba(255, 255, 255, 0.45);
+    font-weight: 500;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+/* 页脚 */
+#footer {
+    display: none;
+}
+
+/* 响应式 */
+@media (max-width: 640px) {
+    #uptime {
+        padding: 12px;
+    }
+    
+    #uptime .item {
+        padding: 18px 20px;
+        border-radius: 12px;
+    }
+    
+    #uptime .timeline {
+        height: 40px;
+    }
+}
+</style> 
+ </body>
+</html>
