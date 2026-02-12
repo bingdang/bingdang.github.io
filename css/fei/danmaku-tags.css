@@ -1,0 +1,79 @@
+/* 侧边栏标签弹幕效果 - B站风格 */
+#aside-content .card-tags .card-tag-cloud.danmaku-init {
+  max-height: 220px;
+  overflow: hidden;
+  position: relative;
+  padding: 0;
+}
+
+.danmaku-canvas {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+}
+
+.danmaku-bullet {
+  position: absolute;
+  white-space: nowrap;
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.75);
+  font-size: 12px !important;
+  line-height: 20px;
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0;
+  animation: danmaku-fly linear forwards;
+  transition: background 0.2s, box-shadow 0.2s;
+  z-index: 0;
+  will-change: left, opacity;
+}
+
+[data-theme="dark"] .danmaku-bullet {
+  background: rgba(55, 55, 55, 0.75);
+}
+
+.danmaku-bullet sup {
+  font-size: 10px;
+  margin-left: 2px;
+  opacity: 0.6;
+}
+
+.danmaku-bullet:hover {
+  background: var(--main, #49b1f5) !important;
+  color: #fff !important;
+  box-shadow: 0 1px 6px rgba(0,0,0,.15);
+  z-index: 10;
+}
+
+.danmaku-bullet:hover sup {
+  opacity: 1;
+  color: #fff;
+}
+
+/* 暂停全部弹幕 */
+#aside-content .card-tags .card-tag-cloud.danmaku-init:hover .danmaku-bullet {
+  animation-play-state: paused;
+}
+
+/* 从左侧飘入，从右侧飘出 */
+@keyframes danmaku-fly {
+  0% {
+    left: 0;
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  3% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    transform: translateX(0);
+    opacity: 0;
+  }
+}
