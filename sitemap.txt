@@ -1,3 +1,4 @@
+https://cakepanit.com/about/index.html
 https://cakepanit.com/status/index.html
 https://cakepanit.com/forward/8cd3cd17.html
 https://cakepanit.com/forward/a5d41a5c.html
@@ -111,7 +112,6 @@ https://cakepanit.com/bookshelf/ops-01/index.html
 https://cakepanit.com/bookshelf/golang-02/index.html
 https://cakepanit.com/bookshelf/golang-03/index.html
 https://cakepanit.com/bookshelf/golang-04/index.html
-https://cakepanit.com/about/index.html
 https://cakepanit.com/status/c_2.html
 https://cakepanit.com/status/c.html
 https://cakepanit.com/protocol/copyright/index.html
