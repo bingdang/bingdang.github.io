@@ -71,7 +71,7 @@ const eurkon = {
       flinkArray = Array.from(flinkSet)
     }
     for (let i = 0; i < flinkArray.length; i++) {
-      flinkList[i].href = flinkArray[i].link
+      flinkList[i].href = '/go.html?url=' + btoa(flinkArray[i].link)
       flinkList[i].innerText = flinkArray[i].name
     }
   },

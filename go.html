@@ -5,137 +5,305 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="robots" content="noindex, nofollow"/>
-    <title>页面加载中，请稍候...</title>
+    <title>安全检测中...</title>
+    <link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css">
     <style type="text/css">
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Lato, Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
             flex-direction: column;
+            background: #F2F6FC;
+            color: #4c4948;
+            overflow: hidden;
         }
-        .avatar-placeholder, .avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 15px;
-            display: block;
+
+        /* 网格背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(22, 119, 179, .04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(22, 119, 179, .04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
         }
-        .avatar {
-            display: none;
+
+        /* 顶部扫描光线 */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #1677B3, #00c4b6, transparent);
+            animation: scan 3s ease-in-out infinite;
+            z-index: 10;
         }
-        .description {
-            font-size: 18px;
+        @keyframes scan {
+            0%, 100% { opacity: 0; transform: translateX(-100%); }
+            50% { opacity: 1; transform: translateX(100%); }
         }
-        .subtitle {
-            font-size: 12px;
-            margin-bottom: 20px;
-            color: #C4C4C4;
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 460px;
+            max-width: 94%;
+            animation: fadeUp .5s ease;
         }
-        .loading {
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 顶部标识 */
+        .brand {
             text-align: center;
-            padding: 30px;
-            border-radius: 18px;
-            animation: fadein 2s;
-            width: 400px;
-            max-width: 90%;
-        }
-        @keyframes fadein {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .content {
             margin-bottom: 20px;
+        }
+        .brand-icon {
+            width: 52px; height: 52px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            overflow: hidden;
+            border: 2px solid rgba(22, 119, 179, .3);
+            box-shadow: 0 0 16px rgba(22, 119, 179, .1);
+        }
+        .brand-icon img,
+        .brand-icon .placeholder {
+            width: 100%; height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+        .brand-icon .placeholder {
+            background: linear-gradient(215deg, #1677B3, #00c4b6);
+        }
+        .brand-icon img { display: none; }
+        .brand-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #363636;
+            letter-spacing: 2px;
+        }
+        .brand-sub {
+            font-size: .7rem;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        /* 主卡片 */
+        .card {
+            background: rgba(255, 255, 255, .85);
+            backdrop-filter: saturate(180%) blur(16px);
+            -webkit-backdrop-filter: saturate(180%) blur(16px);
+            border: 1px solid rgba(0, 0, 0, .04);
+            border-radius: .5rem;
+            padding: 28px 24px;
+            box-shadow: 0 8px 12px -3px rgba(45, 45, 45, .05);
+        }
+
+        /* 安全检查步骤 */
+        .steps {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 22px;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: .72rem;
+            color: #bbb;
+            transition: color .4s;
+        }
+        .step.active { color: #1677B3; }
+        .step.done { color: #00c4b6; }
+        .step-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #dcdfe6;
+            transition: all .4s;
+        }
+        .step.active .step-dot {
+            background: #1677B3;
+            box-shadow: 0 0 8px rgba(22, 119, 179, .5);
+        }
+        .step.done .step-dot {
+            background: #00c4b6;
+            box-shadow: 0 0 8px rgba(0, 196, 182, .4);
+        }
+        .step-line {
+            width: 24px; height: 1px;
+            background: #dcdfe6;
+        }
+
+        /* URL 区域 */
+        .target-label {
+            font-size: .75rem;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        .target-url {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            background: #F2F6FC;
+            border: 1px solid rgba(22, 119, 179, .1);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .url-icon {
+            flex-shrink: 0;
+            width: 16px; height: 16px;
+            border-radius: 3px;
+            background: linear-gradient(135deg, #1677B3, #00c4b6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .url-icon::after {
+            content: '';
+            width: 6px; height: 6px;
+            border: 1.5px solid #fff;
+            border-radius: 50%;
         }
         .url-text {
-            margin-bottom: 10px;
-            font-size: 16px;
-            letter-spacing: 1px;
-        }
-        .jump-url {
-            font-size: 20px;
-            display: block;
-            margin-top: 5px;
-            margin-bottom: 25px;
-            padding: 15px;
-            border-radius: 8px;
-            height: 25px;
+            font-size: .8rem;
+            color: #1677B3;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-family: "SF Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
         }
-        .countdown-text {
-            margin-top: 12px;
-            font-size: 12px;
+
+        /* 状态消息 */
+        .status-msg {
+            text-align: center;
+            font-size: .75rem;
+            color: #999;
+            margin-bottom: 16px;
+            min-height: 1.2em;
         }
-        .button-container {
+        .status-msg span { color: #1677B3; }
+
+        /* 进度条 */
+        .progress-track {
+            width: 100%;
+            height: 3px;
+            border-radius: 3px;
+            background: #ebeef5;
+            overflow: hidden;
+            margin-bottom: 22px;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #1677B3, #00c4b6);
+            transition: width 1s linear;
+            box-shadow: 0 0 6px rgba(0, 196, 182, .3);
+        }
+
+        /* 按钮 */
+        .actions {
             display: flex;
-            justify-content: center;
-            gap: 20%;
-            margin-top: 20px;
+            gap: 12px;
         }
-        .button {
-            padding: 10px 20px;
-            border-radius: 16px;
+        .btn {
+            flex: 1;
+            height: 38px;
+            border-radius: .5rem;
             border: none;
             cursor: pointer;
-            font-size: 16px;
-            width: 120px;
-            height: 40px;
+            font-size: .85rem;
+            transition: all .25s;
         }
-        .cancel-button {
-            color: black;
+        .btn:hover { transform: translateY(-1px); }
+        .btn-secondary {
+            background: #F2F6FC;
+            border: 1px solid #dcdfe6;
+            color: #666;
         }
-        .confirm-button {
-            color: white;
+        .btn-secondary:hover {
+            border-color: rgba(22, 119, 179, .3);
+            color: #1677B3;
         }
-        .progress-bar {
-            width: 100%;
-            border-radius: 5px;
-            overflow: hidden;
-            height: 10px;
-            margin-top: 20px;
+        .btn-primary {
+            background: linear-gradient(135deg, #1677B3, #00c4b6);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(22, 119, 179, .2);
         }
-        .progress {
-            width: 100%;
-            height: 100%;
-            transition: width 1s;
+        .btn-primary:hover {
+            box-shadow: 0 6px 16px rgba(22, 119, 179, .35);
         }
 
-        
+        /* 底部装饰 */
+        .footer-hint {
+            text-align: center;
+            margin-top: 16px;
+            font-size: .65rem;
+            color: #c0c4cc;
+            letter-spacing: 1px;
+        }
 
-        
-        body {
-            background: linear-gradient(135deg, #159957, #155799);
+        /* 浮动粒子 */
+        .particle {
+            position: fixed;
+            width: 2px; height: 2px;
+            background: rgba(22, 119, 179, .15);
+            border-radius: 50%;
+            animation: float linear infinite;
+            z-index: 0;
         }
-        .loading {
-            background: rgba(255, 255, 255, 0.7);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        @keyframes float {
+            from { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            to { transform: translateY(-10vh) scale(1); opacity: 0; }
         }
-        .url-text {
-            color: #333;
+
+        /* 暗色模式 */
+        @media (prefers-color-scheme: dark) {
+            body { background: #0a0e27; color: #c8d6e5; }
+            body::before {
+                background-image:
+                    linear-gradient(rgba(22, 119, 179, .06) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(22, 119, 179, .06) 1px, transparent 1px);
+            }
+            .brand-name { color: #e4e8ee; }
+            .brand-sub { color: #5a6a7e; }
+            .card {
+                background: rgba(16, 22, 50, .75);
+                border-color: rgba(22, 119, 179, .15);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, .3);
+            }
+            .step { color: #3a4a5e; }
+            .step-dot { background: #2a3a4e; }
+            .step-line { background: #2a3a4e; }
+            .target-label { color: #5a6a7e; }
+            .target-url {
+                background: rgba(22, 119, 179, .06);
+                border-color: rgba(22, 119, 179, .12);
+            }
+            .url-text { color: #5cb3cc; }
+            .status-msg { color: #5a6a7e; }
+            .progress-track { background: rgba(22, 119, 179, .1); }
+            .btn-secondary {
+                background: rgba(22, 119, 179, .08);
+                border-color: rgba(22, 119, 179, .2);
+                color: #8ba4c0;
+            }
+            .btn-secondary:hover { color: #a8c4e0; border-color: rgba(22, 119, 179, .5); }
+            .footer-hint { color: #2a3a4e; }
+            .particle { background: rgba(22, 119, 179, .3); }
         }
-        .jump-url {
-            border: 3px solid #2CAEE4;
-            background-color: #ccc;
-            color: #333;
-        }
-        .countdown-text {
-            color: #515151;
-        }
-        .cancel-button {
-            background-color: #a6e3e9;
-        }
-        .confirm-button {
-            background-color: #3fc1c9;
-        }
-        .progress {
-            background-color: #abedd8;
-        }
-        
     </style>
     <script type="text/javascript">
         const host = window.location.host;
@@ -150,7 +318,6 @@
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
             let str = input.replace(/=+$/, '');
             let output = '';
-
             if (str.length % 4 == 1) {
                 throw new Error("'atob' failed: The string to be decoded is not correctly encoded.");
             }
@@ -170,35 +337,41 @@
             jump_url = location.origin;
         }
 
-        let countdown = 5;
-        let progressElement;
-        let countdownElement;
-        let jumpUrlElement;
+        var stepMsgs = [
+            '正在解析目标地址...',
+            '安全检测中，请稍候...',
+            '检测通过，<span>即将跳转</span>'
+        ];
+        var currentStep = 0;
+        var countdown = 5;
+
+        function updateStep() {
+            var els = document.querySelectorAll('.step');
+            els.forEach(function(el, i) {
+                el.className = 'step' + (i < currentStep ? ' done' : i === currentStep ? ' active' : '');
+            });
+            var msg = document.getElementById('status-msg');
+            if (currentStep < stepMsgs.length) msg.innerHTML = stepMsgs[currentStep];
+        }
 
         function updateCountdown() {
-            countdownElement.textContent = countdown;
-            progressElement.style.width = (countdown / 5 * 100) + '%';
-            if (countdown === 0) {
-                jump();
-            } else {
-                countdown--;
-                setTimeout(updateCountdown, 1000);
-            }
+            var countdownEl = document.getElementById('countdown');
+            var progressEl = document.getElementById('progress');
+            countdownEl.textContent = countdown;
+            progressEl.style.width = (countdown / 5 * 100) + '%';
+            if (countdown === 4) { currentStep = 1; updateStep(); }
+            if (countdown === 2) { currentStep = 2; updateStep(); }
+            if (countdown === 0) { jump(); }
+            else { countdown--; setTimeout(updateCountdown, 1000); }
         }
 
-        function jump() {
-            location.href = jump_url;
-        }
+        function jump() { location.href = jump_url; }
+        function closeWindow() { window.opener = null; window.close(); }
 
-        function closeWindow() {
-            window.opener = null;
-            window.close();
-        }
-        
         function loadAvatar() {
-            const avatarImg = document.querySelector('.avatar');
-            const placeholder = document.querySelector('.avatar-placeholder');
-            const img = new Image();
+            var avatarImg = document.querySelector('.brand-icon img');
+            var placeholder = document.querySelector('.brand-icon .placeholder');
+            var img = new Image();
             img.src = '/img/avatar.jpg';
             img.onload = function() {
                 avatarImg.src = img.src;
@@ -207,34 +380,60 @@
             };
         }
 
+        function createParticles() {
+            for (var i = 0; i < 12; i++) {
+                var p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDuration = (6 + Math.random() * 8) + 's';
+                p.style.animationDelay = (Math.random() * 6) + 's';
+                p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+                document.body.appendChild(p);
+            }
+        }
+
         window.onload = function() {
             loadAvatar();
-            progressElement = document.getElementById('progress');
-            countdownElement = document.getElementById('countdown');
-            jumpUrlElement = document.getElementById('jump-url');
-            jumpUrlElement.textContent = jump_url;
+            createParticles();
+            document.getElementById('jump-url').textContent = jump_url;
+            currentStep = 0; updateStep();
             updateCountdown();
         }
     </script>
 </head>
 <body>
-    <div class="avatar-placeholder"></div>
-    <img src="" alt="头像" class="avatar">
-    <div class="description">MaxBit</div>
-    <div class="subtitle">外链中转页</div>
-    <div class="loading">
-        <div class="content">
-            <div class="url-text">您即将离开本站，传送到：</div>
-            <div class="jump-url" id="jump-url"></div>
+    <div class="container">
+        <div class="brand">
+            <div class="brand-icon">
+                <div class="placeholder"></div>
+                <img src="" alt="avatar">
+            </div>
+            <div class="brand-name">MaxBit</div>
+            <div class="brand-sub">外链中转页</div>
         </div>
-        <div class="countdown-text">⚠ 将在 <span id="countdown">5</span> 秒后传送，请自行确认链接安全性</div>
-        <div class="progress-bar">
-            <div class="progress" id="progress"></div>
+        <div class="card">
+            <div class="steps">
+                <div class="step"><div class="step-dot"></div>DNS解析</div>
+                <div class="step-line"></div>
+                <div class="step"><div class="step-dot"></div>安全扫描</div>
+                <div class="step-line"></div>
+                <div class="step"><div class="step-dot"></div>准备跳转</div>
+            </div>
+            <div class="target-label">目标地址</div>
+            <div class="target-url">
+                <div class="url-icon"></div>
+                <div class="url-text" id="jump-url"></div>
+            </div>
+            <div class="status-msg" id="status-msg"></div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-secondary" onclick="closeWindow()">返回</button>
+                <button class="btn btn-primary" onclick="jump()">立即前往 (<span id="countdown">5</span>s)</button>
+            </div>
         </div>
-        <div class="button-container">
-            <button class="button cancel-button" onclick="closeWindow()">取消传送</button>
-            <button class="button confirm-button" onclick="jump()">立即传送</button>
-        </div>
+        <div class="footer-hint">SECURITY CHECK &middot; MaxBit</div>
     </div>
 </body>
 </html>
