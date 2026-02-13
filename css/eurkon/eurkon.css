@@ -5046,6 +5046,17 @@ body .layout>#page {
 
   .home-card .recommend-card {
     width: 100% !important;
+    height: auto !important;
+    flex-direction: column !important;
+  }
+
+  .home-card .recommend-card .recommend-cover-area {
+    flex: none;
+    height: 14rem;
+  }
+
+  .home-card .recommend-card .recommend-list {
+    display: none !important;
   }
 }
 
@@ -5085,103 +5096,140 @@ body .layout>#page {
   box-shadow: var(--box-shadow);
 }
 
+/* === 右侧推荐文章区（封面图+标题列表合一） === */
 .recommend-card {
   height: 20rem;
   width: calc(100% / 2 - 0.25rem);
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-content: space-between;
-}
-
-.recommend-card .recommend-post-item {
-  position: relative;
-  width: calc(100% / 3 - 0.5rem);
-  height: 9.75rem;
-  overflow: hidden;
+  flex-direction: row;
   border-radius: var(--border-radius);
-  background: var(--card-bg);
-  border: var(--card-border);
-  -webkit-box-shadow: var(--box-shadow);
-  -moz-box-shadow: var(--box-shadow);
-  -ms-box-shadow: var(--box-shadow);
-  -o-box-shadow: var(--box-shadow);
+  overflow: hidden;
+  background: #2b2b2b;
   box-shadow: var(--box-shadow);
-  -webkit-transition: all .3s ease-in-out;
-  -moz-transition: all .3s ease-in-out;
-  -ms-transition: all .3s ease-in-out;
-  -o-transition: all .3s ease-in-out;
-  transition: all .3s ease-in-out;
+  transition: background-color 0.5s ease-in-out;
 }
 
-.recommend-card .recommend-post-item .recommend-post-tag {
+/* 左侧封面图区域 */
+.recommend-cover-area {
+  position: relative;
+  flex: 1.5;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.recommend-cover-img {
   position: absolute;
-  background: var(--main);
-  font-size: 90%;
-  color: var(--second);
-  border-radius: calc(var(--border-radius) / 2) 0 calc(var(--border-radius) * 2) 0;
-  padding: 0 0.6em;
-  -webkit-transform: translateX(-2.5em);
-  -moz-transform: translateX(-2.5em);
-  -ms-transform: translateX(-2.5em);
-  -o-transform: translateX(-2.5em);
-  transform: translateX(-2.5em);
-  -webkit-transition: all .3s ease-in-out;
-  -moz-transition: all .3s ease-in-out;
-  -ms-transition: all .3s ease-in-out;
-  -o-transition: all .3s ease-in-out;
-  transition: all .3s ease-in-out;
-}
-
-.recommend-card .recommend-post-item:hover .recommend-post-tag {
-  -webkit-transform: translateX(0);
-  -moz-transform: translateX(0);
-  -ms-transform: translateX(0);
-  -o-transform: translateX(0);
-  transform: translateX(0);
-}
-
-.recommend-card .recommend-post-item:hover {
-  border-color: var(--main);
-  -webkit-box-shadow: var(--main-shadow);
-  -moz-box-shadow: var(--main-shadow);
-  -ms-box-shadow: var(--main-shadow);
-  -o-box-shadow: var(--main-shadow);
-  box-shadow: var(--main-shadow);
-}
-
-.recommend-card .recommend-post-item img {
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  -webkit-transition: filter 375ms ease-in 0.2s, -webkit-transform 0.6s;
-  -moz-transition: filter 375ms ease-in 0.2s, -moz-transform 0.6s;
-  -o-transition: filter 375ms ease-in 0.2s, -o-transform 0.6s;
-  -ms-transition: filter 375ms ease-in 0.2s, -ms-transform 0.6s;
-  transition: filter 375ms ease-in 0.2s, transform 0.6s;
-  object-fit: cover;
-  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  background-size: cover;
+  background-position: center;
+  transition: background-image 0.4s ease-in-out;
 }
 
-.recommend-card .recommend-post-item .recommend-post-cover {
-  height: 5.75rem;
+.recommend-cover-area::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+  z-index: 1;
+  pointer-events: none;
 }
 
-.recommend-card .recommend-post-item .recommend-post-title {
-  color: var(--text-highlight-color);
+.recommend-cover-title {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
+  color: #fff;
   font-size: 1.1rem;
   font-weight: bold;
   line-height: 1.4;
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  -ms-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
-  -webkit-line-clamp: 2;
-  margin: 0.25rem 0.75rem;
-  display: -webkit-box;
+  z-index: 2;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
   overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+
+.recommend-cover-badge {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: rgba(255,255,255,0.9);
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+.recommend-cover-badge i {
+  color: #ffc107;
+  font-size: 0.7rem;
+}
+
+.recommend-cover-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+}
+
+/* 右侧标题列表 */
+.recommend-list {
+  flex: 0.6;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  transition: background-color 0.5s ease-in-out;
+}
+
+.recommend-list-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 0.8rem;
+  gap: 0.5rem;
+  color: rgba(255,255,255,0.88);
+  transition: all 0.2s ease-in-out;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  text-decoration: none;
+}
+
+.recommend-list-item:last-child {
+  border-bottom: none;
+}
+
+.recommend-list-item .recommend-list-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.85rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s;
+}
+
+.recommend-list-item.recommend-active {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+.recommend-list-item.recommend-active .recommend-list-title {
+  font-weight: bold;
+}
+
 
 @keyframes scrollToRight {
   from {
