@@ -4338,14 +4338,30 @@ h1.page-title + .tag-cloud-list {
 }
 .relatedPosts > .relatedPosts-list .content {
   position: absolute;
-  top: 50%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -o-box-orient: vertical;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -o-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
   padding: 0 20px;
   width: 100%;
-  -webkit-transform: translate(0, -50%);
-  -moz-transform: translate(0, -50%);
-  -o-transform: translate(0, -50%);
-  -ms-transform: translate(0, -50%);
-  transform: translate(0, -50%);
 }
 .relatedPosts > .relatedPosts-list .content .date {
   color: var(--light-grey);
@@ -10604,7 +10620,14 @@ a.catalog-more:hover {
 
 /* 推荐文章 */
 .relatedPosts>.relatedPosts-list .content {
-  position: relative;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .relatedPosts>.relatedPosts-list>div {
@@ -10758,8 +10781,8 @@ strong {
 
 #footer #footer-group-container .footer-group {
   margin: 0 auto;
-  min-width: 100px;
-  max-width: 185px;
+  flex: 1;
+  min-width: 0;
 }
 
 #footer #footer-group-container .footer-group .footer-group-title {
