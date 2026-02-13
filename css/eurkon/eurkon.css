@@ -3472,82 +3472,30 @@ html.hide-aside #hide-aside-btn {
 
 /* ========== 开源镜像站卡片差异化样式 ========== */
 
-/* 镜像站列表 flex 布局 */
-#article-container .flink-list.flink-mirror-list {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-/* 镜像站卡片 - 固定高度 + stretch让a撑满 + a内部居中 */
+/* 镜像站卡片 - 两列布局 */
 #article-container .flink-list.flink-mirror-list>.flink-list-item {
-  width: calc(50% - .5rem) !important;
+  width: calc(50% - 1rem) !important;
   height: 110px !important;
-  padding: 0 14px !important;
-  line-height: normal !important;
-  display: flex !important;
-  align-items: stretch !important;
-  float: none !important;
-  overflow: hidden !important;
-  box-sizing: border-box;
   border-left: 3px solid #00c4b6;
   background: linear-gradient(135deg, var(--global-bg) 0%, rgba(0, 196, 182, .04) 100%);
-  border-radius: var(--border-radius);
-  border-top: var(--card-border);
-  border-right: var(--card-border);
-  border-bottom: var(--card-border);
 }
 
-/* a标签撑满卡片高度, 内容垂直居中 */
-#article-container .flink-list.flink-mirror-list>.flink-list-item > a {
-  display: flex !important;
-  align-items: center !important;
-  width: 100%;
-  height: 100%;
+/* 隐藏播客图标 */
+#article-container .flink-list.flink-mirror-list>.flink-list-item > .flink-item-circle {
+  display: none !important;
 }
 
-/* 头像 */
+/* 头像 - 方形白底 */
 #article-container .flink-list.flink-mirror-list>.flink-list-item a .flink-item-icon {
-  width: 68px !important;
-  height: 68px !important;
-  min-width: 68px !important;
-  float: none !important;
-  margin: 0 !important;
   border-radius: 12px !important;
   background: #fff;
   padding: 5px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
   box-sizing: border-box;
-  flex-shrink: 0;
 }
 
 #article-container .flink-list.flink-mirror-list>.flink-list-item a .flink-item-icon img {
   border-radius: 8px;
-  width: 100% !important;
-  height: 100% !important;
   object-fit: contain !important;
-}
-
-/* 文字信息 */
-#article-container .flink-list.flink-mirror-list>.flink-list-item .flink-item-info {
-  display: flex !important;
-  flex-wrap: wrap;
-  align-items: center;
-  align-content: center;
-  padding-left: 14px !important;
-  height: auto !important;
-}
-
-#article-container .flink-list.flink-mirror-list>.flink-list-item .flink-item-name {
-  padding: 0 0 4px 0 !important;
-  height: auto !important;
-  font-size: 1.05em;
-}
-
-#article-container .flink-list.flink-mirror-list>.flink-list-item .flink-item-desc {
-  height: auto !important;
-  padding: 0 !important;
 }
 
 /* 镜像站 hover */
@@ -3557,21 +3505,19 @@ html.hide-aside #hide-aside-btn {
   box-shadow: 0 8px 20px -4px rgba(0, 196, 182, .3) !important;
 }
 
-#article-container .flink-list.flink-mirror-list>.flink-list-item:hover a .flink-item-icon {
-  opacity: 0;
-  width: 0 !important;
-  height: 0 !important;
-  min-width: 0 !important;
-  padding: 0 !important;
-  overflow: hidden;
-}
-
 #article-container .flink-list.flink-mirror-list>.flink-list-item:hover * {
   color: #fff;
 }
 
 #article-container .flink-list.flink-mirror-list>.flink-list-item:hover a .flink-item-info img {
   opacity: .8;
+}
+
+/* 镜像站响应式: 中屏保持两列 */
+@media screen and (max-width:1024px) {
+  #article-container .flink-list.flink-mirror-list>.flink-list-item {
+    width: calc(50% - 1rem) !important;
+  }
 }
 
 /* 镜像站响应式: 小屏单列 */
