@@ -13310,8 +13310,473 @@ body.read-mode #comment-barrage {
   color: var(--theme-color);
 }
 
+/* ===== About 页面卡片组件 ===== */
 #page>#article-container>#author-about {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto 2rem;
+}
+
+/* 去掉 about 页面外层白色卡片背景 */
+body .layout>#page {
+  /* 仅在 about 页由 JS 控制 */
+}
+
+#author-about .author-img {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+#author-about .author-img img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid var(--card-bg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
+}
+
+#author-about .author-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--font-color);
+}
+
+#author-about .author-card-group {
+  display: flex;
+  gap: .75rem;
+  margin-bottom: .75rem;
+}
+
+#author-about .author-card {
+  flex: 1;
+  min-width: 0;
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  border: var(--card-border);
+  box-shadow: var(--box-shadow);
+  padding: 1.2rem;
+  position: relative;
+  overflow: hidden;
+  transition: all .3s ease;
+}
+
+#author-about .author-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+  transform: translateY(-2px);
+}
+
+#author-about .author-card-full {
+  flex: 1 1 100%;
+}
+
+#author-about .author-card-desc {
+  font-size: .75rem;
+  color: var(--theme-color);
+  font-weight: 600;
+  margin-bottom: .5rem;
+  letter-spacing: 1px;
+}
+
+#author-about .author-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--font-color);
+  margin-bottom: .4rem;
+  line-height: 1.3;
+}
+
+#author-about .author-card-subtitle {
+  font-size: .85rem;
+  color: var(--font-second-color, #999);
+  line-height: 1.5;
+}
+
+#author-about .author-card-img {
+  margin: .8rem 0;
+  text-align: center;
+}
+
+#author-about .author-card-img img {
+  max-width: 80px;
+  max-height: 80px;
+}
+
+#author-about .author-card-btn {
+  margin-top: .8rem;
+}
+
+#author-about .author-card-btn a {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .8rem;
+  color: var(--theme-color);
+  padding: .35rem .75rem;
+  border-radius: 2rem;
+  background: rgba(22, 119, 179, .08);
+  transition: all .3s ease;
+  text-decoration: none;
+}
+
+#author-about .author-card-btn a:hover {
+  background: var(--theme-color);
+  color: #fff;
+}
+
+/* === 简介卡片 - 渐变背景 (仿 zhheo) === */
+#author-about .author-card-info {
+  background: linear-gradient(135deg, #2196F3, #673AB7) !important;
+  border: none !important;
+  color: #fff;
+  min-height: 160px;
+  flex: 1.6;
+}
+
+#author-about .author-card-info .author-card-desc {
+  color: rgba(255, 255, 255, .7);
+}
+
+#author-about .author-card-info .author-card-title {
+  color: #fff;
+  font-size: 1.4rem;
+}
+
+#author-about .author-card-info .author-card-subtitle {
+  color: rgba(255, 255, 255, .85);
+}
+
+#author-about .author-card-info .author-card-btn a {
+  background: rgba(255, 255, 255, .2);
+  color: #fff;
+}
+
+#author-about .author-card-info .author-card-btn a:hover {
+  background: rgba(255, 255, 255, .35);
+}
+
+/* === 理念卡片 - 大字排版 (仿 zhheo 追求卡片) === */
+#author-about .author-card-personalities {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 160px;
+}
+
+#author-about .author-card-personalities .author-card-desc {
+  color: var(--font-second-color, #999);
+  font-weight: 400;
+  font-size: .7rem;
+}
+
+#author-about .author-card-personalities .author-card-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.4;
+  margin-bottom: .2rem;
+}
+
+#author-about .author-card-personalities .author-card-highlight {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--theme-color);
+  line-height: 1.4;
+}
+
+#author-about .author-card-personalities .author-card-highlight span {
+  display: inline-block;
+  transition: opacity .3s ease, transform .3s ease;
+}
+
+#author-about .author-card-personalities .author-card-img,
+#author-about .author-card-personalities .author-card-btn {
   display: none;
+}
+
+/* === 技能卡片 - 只保留轮播 === */
+#author-about .author-card-skills .skill-card-container {
+  height: 18rem;
+}
+
+#author-about .author-card-skills .skill-info-container {
+  display: none !important;
+}
+
+#author-about .author-card-skills .skill-card-container:hover .skill-card-wrapper {
+  opacity: 1 !important;
+}
+
+#author-about .author-card-skills .author-card-desc,
+#author-about .author-card-skills .author-card-title {
+  position: relative;
+  z-index: 1;
+}
+
+/* === 联系信息卡片 === */
+#author-about .author-contact-group {
+  display: flex;
+  gap: .75rem;
+  margin-bottom: .75rem;
+}
+
+#author-about .author-contact-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  border: var(--card-border);
+  box-shadow: var(--box-shadow);
+  padding: 1rem 1.2rem;
+  transition: all .3s ease;
+}
+
+#author-about .author-contact-item:first-child {
+  flex: 1.2;
+}
+
+#author-about .author-contact-item:last-child {
+  flex: 1.4;
+}
+
+#author-about .author-contact-item:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+  transform: translateY(-2px);
+}
+
+#author-about .author-contact-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(22, 119, 179, .08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--theme-color);
+  font-size: 1rem;
+}
+
+#author-about .author-contact-label {
+  font-size: .7rem;
+  color: var(--font-second-color, #999);
+  margin-bottom: .15rem;
+}
+
+#author-about .author-contact-value {
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--font-color);
+}
+
+#author-about .author-contact-value a {
+  color: var(--font-color);
+  text-decoration: none;
+}
+
+#author-about .author-contact-value a:hover {
+  color: var(--theme-color);
+}
+
+[data-theme='dark'] #author-about .author-contact-icon {
+  background: rgba(22, 119, 179, .15);
+}
+
+/* === 子站点展示卡片 === */
+#author-about .author-sites-group {
+  display: flex;
+  gap: .75rem;
+  margin-bottom: .75rem;
+}
+
+#author-about .author-site-card {
+  flex: 1;
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  border: var(--card-border);
+  box-shadow: var(--box-shadow);
+  padding: 1.2rem;
+  transition: all .3s ease;
+  text-decoration: none;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+#author-about .author-site-card:first-child {
+  flex: 1.4;
+}
+
+#author-about .author-site-card:last-child {
+  flex: 0.8;
+}
+
+#author-about .author-site-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+  transform: translateY(-2px);
+}
+
+#author-about .author-site-card .site-card-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #fff;
+  margin-bottom: .8rem;
+}
+
+#author-about .author-site-card .site-card-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--font-color);
+  margin-bottom: .3rem;
+}
+
+#author-about .author-site-card .site-card-desc {
+  font-size: .78rem;
+  color: var(--font-second-color, #999);
+  line-height: 1.5;
+}
+
+#author-about .author-site-card .site-card-arrow {
+  position: absolute;
+  right: 1.2rem;
+  top: 1.2rem;
+  color: var(--font-second-color, #ccc);
+  font-size: .8rem;
+  transition: all .3s ease;
+}
+
+#author-about .author-site-card:hover .site-card-arrow {
+  color: var(--theme-color);
+  transform: translateX(3px);
+}
+
+#author-about .author-site-card:hover .site-card-name {
+  color: var(--theme-color);
+}
+
+@media screen and (max-width: 768px) {
+  #author-about .author-sites-group {
+    flex-direction: column;
+  }
+}
+
+/* === about 页面去掉外层 #page 白色背景 === */
+#page:has(#author-about) {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* 响应式: 小屏卡片纵向 */
+@media screen and (max-width: 768px) {
+  #author-about .author-card-group {
+    flex-direction: column;
+  }
+
+  #author-about .author-card-skills .skill-card-container {
+    height: 14rem;
+  }
+
+  #author-about .author-contact-group {
+    flex-direction: column;
+  }
+}
+
+[data-theme='dark'] #author-about .author-card-btn a {
+  background: rgba(22, 119, 179, .15);
+}
+
+[data-theme='dark'] #author-about .author-card-info {
+  background: linear-gradient(135deg, #1565C0, #4A148C) !important;
+}
+
+/* === about 页面图表区域 === */
+#author-about .author-charts-section {
+  margin-top: 1.5rem;
+}
+
+#author-about .author-chart-card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  border: var(--card-border);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--box-shadow);
+  transition: all .3s ease-in-out;
+}
+
+#author-about .author-chart-card:hover {
+  border-color: var(--main);
+  box-shadow: var(--main-shadow);
+}
+
+#author-about .author-chart-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--text-highlight-color);
+}
+
+#author-about .author-chart-header i {
+  color: var(--theme-color);
+}
+
+#author-about .author-charts-row {
+  display: flex;
+  gap: 1rem;
+}
+
+#author-about .author-chart-half {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+#author-about .author-chart-half:first-child {
+  flex: 1.3;
+}
+
+@media screen and (max-width: 768px) {
+  #author-about .author-charts-row {
+    flex-direction: column;
+  }
+  #author-about .author-chart-half:first-child {
+    flex: 1;
+  }
+  
+  /* 修复技能卡片截断问题 */
+  #author-about .author-card-skills .skill-card-container {
+    height: auto;
+    min-height: 12rem;
+    overflow: visible;
+  }
+  
+  #author-about .author-card-skills .skill-wrapper-container {
+    overflow: hidden;
+  }
+  
+  /* 修复分类统计图文字截断 */
+  #author-about .author-chart-half {
+    overflow: visible;
+  }
+
+  #author-about .author-chart-card {
+    overflow: visible;
+  }
+  
+  #categories-chart {
+    overflow: visible !important;
+  }
 }
 
 #article-container .flink .flink-card {
