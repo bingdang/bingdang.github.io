@@ -253,6 +253,51 @@
             letter-spacing: 1px;
         }
 
+        /* 警告状态 */
+        .warning-box {
+            display: none;
+            background: rgba(255, 193, 7, .1);
+            border: 1px solid rgba(255, 152, 0, .3);
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .warning-box.show { display: block; }
+        .warning-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+        .warning-title {
+            font-size: .85rem;
+            font-weight: 600;
+            color: #e65100;
+            margin-bottom: 6px;
+        }
+        .warning-desc {
+            font-size: .75rem;
+            color: #666;
+            line-height: 1.5;
+        }
+        @media (prefers-color-scheme: dark) {
+            .warning-box {
+                background: rgba(255, 152, 0, .08);
+                border-color: rgba(255, 152, 0, .2);
+            }
+            .warning-title { color: #ffb74d; }
+            .warning-desc { color: #8ba4c0; }
+        }
+
+        /* 按钮-警告色 */
+        .btn-warning {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(255, 152, 0, .2);
+        }
+        .btn-warning:hover {
+            box-shadow: 0 6px 16px rgba(255, 152, 0, .35);
+        }
+
         /* 浮动粒子 */
         .particle {
             position: fixed;
@@ -344,6 +389,8 @@
         ];
         var currentStep = 0;
         var countdown = 5;
+        var isPaused = false;
+        var siteReachable = null; // null=检测中, true=可达, false=不可达
 
         function updateStep() {
             var els = document.querySelectorAll('.step');
@@ -354,15 +401,79 @@
             if (currentStep < stepMsgs.length) msg.innerHTML = stepMsgs[currentStep];
         }
 
+        function showWarning(title, desc) {
+            var warningBox = document.getElementById('warning-box');
+            document.getElementById('warning-title').textContent = title;
+            document.getElementById('warning-desc').textContent = desc;
+            warningBox.classList.add('show');
+            // 切换按钮状态
+            document.getElementById('btn-primary').style.display = 'none';
+            document.getElementById('btn-continue').style.display = 'block';
+        }
+
+        function hideWarning() {
+            document.getElementById('warning-box').classList.remove('show');
+            document.getElementById('btn-primary').style.display = 'block';
+            document.getElementById('btn-continue').style.display = 'none';
+        }
+
+        function checkSiteReachable(url) {
+            return new Promise(function(resolve) {
+                var timeout = setTimeout(function() {
+                    resolve(false);
+                }, 4000); // 4秒超时
+
+                // 方法1: 使用 fetch no-cors 模式检测
+                fetch(url, {
+                    method: 'HEAD',
+                    mode: 'no-cors',
+                    cache: 'no-store'
+                }).then(function() {
+                    clearTimeout(timeout);
+                    resolve(true);
+                }).catch(function(err) {
+                    clearTimeout(timeout);
+                    // 网络错误通常表示站点不可达
+                    resolve(false);
+                });
+            });
+        }
+
         function updateCountdown() {
+            if (isPaused) return;
+
             var countdownEl = document.getElementById('countdown');
             var progressEl = document.getElementById('progress');
             countdownEl.textContent = countdown;
             progressEl.style.width = (countdown / 5 * 100) + '%';
+
             if (countdown === 4) { currentStep = 1; updateStep(); }
-            if (countdown === 2) { currentStep = 2; updateStep(); }
+            if (countdown === 2) {
+                // 在第2秒时检查站点可达性结果
+                if (siteReachable === false) {
+                    isPaused = true;
+                    currentStep = 1;
+                    updateStep();
+                    document.getElementById('status-msg').innerHTML = '<span style="color:#e65100">目标站点可能无法访问</span>';
+                    showWarning('目标站点可能无法访问', '检测到目标网站可能已关停或暂时无法连接，是否仍要继续跳转？');
+                    return;
+                }
+                currentStep = 2;
+                updateStep();
+            }
             if (countdown === 0) { jump(); }
             else { countdown--; setTimeout(updateCountdown, 1000); }
+        }
+
+        function continueJump() {
+            hideWarning();
+            isPaused = false;
+            siteReachable = true; // 用户已确认，跳过后续检测
+            currentStep = 2;
+            updateStep();
+            document.getElementById('status-msg').innerHTML = '您选择继续，<span>即将跳转</span>';
+            countdown = 1;
+            updateCountdown();
         }
 
         function jump() { location.href = jump_url; }
@@ -397,6 +508,12 @@
             createParticles();
             document.getElementById('jump-url').textContent = jump_url;
             currentStep = 0; updateStep();
+
+            // 启动站点可达性检测 (后台异步执行)
+            checkSiteReachable(jump_url).then(function(reachable) {
+                siteReachable = reachable;
+            });
+
             updateCountdown();
         }
     </script>
@@ -425,12 +542,18 @@
                 <div class="url-text" id="jump-url"></div>
             </div>
             <div class="status-msg" id="status-msg"></div>
+            <div class="warning-box" id="warning-box">
+                <div class="warning-icon">⚠️</div>
+                <div class="warning-title" id="warning-title">目标站点可能无法访问</div>
+                <div class="warning-desc" id="warning-desc">检测到目标网站可能已关停或暂时无法连接</div>
+            </div>
             <div class="progress-track">
                 <div class="progress-fill" id="progress"></div>
             </div>
             <div class="actions">
                 <button class="btn btn-secondary" onclick="closeWindow()">返回</button>
-                <button class="btn btn-primary" onclick="jump()">立即前往 (<span id="countdown">5</span>s)</button>
+                <button class="btn btn-primary" id="btn-primary" onclick="jump()">立即前往 (<span id="countdown">5</span>s)</button>
+                <button class="btn btn-warning" id="btn-continue" style="display:none" onclick="continueJump()">仍要跳转</button>
             </div>
         </div>
         <div class="footer-hint">SECURITY CHECK &middot; MaxBit</div>

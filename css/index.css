@@ -9615,7 +9615,7 @@ a {
   display: inline-block;
   background: var(--global-bg);
   border-radius: var(--border-radius);
-  width: calc((94% - .5rem) / 3);
+  width: calc((100% - 1rem) / 3);
   -webkit-transition: all .3s ease-in-out;
   -moz-transition: all .3s ease-in-out;
   -ms-transition: all .3s ease-in-out;
@@ -10016,13 +10016,13 @@ a {
 
 #aside-content .card-info .author-info__description {
   padding: .5rem;
-  margin: .5rem 0;
+  margin: .8rem 0;
   background: var(--global-bg);
   border-radius: var(--border-radius);
 }
 
 #aside-content .card-widget.card-info .card-info-data {
-  margin: .5rem 0;
+  margin: .8rem 0;
 }
 
 #aside-content .card-widget.card-posts .item-headline * {
@@ -12322,30 +12322,80 @@ html.hide-aside #hide-aside-btn {
 
 /* ========== 开源镜像站卡片差异化样式 ========== */
 
-/* 镜像站卡片 - 两列布局 */
+/* 镜像站列表 flex 布局 */
+#article-container .flink-list.flink-mirror-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* 镜像站卡片 - 参考友情链接样式 */
 #article-container .flink-list.flink-mirror-list>.flink-list-item {
-  width: calc(50% - 1rem) !important;
-  height: 110px !important;
+  width: calc(50% - .5rem) !important;
+  height: 100px !important;
+  padding: 10px 14px !important;
+  line-height: normal !important;
+  display: block !important;
+  float: none !important;
+  overflow: hidden !important;
+  box-sizing: border-box;
   border-left: 3px solid #00c4b6;
   background: linear-gradient(135deg, var(--global-bg) 0%, rgba(0, 196, 182, .04) 100%);
+  border-radius: var(--border-radius);
+  border-top: var(--card-border);
+  border-right: var(--card-border);
+  border-bottom: var(--card-border);
 }
 
-/* 隐藏播客图标 */
-#article-container .flink-list.flink-mirror-list>.flink-list-item > .flink-item-circle {
-  display: none !important;
+/* a标签 */
+#article-container .flink-list.flink-mirror-list>.flink-list-item > a {
+  display: flex !important;
+  align-items: center !important;
+  height: 80px;
 }
 
-/* 头像 - 方形白底 */
+/* 头像 */
 #article-container .flink-list.flink-mirror-list>.flink-list-item a .flink-item-icon {
+  width: 68px !important;
+  height: 68px !important;
+  min-width: 68px !important;
+  float: none !important;
+  margin: 0 !important;
   border-radius: 12px !important;
   background: #fff;
   padding: 5px !important;
-  box-sizing: border-box;
+  overflow: hidden !important;
+  flex-shrink: 0;
 }
 
 #article-container .flink-list.flink-mirror-list>.flink-list-item a .flink-item-icon img {
   border-radius: 8px;
+  width: 100% !important;
+  height: 100% !important;
   object-fit: contain !important;
+}
+
+/* 文字信息 */
+#article-container .flink-list.flink-mirror-list>.flink-list-item .flink-item-info {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: center;
+  padding-left: 14px !important;
+  height: 68px !important;
+  line-height: 1.4 !important;
+}
+
+#article-container .flink-list.flink-mirror-list>.flink-list-item .flink-item-name {
+  padding: 0 0 4px 0 !important;
+  height: auto !important;
+  font-size: 1.05em;
+}
+
+#article-container .flink-list.flink-mirror-list>.flink-list-item .flink-item-desc {
+  height: auto !important;
+  padding: 0 !important;
 }
 
 /* 镜像站 hover */
@@ -12355,19 +12405,21 @@ html.hide-aside #hide-aside-btn {
   box-shadow: 0 8px 20px -4px rgba(0, 196, 182, .3) !important;
 }
 
+#article-container .flink-list.flink-mirror-list>.flink-list-item:hover a .flink-item-icon {
+  opacity: 0;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
 #article-container .flink-list.flink-mirror-list>.flink-list-item:hover * {
   color: #fff;
 }
 
 #article-container .flink-list.flink-mirror-list>.flink-list-item:hover a .flink-item-info img {
   opacity: .8;
-}
-
-/* 镜像站响应式: 中屏保持两列 */
-@media screen and (max-width:1024px) {
-  #article-container .flink-list.flink-mirror-list>.flink-list-item {
-    width: calc(50% - 1rem) !important;
-  }
 }
 
 /* 镜像站响应式: 小屏单列 */
