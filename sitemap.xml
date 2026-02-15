@@ -2,6 +2,33 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://cakepanit.com/forward/57e2aa11.html</loc>
+    
+    <lastmod>2026-02-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://cakepanit.com/forward/69e1266e.html</loc>
+    
+    <lastmod>2026-02-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://cakepanit.com/forward/3df8560c.html</loc>
+    
+    <lastmod>2026-02-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://cakepanit.com/notice/index.html</loc>
     
     <lastmod>2026-02-15</lastmod>
@@ -281,15 +308,6 @@
   </url>
   
   <url>
-    <loc>https://cakepanit.com/forward/3df8560c.html</loc>
-    
-    <lastmod>2026-02-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://cakepanit.com/forward/b36ee5af.html</loc>
     
     <lastmod>2026-02-15</lastmod>
@@ -344,6 +362,15 @@
   </url>
   
   <url>
+    <loc>https://cakepanit.com/forward/d063782.html</loc>
+    
+    <lastmod>2026-02-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://cakepanit.com/forward/131c756.html</loc>
     
     <lastmod>2026-02-15</lastmod>
@@ -354,15 +381,6 @@
   
   <url>
     <loc>https://cakepanit.com/forward/47eea66c.html</loc>
-    
-    <lastmod>2026-02-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://cakepanit.com/forward/d063782.html</loc>
     
     <lastmod>2026-02-15</lastmod>
     
@@ -614,15 +632,6 @@
   </url>
   
   <url>
-    <loc>https://cakepanit.com/forward/57e2aa11.html</loc>
-    
-    <lastmod>2026-02-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://cakepanit.com/forward/e9795f03.html</loc>
     
     <lastmod>2026-02-15</lastmod>
@@ -750,15 +759,6 @@
   
   <url>
     <loc>https://cakepanit.com/forward/40c70ce.html</loc>
-    
-    <lastmod>2026-02-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://cakepanit.com/forward/69e1266e.html</loc>
     
     <lastmod>2026-02-15</lastmod>
     
@@ -974,6 +974,15 @@
   </url>
   
   <url>
+    <loc>https://cakepanit.com/bookshelf/index.html</loc>
+    
+    <lastmod>2026-02-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://cakepanit.com/charts/index.html</loc>
     
     <lastmod>2026-02-15</lastmod>
@@ -992,7 +1001,7 @@
   </url>
   
   <url>
-    <loc>https://cakepanit.com/bookshelf/index.html</loc>
+    <loc>https://cakepanit.com/bookshelf/golang-01/index.html</loc>
     
     <lastmod>2026-02-15</lastmod>
     
@@ -1002,15 +1011,6 @@
   
   <url>
     <loc>https://cakepanit.com/bookshelf/golang-02/index.html</loc>
-    
-    <lastmod>2026-02-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://cakepanit.com/bookshelf/golang-01/index.html</loc>
     
     <lastmod>2026-02-15</lastmod>
     
@@ -1162,6 +1162,20 @@
   </url>
   
   <url>
+    <loc>https://cakepanit.com/tags/Skywalking/</loc>
+    <lastmod>2026-02-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://cakepanit.com/tags/%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/</loc>
+    <lastmod>2026-02-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://cakepanit.com/tags/Download/</loc>
     <lastmod>2026-02-15</lastmod>
     <changefreq>weekly</changefreq>
@@ -1198,20 +1212,6 @@
   
   <url>
     <loc>https://cakepanit.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://cakepanit.com/tags/Skywalking/</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://cakepanit.com/tags/%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/</loc>
     <lastmod>2026-02-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1575,20 +1575,6 @@
   </url>
   
   <url>
-    <loc>https://cakepanit.com/tags/Canal/</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://cakepanit.com/tags/CI-CD/</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://cakepanit.com/tags/Apollo/</loc>
     <lastmod>2026-02-15</lastmod>
     <changefreq>weekly</changefreq>
@@ -1596,7 +1582,21 @@
   </url>
   
   <url>
+    <loc>https://cakepanit.com/tags/Canal/</loc>
+    <lastmod>2026-02-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://cakepanit.com/tags/%E5%A4%9A%E8%A1%A8%E8%81%94%E6%9F%A5/</loc>
+    <lastmod>2026-02-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://cakepanit.com/tags/CI-CD/</loc>
     <lastmod>2026-02-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
