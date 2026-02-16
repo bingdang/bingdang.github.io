@@ -1,0 +1,183 @@
+.theme-transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.theme-transition-overlay.to-dark {
+  background: linear-gradient(to bottom, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+}
+
+.theme-transition-overlay.to-light {
+  background: linear-gradient(to bottom, #87CEEB 0%, #98D8E8 50%, #B0E0E6 100%);
+}
+
+.theme-transition-sun,
+.theme-transition-moon {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 80px;
+  opacity: 0;
+  transition: all 0.8s ease;
+}
+
+.theme-transition-sun {
+  top: -100px;
+  color: #FFD700;
+  text-shadow: 0 0 30px #FFD700, 0 0 60px #FFA500, 0 0 90px #FF8C00;
+}
+
+.theme-transition-moon {
+  top: -100px;
+  color: #F5F5DC;
+  text-shadow: 0 0 20px #F5F5DC, 0 0 40px #E6E6FA;
+}
+
+.theme-transition-sun .sun-rays,
+.theme-transition-moon .moon-craters {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.theme-transition-sun .sun-rays {
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, #FFD700 0%, transparent 70%);
+  animation: sun-pulse 1s ease-in-out infinite;
+}
+
+.theme-transition-moon .moon-craters {
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle at 30% 30%, rgba(200, 200, 200, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 70% 60%, rgba(180, 180, 180, 0.2) 0%, transparent 30%);
+}
+
+@keyframes sun-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+  50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+}
+
+.theme-transition-cloud {
+  position: absolute;
+  font-size: 40px;
+  opacity: 0;
+  color: #fff;
+}
+
+.theme-transition-cloud.cloud-1 { left: 20%; animation-delay: 0.1s; }
+.theme-transition-cloud.cloud-2 { left: 40%; animation-delay: 0.2s; }
+.theme-transition-cloud.cloud-3 { left: 60%; animation-delay: 0.3s; }
+.theme-transition-cloud.cloud-4 { left: 80%; animation-delay: 0.4s; }
+
+.theme-transition-star {
+  position: absolute;
+  font-size: 16px;
+  opacity: 0;
+  color: #fff;
+  text-shadow: 0 0 10px #fff;
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes float-down {
+  0% { top: -100px; opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { top: 60%; opacity: 0; }
+}
+
+@keyframes float-up {
+  0% { top: 110%; opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { top: -100px; opacity: 0; }
+}
+
+@keyframes cloud-float {
+  0% { transform: translateX(-50px); opacity: 0; }
+  20% { opacity: 0.9; }
+  80% { opacity: 0.9; }
+  100% { transform: translateX(50px); opacity: 0; }
+}
+
+@keyframes star-appear {
+  0% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.5); }
+}
+
+[data-theme="dark"] #footer {
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-meteor {
+  position: absolute;
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.6));
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: 50%;
+}
+
+@keyframes meteor-fall {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(45deg);
+    clip-path: inset(0 100% 0 0);
+  }
+  10% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+  70% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(200px, 200px) rotate(45deg);
+    clip-path: inset(0 0 0 100%);
+  }
+}
+
+[data-theme="dark"] .card-widget.card-info {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-info-star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.6);
+}
+
+@keyframes star-sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
