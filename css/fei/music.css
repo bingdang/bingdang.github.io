@@ -43,11 +43,11 @@
   width: 400px;
   height: 400px;
   border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.3) 0%,
-    rgba(255, 255, 255, 0.1) 20%,
-    rgba(255, 255, 255, 0) 50%
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.1) 30%,
+    rgba(255, 255, 255, 0) 60%
   );
   z-index: 30;
   pointer-events: none;
@@ -57,14 +57,9 @@
   position: absolute;
   top: -10px;
   left: 60%;
-  transform: translateX(-50%) rotate(0deg);
+  transform: translateX(-50%) rotate(-40deg);
   transform-origin: left top;
   z-index: 20;
-  transition: transform 0.5s ease;
-}
-
-.play-bar.paused {
-  transform: translateX(-50%) rotate(-40deg);
 }
 
 .play-bar img {
