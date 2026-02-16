@@ -140,7 +140,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 8px solid #e0e0e0;
+  border: 4px solid #e0e0e0;
 }
 
 .vinyl-img {
@@ -318,6 +318,10 @@
 }
 
 @media (max-width: 1180px) {
+  .fullscreen-btn {
+    display: none;
+  }
+  
   .music-wrapper {
     flex-direction: column;
     align-items: center;
