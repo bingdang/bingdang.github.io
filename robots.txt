@@ -1,0 +1,32 @@
+# Robots.txt for Maxbit
+# https://cakepanit.com
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://cakepanit.com/sitemap.xml
+
+# Disallow admin and private paths
+Disallow: /go.html
+Disallow: /css/
+Disallow: /js/
+Disallow: /img/
+Disallow: /fonts/
+
+# Allow search engines to crawl all content
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+# Crawl-delay for aggressive bots
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10

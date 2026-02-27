@@ -1,0 +1,471 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>N卡GPU计算型实例驱动安装 | Maxbit</title><meta name="author" content="饼铛"><meta name="copyright" content="饼铛"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="N卡GPU型号一览   产品系列 M-Class P-Series P-Series V-Series T-Series V-Series A-Series A-Series A-Series    产品家族 M40 Tesla P100 Tesla P4 Tesla V100 Tesla T4 Tesla V100 NVIDIA A100 NVIDIA A10 NVIDIA A100   前置操">
+<meta property="og:type" content="article">
+<meta property="og:title" content="N卡GPU计算型实例驱动安装">
+<meta property="og:url" content="https://cakepanit.com/forward/c6f90662.html">
+<meta property="og:site_name" content="Maxbit">
+<meta property="og:description" content="N卡GPU型号一览   产品系列 M-Class P-Series P-Series V-Series T-Series V-Series A-Series A-Series A-Series    产品家族 M40 Tesla P100 Tesla P4 Tesla V100 Tesla T4 Tesla V100 NVIDIA A100 NVIDIA A10 NVIDIA A100   前置操">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cakepanit.com/images/pasted-310.png">
+<meta property="article:published_time" content="2023-08-04T03:12:00.000Z">
+<meta property="article:modified_time" content="2026-02-15T15:09:41.577Z">
+<meta property="article:author" content="饼铛">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="nvidia">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cakepanit.com/images/pasted-310.png">
+<meta name="twitter:site" content="@maxbit_tech"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://cakepanit.com/forward/c6f90662.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="/css/fei/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/css/fei/fancybox.min.css" media="print" onload="this.media='all'"><script async="async" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><script>(adsbygoogle = window.adsbygoogle || []).push({
+  google_ad_client: 'ca-pub-1372389585456420',
+  enable_page_level_ads: 'true'
+});</script><script data-pjax="" defer="" async="async" src="https://www.googletagmanager.com/gtag/js?id=G-0MFDY8HY5K"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-0MFDY8HY5K');
+</script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":100,"languages":{"author":"作者: 饼铛","link":"链接: ","source":"来源: Maxbit","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: '/css/fei/fjGallery.min.js',
+      css: '/css/fei/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'N卡GPU计算型实例驱动安装',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-02-15 23:09:41'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = url => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      link.onload = () => resolve()
+      link.onerror = () => reject()
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css"><link rel="stylesheet" href="/css/fei/danmaku-tags.css"><link rel="stylesheet" href="/css/fei/tags-fold.css"><link rel="stylesheet" href="/css/fei/swiper-bundle.min.css"><link rel="stylesheet" href="/css/fei/love.css"><link rel="stylesheet" href="/css/fei/theme-transition.css"><link rel="stylesheet" href="/css/fei/greeting.css"><script src="/css/fei/swiper-bundle.min.js"></script><script src="/css/fei/pace.min.js"></script><script src="/css/fei/echarts.min.js"></script><script src="/css/fei/theme-transition.js"></script><script src="/js/fei/greeting.js"></script><style type="text/css"> .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body { left: -66px !important; /* 默认情况下缩进左侧66px，只留一点箭头部分 */ }
+.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover { left: 0 !important; /* 鼠标悬停是左侧缩进归零，完全显示按钮 */ } </style><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Maxbit",
+  "url": "https://cakepanit.com",
+  "description": "Maxbit技术博客 - 分享Kubernetes、Docker、Golang、MySQL等运维开发实战教程。涵盖DevOps、云原生、Linux运维、数据库管理，助力IT工程师技术进阶！",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://cakepanit.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Maxbit",
+  "url": "https://cakepanit.com",
+  "logo": "https://cakepanit.com/img/avatar.jpg",
+  "sameAs": [
+    "https://github.com/bingdang"
+  ]
+}
+</script><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "N卡GPU计算型实例驱动安装",
+  "description": "N卡GPU型号一览
+
+
+产品系列
+M-Class
+P-Series
+P-Series
+V-Series
+T-Series
+V-Series
+A-Series
+A-Series
+A-Series
+
+
+
+产品家族
+M40
+Tesla P100
+Tesla P4
+Tesla V100
+Tesla T4
+Tesla V100
+NVIDIA A100
+NVIDIA A10
+NVIDIA A100
+
+
+前置操",
+  "image": "/images/pasted-310.png",
+  "datePublished": "2023-08-04T03:12:00.000Z",
+  "dateModified": "2026-02-15T15:09:41.577Z",
+  "author": {
+    "@type": "Person",
+    "name": "饼铛"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Maxbit",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://cakepanit.com/img/avatar.jpg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://cakepanit.com/forward/c6f90662.html"
+  }
+}
+</script><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {&quot;@type&quot;: &quot;ListItem&quot;, &quot;position&quot;: 1, &quot;name&quot;: &quot;首页&quot;, &quot;item&quot;: &quot;https://cakepanit.com&quot;},
+        {&quot;@type&quot;: &quot;ListItem&quot;, &quot;position&quot;: 2, &quot;name&quot;: &quot;OPS&quot;, &quot;item&quot;: &quot;https://cakepanit.com/categories/OPS/&quot;},
+        {&quot;@type&quot;: &quot;ListItem&quot;, &quot;position&quot;: 3, &quot;name&quot;: &quot;N卡GPU计算型实例驱动安装&quot;, &quot;item&quot;: &quot;https://cakepanit.com/forward/c6f90662.html&quot;}
+  ]
+}</script></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "/img/loading.gif" data-lazy-src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">104</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">89</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-book-open"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/" target="_self"><i class="fa-fw fa-fw fas fa-archive"></i><span> 文章列表</span></a></li><li><a class="site-page child" href="/categories/" target="_self"><i class="fa-fw fa-fw fas fa-shapes"></i><span> 全部分类</span></a></li><li><a class="site-page child" href="/tags/" target="_self"><i class="fa-fw fa-fw fas fa-tags"></i><span> 所有标签</span></a></li><li><a class="site-page child" href="javascript:toRandomPost();" target="_self"><i class="fa-fw fa-fw fas fa-random"></i><span> 随便看看</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-link"></i><span> 导航</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/" target="_self"><i class="fa-fw fa-fw fas fa-child"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/" target="_self"><i class="fa-fw fa-fw fas fa-address-card"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="https://pan.cakepanit.com/" target="_blank"><i class="fa-fw fa-fw fas fa-cloud"></i><span> 我的云盘</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 其他</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/" target="_self"><i class="fa-fw fas fa-file-image"></i><span> 收藏图库</span></a></li><li><a class="site-page child" href="/bookshelf/" target="_self"><i class="fa-fw fas fa-bookmark"></i><span> 收藏书单</span></a></li><li><a class="site-page child" href="/music/" target="_blank"><i class="fa-fw fas fa-music"></i><span> 天天动听</span></a></li><li><a class="site-page child" href="/status/" target="_self"><i class="fa-fw fab fa-accessible-icon"></i><span> 站点监控</span></a></li><li><a class="site-page child" href="https://docs.cakepanit.com/" target="_self"><i class="fa-fw fa fa-tasks"></i><span> 帮助文档</span></a></li><li><a class="site-page child" href="https://cmd.cakepanit.com/" target="_self"><i class="fa-fw fa fa-sort-alpha-desc"></i><span> 命令查询</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/images/pasted-310.png')"><nav id="nav"><div id="nav-group"><span id="blog-info"> <a class="site-page" href="/" title="Maxbit"><span class="site-name">Maxbit</span><i class="fas fa-home"></i></a></span><span id="page_name"><a class="site-page" id="page-title" title="回到顶部" onclick="btf.scrollToDest(0, 500)"><span>Maxbit</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-book-open"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/" target="_self"><i class="fa-fw fa-fw fas fa-archive"></i><span> 文章列表</span></a></li><li><a class="site-page child" href="/categories/" target="_self"><i class="fa-fw fa-fw fas fa-shapes"></i><span> 全部分类</span></a></li><li><a class="site-page child" href="/tags/" target="_self"><i class="fa-fw fa-fw fas fa-tags"></i><span> 所有标签</span></a></li><li><a class="site-page child" href="javascript:toRandomPost();" target="_self"><i class="fa-fw fa-fw fas fa-random"></i><span> 随便看看</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa-fw fas fa-link"></i><span> 导航</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/" target="_self"><i class="fa-fw fa-fw fas fa-child"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/" target="_self"><i class="fa-fw fa-fw fas fa-address-card"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="https://pan.cakepanit.com/" target="_blank"><i class="fa-fw fa-fw fas fa-cloud"></i><span> 我的云盘</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 其他</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/gallery/" target="_self"><i class="fa-fw fas fa-file-image"></i><span> 收藏图库</span></a></li><li><a class="site-page child" href="/bookshelf/" target="_self"><i class="fa-fw fas fa-bookmark"></i><span> 收藏书单</span></a></li><li><a class="site-page child" href="/music/" target="_blank"><i class="fa-fw fas fa-music"></i><span> 天天动听</span></a></li><li><a class="site-page child" href="/status/" target="_self"><i class="fa-fw fab fa-accessible-icon"></i><span> 站点监控</span></a></li><li><a class="site-page child" href="https://docs.cakepanit.com/" target="_self"><i class="fa-fw fa fa-tasks"></i><span> 帮助文档</span></a></li><li><a class="site-page child" href="https://cmd.cakepanit.com/" target="_self"><i class="fa-fw fa fa-sort-alpha-desc"></i><span> 命令查询</span></a></li></ul></div></div></div><div id="hotkey"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索"><i class="fas fa-search fa-fw"></i></a></div><div id="setting-button" onclick="eurkon.switchRightSide();"><a class="site-page" href="javascript:void(0);" title="设置"><i class="fas fa-screwdriver-wrench fa-fw"></i></a></div><div id="admin-button" style="display:none;"><a class="site-page" href="/admin/login/" title="登录" target="_blank"><i class="fas fa-user-shield fa-fw"></i></a></div><script>(function(){
+  var host = window.location.hostname;
+  if (host !== 'cakepanit.com' && host !== 'www.cakepanit.com') {
+    var btn = document.getElementById('admin-button');
+    if (btn) btn.style.display = '';
+  }
+})();</script><div id="top-button"><a class="site-page" href="javascript:void(0);" title="回到顶部" onclick="btf.scrollToDest(0, 500)"><span class="scroll-percent"></span><i class="fas fa-arrow-up fa-fw"></i></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></div></nav><div id="post-cover"><img class="cover" id="post-cover-img" src= "/img/loading.gif" data-lazy-src="/images/pasted-310.png" alt="cover"></div><div id="post-info"><div id="post-meta"><div class="meta-firstline"><span class="post-meta-categories"><i class="fas fa-shapes fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/OPS/">OPS</a></span><span class="post-meta-tags"><span class="post-meta-separator">|</span><i class="fas fa-tags fa-fw post-meta-icon"></i><a class="post-meta-tags" href="/tags/GPU/">GPU</a><span class="post-meta-separator">•</span><a class="post-meta-tags" href="/tags/nvidia/">nvidia</a></span></div><h1 class="post-title">N卡GPU计算型实例驱动安装</h1><div class="meta-secondline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-04T03:12:00.000Z" title="发表于 2023-08-04 11:12:00">2023-08-04</time></span><span class="post-meta-separator">|</span><span class="post-meta-date"><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-02-15T15:09:41.577Z" title="更新于 2026-02-15 23:09:41">2026-02-15</time></span><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span></span><span class="post-meta-min2read"><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="N卡GPU计算型实例驱动安装"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section></header><main class="layout" id="content-inner"><div><div id="post"><article class="post-content" id="article-container"><h2 id="N卡GPU型号一览"><a href="#N卡GPU型号一览" class="headerlink" title="N卡GPU型号一览"></a>N卡GPU型号一览</h2><table>
+<thead>
+<tr>
+<th align="center">产品系列</th>
+<th align="center">M-Class</th>
+<th align="center">P-Series</th>
+<th align="center">P-Series</th>
+<th align="center">V-Series</th>
+<th align="center">T-Series</th>
+<th align="center">V-Series</th>
+<th align="center">A-Series</th>
+<th align="center">A-Series</th>
+<th align="center">A-Series</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">产品家族</td>
+<td align="center">M40</td>
+<td align="center">Tesla P100</td>
+<td align="center">Tesla P4</td>
+<td align="center">Tesla V100</td>
+<td align="center">Tesla T4</td>
+<td align="center">Tesla V100</td>
+<td align="center">NVIDIA A100</td>
+<td align="center">NVIDIA A10</td>
+<td align="center">NVIDIA A100</td>
+</tr>
+</tbody></table>
+<h2 id="前置操作"><a href="#前置操作" class="headerlink" title="前置操作"></a>前置操作</h2><ul>
+<li>确定好待交付机器的规格和GPU型号，下面已T4卡为例。</li>
+<li>跟业务确定好Driver Version和CUDA Version 然后去NVIDIA官网下载对应的驱动脚本</li>
+<li>比如业务要求：<ul>
+<li>Driver Version: 470.82.xx</li>
+<li>CUDA Version: 11.4</li>
+</ul>
+</li>
+</ul>
+<p>进入NVIDIA官网:<a target="_blank" rel="external nofollow noopener noreferrer" href="/go.html?url=aHR0cHM6Ly93d3cubnZpZGlhLmNvbS9Eb3dubG9hZC9GaW5kLmFzcHg=">https://www.nvidia.com/Download/Find.aspx</a></p>
+<p>Driver 和 CUDA对应关系  <a target="_blank" rel="external nofollow noopener noreferrer" href="/go.html?url=aHR0cHM6Ly9kb2NzLm52aWRpYS5jb20vY3VkYS9jdWRhLXRvb2xraXQtcmVsZWFzZS1ub3Rlcy9pbmRleC5odG1s">https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html</a></p>
+<p><img src= "/img/loading.gif" data-lazy-src="/images/pasted-305.png" alt="N卡驱动"></p>
+<p>点进去拿到：<code>https://cn.download.nvidia.com/tesla/470.82.01/NVIDIA-Linux-x86_64-470.82.01.run</code></p>
+<h2 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h2><h3 id="Debian系统："><a href="#Debian系统：" class="headerlink" title="Debian系统："></a>Debian系统：</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. 升级内核：</span><br><span class="line">apt install linux-image-amd64 linux-headers-amd64 -y &amp;&amp; reboot</span><br><span class="line"> </span><br><span class="line">2. 然后再执行</span><br><span class="line">wget https://cn.download.nvidia.com/tesla/470.82.01/NVIDIA-Linux-x86_64-470.82.01.run &amp;&amp; <span class="built_in">chmod</span> +x NVIDIA-Linux-x86_64-470.82.01.run &amp;&amp; sh NVIDIA-Linux-x86_64-470.82.01.run &amp;&amp; nvidia-smi</span><br></pre></td></tr></tbody></table></figure>
+<p>第一步重启完后这里面有和当前内核版本一致的内核的开发包文件（安装驱动会重新编译内核 必要）<br><img src= "/img/loading.gif" data-lazy-src="/images/pasted-306.png" alt="内核开发包"></p>
+<h3 id="CentOS系统："><a href="#CentOS系统：" class="headerlink" title="CentOS系统："></a>CentOS系统：</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">请执行以下命令，查询实例中是否安装kernel-devel和kernel-headers包</span><br><span class="line">rpm  -qa | grep $(<span class="built_in">uname</span> -r)</span><br><span class="line"> </span><br><span class="line">回显类似如下信息，即包含了kernel-devel和kernel-headers包的版本信息，表示已安装。</span><br><span class="line">kernel-3.10.0-1062.18.1.el7.x86_64</span><br><span class="line">kernel-devel-3.10.0-1062.18.1.el7.x86_64</span><br><span class="line">kernel-headers-3.10.0-1062.18.1.el7.x86_64</span><br><span class="line"> </span><br><span class="line">然后再执行</span><br><span class="line">wget https://cn.download.nvidia.com/tesla/470.82.01/NVIDIA-Linux-x86_64-470.82.01.run &amp;&amp; <span class="built_in">chmod</span> +x NVIDIA-Linux-x86_64-470.82.01.run &amp;&amp; sh NVIDIA-Linux-x86_64-470.82.01.run &amp;&amp; nvidia-smi</span><br></pre></td></tr></tbody></table></figure>
+<p>kernel-devel和kernel版本不一致会导致在安装driver rpm过程中driver编译出错。因此，请您确认回显信息中<code>kernel-*</code>的版本号后，再下载对应版本的kernel-devel。在示例回显信息中，kernel的版本号为<code>3.10.0-1062.18.1.el7.x86_64</code>。</p>
+<p>回显：<br><img src= "/img/loading.gif" data-lazy-src="/images/pasted-307.png" alt="nvidia-smi"></p>
+<h2 id="N卡的持久模式"><a href="#N卡的持久模式" class="headerlink" title="N卡的持久模式"></a>N卡的持久模式</h2><blockquote>
+<p>解决低负载下掉卡、卡休眠</p>
+</blockquote>
+<h3 id="原因分析"><a href="#原因分析" class="headerlink" title="原因分析"></a>原因分析</h3><p>每当一个或多个客户端打开设备文件时，GPU 状态就会保持加载在驱动程序中。一旦所有客户端都关闭了设备文件，除非启用了持久化模式，否则 GPU 状态将被卸载。为避免每次初始化所造成的延迟而影响到效能，可开启 GPU 持久化模式。</p>
+<p>NVIDIA DRIVER PERSISTENCE 文档 <a target="_blank" rel="external nofollow noopener noreferrer" href="/go.html?url=aHR0cHM6Ly9kb2NzLm52aWRpYS5jb20vZGVwbG95L2RyaXZlci1wZXJzaXN0ZW5jZS9pbmRleC5odG1s">Driver Persistence</a>：</p>
+<blockquote>
+<p>Under Linux systems where X runs by default on the target GPU the kernel mode driver will generally be initalized and kept alive from machine startup to shutdown, courtesy of the X process. On headless systems or situations where no long-lived X-like client maintains a handle to the target GPU, the kernel mode driver will initilize and deinitialize the target GPU each time a target GPU application starts and stops. In HPC environments this situation is quite common. Since it is often desireable to keep the GPU initialized in these cases, NVIDIA provides two options for changing driver behavior: Persistence Mode (Legacy) and the Persistence Daemon.</p>
+</blockquote>
+<p><strong>为什么不开启Persistence Mode，GPU会掉卡？</strong></p>
+<blockquote>
+<p>根据我的分析，因为我在运行的程序是Antares/Ansor，这个程序不是一个单一的GPU Application，而是生成数以万计的GPU Application去验证性能，则在每一个Application运行的过程中，GPU的驱动都需要被反复加载和卸载，一方面会损失很多性能，另一方面driver频繁卸载加载，GPU频繁被初始化，CPU访问PCIe config registers时间过长导致 softlock，从而造成GPU的死机。(引用自：<a target="_blank" rel="external nofollow noopener noreferrer" href="/go.html?url=aHR0cHM6Ly9iYnMuZ3B1d29ybGQuY24vaW5kZXgucGhwP3RvcGljPTEwMzUzLjA=">/bbs.gpuworld.cn/index.p</a>)</p>
+</blockquote>
+<h3 id="设置方法"><a href="#设置方法" class="headerlink" title="设置方法"></a>设置方法</h3><p>一般的机器上安装GPU，GPU的驱动程序会在机器的开启时被加载，机器关闭时再被卸载。而在在没有显示器的Linux操作系统(headless systems)中，尤其是HPC中非常常见，GPU的驱动程序会随着GPU运行的程序开始的时候自动被加载，程序关闭时自动被卸载。nvidia-smi -pm 1设置GPU的Persistence Mode:</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvidia-smi -pm 1</span><br></pre></td></tr></tbody></table></figure>
+<p>开启了该模式之后，GPU的响应速度会变快，但是待机功耗会增加一点。厂商建议开启GPU的持久模式。gpu默认持久模式关闭的时候，GPU如果负载低，会休眠。之后唤起的时候，有一定几率失败，nvidia-smi -pm 1 这个命令可以使GPU一直保持准备工作的状态，解决GPU卡在低负载情况下跑着跑着被卸载休眠的情况。</p>
+<p>在机器重新启动后，设定将会清空，如要保留则需写入 service 中编辑 <code>/lib/systemd/system/nvidia-persistenced.service</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># vim /lib/systemd/system/nvidia-persistenced.service</span></span><br><span class="line">[Unit]</span><br><span class="line">Description=NVIDIA Persistence Daemon</span><br><span class="line">After=syslog.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">PIDFile=/var/run/nvidia-persistenced/nvidia-persistenced.pid</span><br><span class="line">Restart=always</span><br><span class="line">ExecStart=/usr/bin/nvidia-persistenced --verbose</span><br><span class="line">ExecStopPost=/bin/rm -rf /var/run/nvidia-persistenced/*</span><br><span class="line">TimeoutSec=300</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line"><span class="comment"># systemctl enable nvidia-persistenced</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="前后对比"><a href="#前后对比" class="headerlink" title="前后对比"></a>前后对比</h3><p>开启前：GPU低负载偶尔掉卡<br><img src= "/img/loading.gif" data-lazy-src="/images/pasted-308.png" alt="开启前"></p>
+<p>开启后：单机4卡不掉<br><img src= "/img/loading.gif" data-lazy-src="/images/pasted-309.png" alt="开启后"></p>
+<h2 id="番外-容器GPU集群"><a href="#番外-容器GPU集群" class="headerlink" title="番外-容器GPU集群"></a>番外-容器GPU集群</h2><p>各大云厂商都支持N卡的k8s容器集群，且集群都带相关能力自动安装N卡驱动（在集群每次纳管节点时自动安装）。这里贴一下相关文档，有机会再结合我的工作实践作详细讲解。<br><strong>阿里云：</strong><a target="_blank" rel="external nofollow noopener noreferrer" href="/go.html?url=aHR0cHM6Ly9oZWxwLmFsaXl1bi5jb20vemgvYWNrL2Fjay1tYW5hZ2VkLWFuZC1hY2stZGVkaWNhdGVkL3VzZXItZ3VpZGUvY3VzdG9taXplLXRoZS1ncHUtZHJpdmVyLXZlcnNpb24tb2YtdGhlLW5vZGUtYnktc3BlY2lmeWluZy10aGUtdmVyc2lvbi1udW1iZXI=">文档链接</a></p>
+<ul>
+<li>在ACK节点池中打上对应的N卡驱动版本标签，机器纳管进入该节点池时会自行安装对应的驱动</li>
+</ul>
+<p><strong>华为云：</strong><a target="_blank" rel="external nofollow noopener noreferrer" href="/go.html?url=aHR0cHM6Ly9zdXBwb3J0Lmh1YXdlaWNsb3VkLmNvbS91c2VybWFudWFsLWNjZS9jY2VfMTBfMDE0MS5odG1s">文档链接</a></p>
+<ul>
+<li>在CCE集群中添加<code>gpu-device-plugin</code>，将N卡驱动传入OBS(对象存储)中。插件每次读取OBS中的驱动包为纳管的节点打上对应的驱动</li>
+</ul>
+<p><strong>腾讯云：</strong><a target="_blank" rel="external nofollow noopener noreferrer" href="/go.html?url=aHR0cHM6Ly9jbG91ZC50ZW5jZW50LmNvbS9kb2N1bWVudC9wcm9kdWN0LzQ1Ny8zMjIwNw==">文档链接</a></p>
+<ul>
+<li>在TKE集群纳管GPU节点时可选择需要的驱动进行安装</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info">N卡GPU计算型实例驱动安装</span></div><div class="post-copyright__url"><span class="post-copyright-info"><a id="post-url" href="https://cakepanit.com/forward/c6f90662.html">https://cakepanit.com/forward/c6f90662.html</a><a id="post-url-copy" title="复制文章链接" onclick="btf.copyFn(&quot;https://cakepanit.com/forward/c6f90662.html&quot;)"><i class="fas fa-paste copy-button"></i></a></span></div><div class="post-copyright__cc"><span class="post-copyright-info">转载前请阅读本站 <a href="/protocol/copyright/" title="本站所有原创文章采用知识共享(Creative Commons)署名—非商业性使用—相同方式共享4.0国际公共许可协议">版权协议</a>，文章著作权归 <a href="https://cakepanit.com">饼铛</a> 所有，转载请注明出处。</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/GPU/">GPU</a><a class="post-meta__tags" href="/tags/nvidia/">nvidia</a></div><div class="post_share"><div class="social-share" data-image="/images/pasted-310.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="/css/fei/share.min.css" media="print" onload="this.media='all'"><script src="/css/fei/share.min.js" defer=""></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/DC9cYFtFic5G6JZgktjajza5fVfRJLaXLS.png" target="_blank"><img class="post-qr-code-img" src= "/img/loading.gif" data-lazy-src="/img/DC9cYFtFic5G6JZgktjajza5fVfRJLaXLS.png" alt="狗狗币(DogeCoin)"></a><div class="post-qr-code-desc">狗狗币(DogeCoin)</div></li><li class="reward-item"><a href="/img/bc1q63xj5a3xgfulv8guate5qxmh6qh8ws7c3casqm.png" target="_blank"><img class="post-qr-code-img" src= "/img/loading.gif" data-lazy-src="/img/bc1q63xj5a3xgfulv8guate5qxmh6qh8ws7c3casqm.png" alt="比特币(BitCoin)"></a><div class="post-qr-code-desc">比特币(BitCoin)</div></li></ul></div></div><div class="ads-wrap"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1372389585456420" data-ad-slot="6522729366" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/forward/8ed285a0.html" title="Debian 12 ISO镜像无人应答安装"><img class="cover" src= "/img/loading.gif" data-lazy-src="/images/pasted-327.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Debian 12 ISO镜像无人应答安装</div><div class="content">引言preseed是Debian和Ubuntu操作系统中用于自动化安装过程的一种方式。通过编写一个包含预定义答案的配置文件（称为preseed文件），可以在安装过程中自动回答安装程序的各种问题，从而实现无人值守或自定义化的安装。preseed文件包含了安装过程中可能涉及到的各种问题的答案，比如语言选择、时区设置、分区方案、软件包选择、用户账户等等。
+使用preseed可以大大简化大规模部署系统的过程，提高效率并减少可能出错的几率。结合genisoimage等工具，可以将preseed文件与安装介质打包在一起，以便进行自动化安装。这样就能够轻松地实现定制化安装，节省时间和精力。
+2024-04-09:文档更新更新内容：
+
+如何替换官版iso镜像内核为自定义内核（可选）
+如何为官版iso镜像注入指定的硬件驱动（可选）
+
+安装工具1apt -y install genisoimage
+
+下载镜像1234567891011121314151617181920212223242526[root@nvm-jscs02-cloud-dev-01 /data/isomake]# wget https: ...</div></div></a></div><div class="next-post pull-right"><a href="/forward/8269a7fd.html" title="k8s企业级DevOps实践-容器集群网络"><img class="cover" src= "/img/loading.gif" data-lazy-src="/images/pasted-6.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">k8s企业级DevOps实践-容器集群网络</div><div class="content">
+本文会再谈Docker网络、Pod网络、CNI模式、CNI选型。
+
+Docker网络一览表：
+
+
+容器网络模式
+简介
+
+
+
+bridge
+容器具有独立的network namespace，会将容器连接到docker0虚拟网桥，并配置IP地址，docker的默认网络模式。
+
+
+host
+容器没有独立的network namespace，和宿主机共用网络。
+
+
+none
+容器具有独立的network namespace，与宿主机网络隔离，但并没有对其进行任何网络设置。
+
+
+container
+容器和某一个已存在的容器共享network namespace。
+
+
+bridgebridge模式是 docker 的默认网络模式，不写–net参数，就是bridge模式。使用docker run -p时，docker 实际是在iptables做了DNAT规则，实现端口转发功能。可以使用iptables -t nat -vnL查看。
+12345# 创建一个新的 Docker 网络。-d参数指定 Docker 网络类型$ docker network create -d bridge my-net # ...</div></div></a></div></nav></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><a href="/about/"><img src= "/img/loading.gif" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"></a></div><div class="author-info__name">饼铛</div><div class="author-info__description">Think like a coder</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">104</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">89</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="/go.html?url=aHR0cHM6Ly90Lm1lL2pvaW5jaGF0L2NfUGFybW9ITW1VNU1ETTk=" target="_blank" title="Telegram" rel="external nofollow noopener noreferrer"><i class="fab fa-telegram-plane"></i></a><a class="social-icon" href="/go.html?url=aHR0cHM6Ly9xbS5xcS5jb20vY2dpLWJpbi9xbS9xcj9rPVExTjlsM2lzazhPX2k1YXdGd08tYmxBb1BIN1BVZWI0Jm5vdmVyaWZ5PTA=" target="_blank" title="QQ" rel="external nofollow noopener noreferrer"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:admin@cakepanit.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/go.html?url=aHR0cHM6Ly9tdXNpYy4xNjMuY29tLyMvdXNlci9ob21lP2lkPTMxMzc3NTI4Mg==" target="_blank" title="Netease" rel="external nofollow noopener noreferrer"><i class="fas fa-record-vinyl"></i></a></div></div><div class="card-widget"><div class="item-headline"><i class="fas fa-heartbeat"></i><span>Wishing for world peace</span></div><div class="item-content"><a target="_blank" rel="external nofollow noopener noreferrer" href="/go.html?url=aHR0cHM6Ly93d3cudW4ub3JnL3poL29ic2VydmFuY2VzL0ludGVybmF0aW9uYWwtZGF5LW9mLXNvbGlkYXJpdHktd2l0aC10aGUtcGFsZXN0aW5pYW4tcGVvcGxl"><div class="container"><div class="black"></div><div class="white"></div><div class="green"></div><div class="red"></div></div><style>body{margin:0}.container{width:100%;height:15.1vh;position:relative}.black{width:100%;top:0;position:absolute;background-color:black;height:33.3333%}.white{width:100%;top:33.3333%;position:absolute;background-color:white;height:33.3333%}.green{width:100%;bottom:0;position:absolute;background-color:green;height:33.3333%}.red{position:absolute;border-style:solid;border-color:transparent transparent transparent red;border-width:7.6vh;z-index:1}</style></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#N%E5%8D%A1GPU%E5%9E%8B%E5%8F%B7%E4%B8%80%E8%A7%88"><span class="toc-number">1.</span> <span class="toc-text">N卡GPU型号一览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">前置操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">安装过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Debian%E7%B3%BB%E7%BB%9F%EF%BC%9A"><span class="toc-number">3.1.</span> <span class="toc-text">Debian系统：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CentOS%E7%B3%BB%E7%BB%9F%EF%BC%9A"><span class="toc-number">3.2.</span> <span class="toc-text">CentOS系统：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#N%E5%8D%A1%E7%9A%84%E6%8C%81%E4%B9%85%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">N卡的持久模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E5%9B%A0%E5%88%86%E6%9E%90"><span class="toc-number">4.1.</span> <span class="toc-text">原因分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E6%96%B9%E6%B3%95"><span class="toc-number">4.2.</span> <span class="toc-text">设置方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E5%90%8E%E5%AF%B9%E6%AF%94"><span class="toc-number">4.3.</span> <span class="toc-text">前后对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%95%AA%E5%A4%96-%E5%AE%B9%E5%99%A8GPU%E9%9B%86%E7%BE%A4"><span class="toc-number">5.</span> <span class="toc-text">番外-容器GPU集群</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/forward/a5d41a5c.html" title="Golang-Gin+GORM-Demo"><img src= "/img/loading.gif" data-lazy-src="/images/pasted-335.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Golang-Gin+GORM-Demo"></a><div class="content"><a class="title" href="/forward/a5d41a5c.html" title="Golang-Gin+GORM-Demo">Golang-Gin+GORM-Demo</a><time datetime="2024-10-06T10:57:00.000Z" title="发表于 2024-10-06 18:57:00">2024-10-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/forward/4e89d84.html" title="Golang-23种设计模式"><img src= "/img/loading.gif" data-lazy-src="/images/pasted-2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Golang-23种设计模式"></a><div class="content"><a class="title" href="/forward/4e89d84.html" title="Golang-23种设计模式">Golang-23种设计模式</a><time datetime="2024-02-06T09:33:00.000Z" title="发表于 2024-02-06 17:33:00">2024-02-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/forward/d17c8c9b.html" title="Containerd与Docker"><img src= "/img/loading.gif" data-lazy-src="/images/pasted-334.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Containerd与Docker"></a><div class="content"><a class="title" href="/forward/d17c8c9b.html" title="Containerd与Docker">Containerd与Docker</a><time datetime="2024-01-11T06:40:00.000Z" title="发表于 2024-01-11 14:40:00">2024-01-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/forward/82cd681d.html" title="Golang-网络编程"><img src= "/img/loading.gif" data-lazy-src="/images/pasted-2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Golang-网络编程"></a><div class="content"><a class="title" href="/forward/82cd681d.html" title="Golang-网络编程">Golang-网络编程</a><time datetime="2024-01-05T03:30:00.000Z" title="发表于 2024-01-05 11:30:00">2024-01-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/forward/e94e48aa.html" title="Golang-面向“对象”：面向接口"><img src= "/img/loading.gif" data-lazy-src="/images/pasted-2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Golang-面向“对象”：面向接口"></a><div class="content"><a class="title" href="/forward/e94e48aa.html" title="Golang-面向“对象”：面向接口">Golang-面向“对象”：面向接口</a><time datetime="2023-11-10T16:45:00.000Z" title="发表于 2023-11-11 00:45:00">2023-11-11</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="footer-group-container"><div class="footer-group"><span class="footer-group-title">外链</span><a class="footer-group-item" target="_blank" rel="external nofollow noopener noreferrer" href="/go.html?url=aHR0cHM6Ly93d3cuYWxpeXVuLmNvbS8=">alibabaCloud</a><a class="footer-group-item" target="_blank" rel="external nofollow noopener noreferrer" href="/go.html?url=aHR0cHM6Ly93d3cudGlvYmUuY29tL3Rpb2JlLWluZGV4Lw==">编程语言排名</a><a class="footer-group-item" target="_blank" rel="external nofollow noopener noreferrer" href="/go.html?url=aHR0cHM6Ly9zdG9yZS5zaW1wbGVoYWMuY24v">黑苹果资源站</a><a class="footer-group-item" target="_blank" rel="external nofollow noopener noreferrer" href="/go.html?url=aHR0cHM6Ly9mb3JldmVyYmxvZy5jbi9nby5odG1s">虫洞十年之约</a></div><div class="footer-group"><span class="footer-group-title">导航</span><a class="footer-group-item" href="/link/">友情链接</a><a class="footer-group-item" href="https://pan.cakepanit.com/" target="_blank" title="我的云盘">我的云盘</a><a class="footer-group-item" href="/music/" target="_blank">天天动听</a><a class="footer-group-item" href="/bookshelf/">收藏书单</a></div><div class="footer-group"><span class="footer-group-title">分类</span><a class="footer-group-item" href="/categories/OPS/">运维教程</a><a class="footer-group-item" href="/categories/DBA/">DBA教程</a><a class="footer-group-item" href="/categories/DEV/">编码教程</a><a class="footer-group-item" target="_blank" rel="noopener" href="https://cmd.cakepanit.com/">命令查询</a></div><div class="footer-group"><span class="footer-group-title">关于</span><a class="footer-group-item" href="/notice/">网站公告</a><a class="footer-group-item" href="/about/">关于本站</a><a class="footer-group-item" href="/status/">站点监控</a><a class="footer-group-item" target="_blank" rel="noopener" href="https://docs.cakepanit.com/">帮助文档</a></div><div class="footer-group" id="footer-group-flink"><span class="footer-group-title">友链<i class="fas fa-arrow-rotate-right" title="随机友链" onclick="eurkon.footerRandomFlink(flinks, 3);"></i></span><a class="footer-group-item" href="" target="_blank" rel="noopener external nofollow noreferrer">加载中...</a><a class="footer-group-item" href="" target="_blank" rel="noopener external nofollow noreferrer">加载中...</a><a class="footer-group-item" href="" target="_blank" rel="noopener external nofollow noreferrer">加载中...</a><a class="footer-group-item" href="/link/">更多友链</a></div><div class="footer-group"><span class="footer-group-title">协议</span><a class="footer-group-item" href="/protocol/comment/" title="用户发言前，请认真阅读本条例。一经发言，即视为同意接受本条例；如不同意，请勿发言。">评论协议</a><a class="footer-group-item" href="/protocol/copyright/" title="本站所有原创文章采用知识共享(Creative Commons)署名—非商业性使用—相同方式共享4.0国际公共许可协议">版权协议</a></div></div><div id="footer-banner"><div id="footer-banner-container"><div class="footer-banner"><div class="copyright">Copyright © 2019 - 2026  Maxbit  All Rights Reserved.</div></div><div class="footer-banner"><a target="_blank" rel="external nofollow noopener noreferrer" href="/go.html?url=aHR0cHM6Ly9iZWlhbi5taWl0Lmdvdi5jbg==" title="ICP备案" style="display: flex; justify-content: center;"><img class="no-lightbox no-lazy" src="/img/beian.svg" alt="ICP备案" style="margin-right: 4px;">皖ICP备2021005605号-1</a><a target="_blank" rel="external nofollow noopener noreferrer" href="/go.html?url=aHR0cHM6Ly93d3cudXB5dW4uY29tLz91dG1fc291cmNlPWxpYW5tZW5nJnV0bV9tZWRpdW09cmVmZXJyYWw=" title="UPYUN" style="display: flex; justify-content: center;"><img class="no-lightbox no-lazy" src="/img/upyun.svg" alt="CDN加速" style="margin-right: 4px;">又拍云提供CDN加速</a></div></div></div></div></footer></div><div class="hidden" id="rightside-mask" onclick="eurkon.switchRightSide();"></div><div class="hidden" id="rightside"><div id="rightside-header"><div id="rightside-back"><i class="fas fa-chevron-left" onclick="eurkon.backRightSide();"></i></div><div id="rightside-title">设置</div><div id="rightside-close" onclick="eurkon.switchRightSide();"><i class="fas fa-xmark"></i></div></div><div id="rightside-content"><div id="card-post-content"><div class="rightside-left-col"><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/DBA/"><span class="card-category-list-name">DBA</span><span class="card-category-list-count">34</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/DEV/"><span class="card-category-list-name">DEV</span><span class="card-category-list-count">15</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/OPS/"><span class="card-category-list-name">OPS</span><span class="card-category-list-count">53</span></a></li>
+            </ul></div></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a id="tags/Git/" href="/tags/Git/" style="font-size: 1.23em; color: rgb(107, 14, 110)">Git<sup>4</sup></a><a id="tags/GitLab/" href="/tags/GitLab/" style="font-size: 1.23em; color: rgb(154, 197, 8)">GitLab<sup>4</sup></a><a id="tags/OPS/" href="/tags/OPS/" style="font-size: 1.45em; color: rgb(160, 44, 10)">🌍OPS<sup>49</sup></a><a id="tags/Docker/" href="/tags/Docker/" style="font-size: 1.29em; color: rgb(85, 86, 184)">Docker<sup>7</sup></a><a id="tags/Containerd/" href="/tags/Containerd/" style="font-size: 1.15em; color: rgb(69, 53, 186)">Containerd<sup>1</sup></a><a id="tags/Skywalking/" href="/tags/Skywalking/" style="font-size: 1.15em; color: rgb(8, 80, 181)">Skywalking<sup>1</sup></a><a id="tags/链路追踪/" href="/tags/%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/" style="font-size: 1.15em; color: rgb(147, 57, 69)">链路追踪<sup>1</sup></a><a id="tags/Download/" href="/tags/Download/" style="font-size: 1.15em; color: rgb(154, 193, 9)">⏬Download<sup>1</sup></a><a id="tags/ELK/" href="/tags/ELK/" style="font-size: 1.26em; color: rgb(198, 174, 86)">ELK<sup>5</sup></a><a id="tags/Logstash/" href="/tags/Logstash/" style="font-size: 1.18em; color: rgb(37, 150, 137)">Logstash<sup>2</sup></a><a id="tags/Nginx/" href="/tags/Nginx/" style="font-size: 1.18em; color: rgb(133, 186, 92)">Nginx<sup>2</sup></a><a id="tags/Golang/" href="/tags/Golang/" style="font-size: 1.37em; color: rgb(176, 147, 198)">📝Golang<sup>13</sup></a><a id="tags/设计模式/" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1.15em; color: rgb(51, 64, 184)">设计模式<sup>1</sup></a><a id="tags/Gin/" href="/tags/Gin/" style="font-size: 1.15em; color: rgb(155, 80, 141)">Gin<sup>1</sup></a><a id="tags/GORM/" href="/tags/GORM/" style="font-size: 1.15em; color: rgb(3, 69, 38)">GORM<sup>1</sup></a><a id="tags/协程/" href="/tags/%E5%8D%8F%E7%A8%8B/" style="font-size: 1.15em; color: rgb(168, 121, 143)">协程<sup>1</sup></a><a id="tags/goroutine/" href="/tags/goroutine/" style="font-size: 1.15em; color: rgb(156, 130, 86)">goroutine<sup>1</sup></a><a id="tags/数据处理/" href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" style="font-size: 1.15em; color: rgb(165, 186, 38)">数据处理<sup>1</sup></a><a id="tags/爬虫/" href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 1.15em; color: rgb(96, 86, 48)">爬虫<sup>1</sup></a><a id="tags/反射/" href="/tags/%E5%8F%8D%E5%B0%84/" style="font-size: 1.15em; color: rgb(84, 188, 92)">反射<sup>1</sup></a><a id="tags/reflect/" href="/tags/reflect/" style="font-size: 1.15em; color: rgb(157, 92, 45)">reflect<sup>1</sup></a><a id="tags/JumpServer/" href="/tags/JumpServer/" style="font-size: 1.15em; color: rgb(54, 107, 101)">JumpServer<sup>1</sup></a><a id="tags/堡垒机/" href="/tags/%E5%A0%A1%E5%9E%92%E6%9C%BA/" style="font-size: 1.15em; color: rgb(160, 77, 191)">堡垒机<sup>1</sup></a><a id="tags/Kong/" href="/tags/Kong/" style="font-size: 1.2em; color: rgb(14, 89, 159)">Kong<sup>3</sup></a><a id="tags/OAuth2-0/" href="/tags/OAuth2-0/" style="font-size: 1.15em; color: rgb(197, 165, 149)">OAuth2.0<sup>1</sup></a><a id="tags/iptables/" href="/tags/iptables/" style="font-size: 1.15em; color: rgb(45, 150, 141)">iptables<sup>1</sup></a><a id="tags/MongoDB/" href="/tags/MongoDB/" style="font-size: 1.2em; color: rgb(47, 116, 105)">MongoDB<sup>3</sup></a><a id="tags/NoSQL/" href="/tags/NoSQL/" style="font-size: 1.29em; color: rgb(190, 107, 164)">NoSQL<sup>7</sup></a><a id="tags/主从复制/" href="/tags/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" style="font-size: 1.34em; color: rgb(168, 96, 151)">主从复制<sup>12</sup></a><a id="tags/MySQL/" href="/tags/MySQL/" style="font-size: 1.42em; color: rgb(14, 164, 71)">🌲MySQL<sup>26</sup></a><a id="tags/读写分离/" href="/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/" style="font-size: 1.23em; color: rgb(132, 153, 77)">读写分离<sup>4</sup></a><a id="tags/高可用/" href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" style="font-size: 1.31em; color: rgb(110, 148, 96)">高可用<sup>8</sup></a><a id="tags/MHA/" href="/tags/MHA/" style="font-size: 1.18em; color: rgb(156, 100, 98)">MHA<sup>2</sup></a><a id="tags/分布式/" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 1.26em; color: rgb(34, 60, 9)">分布式<sup>5</sup></a><a id="tags/MyCAT/" href="/tags/MyCAT/" style="font-size: 1.2em; color: rgb(70, 179, 180)">MyCAT<sup>3</sup></a><a id="tags/垂直拆分/" href="/tags/%E5%9E%82%E7%9B%B4%E6%8B%86%E5%88%86/" style="font-size: 1.15em; color: rgb(45, 78, 23)">垂直拆分<sup>1</sup></a><a id="tags/锁/" href="/tags/%E9%94%81/" style="font-size: 1.15em; color: rgb(189, 153, 107)">锁<sup>1</sup></a><a id="tags/ACID/" href="/tags/ACID/" style="font-size: 1.15em; color: rgb(164, 86, 168)">ACID<sup>1</sup></a><a id="tags/事务/" href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 1.15em; color: rgb(98, 27, 39)">事务<sup>1</sup></a><a id="tags/日志管理/" href="/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" style="font-size: 1.23em; color: rgb(20, 195, 21)">日志管理<sup>4</sup></a><a id="tags/SQL/" href="/tags/SQL/" style="font-size: 1.2em; color: rgb(83, 175, 126)">SQL<sup>3</sup></a><a id="tags/一致性hash算法/" href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7hash%E7%AE%97%E6%B3%95/" style="font-size: 1.15em; color: rgb(102, 56, 136)">一致性hash算法<sup>1</sup></a><a id="tags/GPU/" href="/tags/GPU/" style="font-size: 1.15em; color: rgb(84, 93, 195)">GPU<sup>1</sup></a><a id="tags/nvidia/" href="/tags/nvidia/" style="font-size: 1.15em; color: rgb(42, 4, 82)">nvidia<sup>1</sup></a><a id="tags/PAM/" href="/tags/PAM/" style="font-size: 1.15em; color: rgb(17, 22, 168)">PAM<sup>1</sup></a><a id="tags/Ansible/" href="/tags/Ansible/" style="font-size: 1.15em; color: rgb(20, 97, 69)">Ansible<sup>1</sup></a><a id="tags/Playbook/" href="/tags/Playbook/" style="font-size: 1.15em; color: rgb(78, 121, 129)">Playbook<sup>1</sup></a><a id="tags/Redis/" href="/tags/Redis/" style="font-size: 1.26em; color: rgb(161, 89, 59)">Redis<sup>5</sup></a><a id="tags/tools/" href="/tags/tools/" style="font-size: 1.15em; color: rgb(139, 88, 84)">tools<sup>1</sup></a><a id="tags/SVN/" href="/tags/SVN/" style="font-size: 1.15em; color: rgb(170, 91, 44)">SVN<sup>1</sup></a><a id="tags/Zabbix/" href="/tags/Zabbix/" style="font-size: 1.23em; color: rgb(123, 56, 109)">Zabbix<sup>4</sup></a><a id="tags/Zookeeper/" href="/tags/Zookeeper/" style="font-size: 1.2em; color: rgb(107, 170, 16)">Zookeeper<sup>3</sup></a><a id="tags/gRPC/" href="/tags/gRPC/" style="font-size: 1.15em; color: rgb(24, 199, 30)">gRPC<sup>1</sup></a><a id="tags/Kubernetes/" href="/tags/Kubernetes/" style="font-size: 1.4em; color: rgb(138, 187, 146)">⛵Kubernetes<sup>21</sup></a><a id="tags/place/" href="/tags/place/" style="font-size: 1.15em; color: rgb(13, 118, 107)">place<sup>1</sup></a><a id="tags/mysql备份/" href="/tags/mysql%E5%A4%87%E4%BB%BD/" style="font-size: 1.15em; color: rgb(7, 163, 106)">mysql备份<sup>1</sup></a><a id="tags/弹性伸缩/" href="/tags/%E5%BC%B9%E6%80%A7%E4%BC%B8%E7%BC%A9/" style="font-size: 1.15em; color: rgb(22, 29, 192)">弹性伸缩<sup>1</sup></a><a id="tags/调度策略/" href="/tags/%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/" style="font-size: 1.15em; color: rgb(162, 165, 123)">调度策略<sup>1</sup></a><a id="tags/数据备份/" href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD/" style="font-size: 1.18em; color: rgb(143, 85, 50)">数据备份<sup>2</sup></a><a id="tags/OPENVPN/" href="/tags/OPENVPN/" style="font-size: 1.15em; color: rgb(151, 124, 26)">OPENVPN<sup>1</sup></a><a id="tags/DNS/" href="/tags/DNS/" style="font-size: 1.15em; color: rgb(6, 162, 174)">DNS<sup>1</sup></a><a id="tags/树莓派/" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 1.15em; color: rgb(82, 43, 114)">树莓派<sup>1</sup></a><a id="tags/Minecraft/" href="/tags/Minecraft/" style="font-size: 1.15em; color: rgb(168, 181, 38)">Minecraft<sup>1</sup></a><a id="tags/优化/" href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 1.15em; color: rgb(16, 148, 79)">优化<sup>1</sup></a><a id="tags/Apollo/" href="/tags/Apollo/" style="font-size: 1.15em; color: rgb(182, 42, 166)">Apollo<sup>1</sup></a><a id="tags/Canal/" href="/tags/Canal/" style="font-size: 1.15em; color: rgb(176, 23, 13)">Canal<sup>1</sup></a><a id="tags/多表联查/" href="/tags/%E5%A4%9A%E8%A1%A8%E8%81%94%E6%9F%A5/" style="font-size: 1.15em; color: rgb(12, 107, 19)">多表联查<sup>1</sup></a><a id="tags/CI-CD/" href="/tags/CI-CD/" style="font-size: 1.18em; color: rgb(115, 48, 103)">CI/CD<sup>2</sup></a><a id="tags/网络编程/" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 1.15em; color: rgb(129, 138, 55)">网络编程<sup>1</sup></a><a id="tags/面向对象/" href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 1.15em; color: rgb(161, 7, 106)">面向对象<sup>1</sup></a><a id="tags/水平拆分/" href="/tags/%E6%B0%B4%E5%B9%B3%E6%8B%86%E5%88%86/" style="font-size: 1.15em; color: rgb(7, 84, 26)">水平拆分<sup>1</sup></a><a id="tags/索引/" href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 1.15em; color: rgb(167, 46, 18)">索引<sup>1</sup></a><a id="tags/Redis哨兵/" href="/tags/Redis%E5%93%A8%E5%85%B5/" style="font-size: 1.15em; color: rgb(181, 108, 80)">Redis哨兵<sup>1</sup></a><a id="tags/Terraform/" href="/tags/Terraform/" style="font-size: 1.15em; color: rgb(157, 55, 13)">Terraform<sup>1</sup></a><a id="tags/基础设施即代码/" href="/tags/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E5%8D%B3%E4%BB%A3%E7%A0%81/" style="font-size: 1.15em; color: rgb(101, 109, 148)">基础设施即代码<sup>1</sup></a><a id="tags/公有云编排/" href="/tags/%E5%85%AC%E6%9C%89%E4%BA%91%E7%BC%96%E6%8E%92/" style="font-size: 1.15em; color: rgb(120, 28, 178)">公有云编排<sup>1</sup></a><a id="tags/数据持久化/" href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96/" style="font-size: 1.15em; color: rgb(180, 76, 11)">数据持久化<sup>1</sup></a><a id="tags/Workload/" href="/tags/Workload/" style="font-size: 1.15em; color: rgb(186, 200, 99)">Workload<sup>1</sup></a><a id="tags/CNI/" href="/tags/CNI/" style="font-size: 1.15em; color: rgb(177, 99, 142)">CNI<sup>1</sup></a><a id="tags/服务发现/" href="/tags/%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/" style="font-size: 1.15em; color: rgb(141, 32, 46)">服务发现<sup>1</sup></a><a id="tags/无人应答/" href="/tags/%E6%97%A0%E4%BA%BA%E5%BA%94%E7%AD%94/" style="font-size: 1.15em; color: rgb(42, 7, 148)">无人应答<sup>1</sup></a><a id="tags/preseed/" href="/tags/preseed/" style="font-size: 1.15em; color: rgb(143, 163, 181)">preseed<sup>1</sup></a><a id="tags/数据库优化/" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96/" style="font-size: 1.15em; color: rgb(23, 150, 193)">数据库优化<sup>1</sup></a><a id="tags/容器编排/" href="/tags/%E5%AE%B9%E5%99%A8%E7%BC%96%E6%8E%92/" style="font-size: 1.15em; color: rgb(42, 56, 16)">容器编排<sup>1</sup></a><a id="tags/Prometheus/" href="/tags/Prometheus/" style="font-size: 1.15em; color: rgb(160, 102, 96)">Prometheus<sup>1</sup></a><a id="tags/StatefuSet/" href="/tags/StatefuSet/" style="font-size: 1.15em; color: rgb(17, 155, 166)">StatefuSet<sup>1</sup></a><a id="tags/Helm-v3/" href="/tags/Helm-v3/" style="font-size: 1.15em; color: rgb(3, 53, 83)">Helm v3<sup>1</sup></a><a id="tags/SHELL/" href="/tags/SHELL/" style="font-size: 1.15em; color: rgb(154, 150, 83)">SHELL<sup>1</sup></a><a id="tags/RAID/" href="/tags/RAID/" style="font-size: 1.15em; color: rgb(121, 32, 78)">RAID<sup>1</sup></a></div></div></div></div><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-sun"></i><i class="fas fa-moon"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"></div></div><hr><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div id="rightmenu"><div class="rightmenu-group rightmenu-small"><div class="rightmenu-item" id="menu-backward" onclick="window.history.back()"><i class="fas fa-arrow-left"></i></div><div class="rightmenu-item" id="menu-forward" onclick="window.history.forward()"><i class="fas fa-arrow-right"></i></div><div class="rightmenu-item" id="menu-refresh" onclick="window.history.reload()"><i class="fas fa-arrow-rotate-right"></i></div><div class="rightmenu-item" id="menu-top" onclick="btf.scrollToDest(0, 500)"><i class="fas fa-arrow-up"></i></div></div><div class="rightmenu-group rightmenu-line" id="rightmenu-text"><div class="rightmenu-item" id="menu-copy"><i class="fas fa-copy"></i><span>复制内容</span></div><div class="rightmenu-item" id="menu-comment"><i class="fas fa-comment"></i><span>引用评论</span></div><div class="rightmenu-item" id="menu-paste"><i class="fas fa-paste"></i><span>粘贴文本</span></div><div class="rightmenu-item" id="menu-search"><i class="fas fa-search"></i><span>在本站搜索</span></div><div class="rightmenu-item" id="menu-baidu"><i class="fas fa-search-plus"></i><span>去百度搜索</span></div></div><div class="rightmenu-group rightmenu-line" id="rightmenu-href"><div class="rightmenu-item" id="menu-copy-image"><i class="fas fa-copy"></i><span>复制图片</span></div><div class="rightmenu-item" id="menu-download-image"><i class="fas fa-download"></i><span>下载图片</span></div><div class="rightmenu-item" id="menu-link"><i class="fas fa-link"></i><span>分享链接</span></div><div class="rightmenu-item" id="menu-window"><i class="fas fa-window-restore"></i><span>新窗口打开</span></div></div><div class="rightmenu-group rightmenu-line" id="rightmenu-post"><a class="rightmenu-item" id="menu-random" href="/random/"><i class="fas fa-random"></i><span>随机文章</span></a><a class="rightmenu-item" id="menu-categories" href="/categories/"><i class="fas fa-shapes"></i><span>全部分类</span></a><a class="rightmenu-item" id="menu-tags" href="/tags/"><i class="fas fa-tags"></i><span>所有标签</span></a><div class="rightmenu-item" id="menu-share"><i class="fas fa-share-square"></i><span>分享本页</span></div></div><div class="rightmenu-group rightmenu-line" id="rightmenu-site"><a class="rightmenu-item" id="menu-message" href="/message/"><i class="fas fa-envelope"></i><span>留言信箱</span></a><a class="rightmenu-item" id="menu-about" href="/about/"><i class="fas fa-address-card"></i><span>关于本站</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/eurkon/color-thief.min.js"></script><script defer="" src="/js/eurkon/eurkon.js"></script><script defer="" data-pjax="" src="/js/eurkon/refresh.js"></script><script src="/js/tw_cn.js"></script><script src="/css/fei/fancybox.umd.min.js"></script><script src="/css/fei/instantpage.min.js" type="module"></script><script src="/css/fei/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script defer="" data-pjax="" async="" src="//at.alicdn.com/t/font_2358265_expoyqe85d4.js"></script><script defer="" data-pjax="" src="/css/fei/danmaku-tags.js"></script><script defer="" data-pjax="" src="/css/fei/tags-fold.js"></script><script defer="" data-pjax="" src="/js/fei/skill-color.js"></script><div class="aplayer no-destroy" data-id="9114857987" data-server="netease" data-type="playlist" data-order="random" data-fixed="true" data-autoplay="false"> </div><link rel="stylesheet" href="/css/fei/APlayer.min.css" media="print" onload="this.media='all'"><script src="/css/fei/APlayer.min.js"></script><script src="/css/fei/Meting.min.js"></script><script src="/css/fei/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: true,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', 'G-0MFDY8HY5K', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-0MFDY8HY5K');
+
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async="" data-pjax="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/haru01.model.json"},"bottom":-40,"display":{"position":"right","width":190,"height":380,"hOffset":5},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html><script>var posts=["forward/60c1bc2d.html","forward/882d9505.html","forward/408a4bb8.html","forward/d17c8c9b.html","forward/d063782.html","forward/download.html","forward/17b35260.html","forward/131c756.html","forward/47eea66c.html","forward/eb065b59.html","forward/873540ab.html","forward/4e89d84.html","forward/a5d41a5c.html","forward/d12df344.html","forward/c675163c.html","forward/f61b8e50.html","forward/8f91bfec.html","forward/d5b63f7f.html","forward/f9d199b7.html","forward/420acb0d.html","forward/bac240f7.html","forward/1e56645c.html","forward/d7240237.html","forward/c4bb5371.html","forward/6c0d75ae.html","forward/3053135c.html","forward/74c8159a.html","forward/bbb9c58b.html","forward/c919a25c.html","forward/557ea64b.html","forward/49de8711.html","forward/f34e607d.html","forward/c3e1b71a.html","forward/bc8a646.html","forward/93ea067.html","forward/62bf20bb.html","forward/cb26d424.html","forward/3c4a0863.html","forward/ddc093b3.html","forward/4f3d60c1.html","forward/a7fae6f0.html","forward/ae362167.html","forward/c6f90662.html","forward/36cbf320.html","forward/67af6371.html","forward/fb94f251.html","forward/212d60e3.html","forward/b571ca78.html","forward/fabc6ce1.html","forward/ae26d423.html","forward/f353577b.html","forward/2f09977b.html","forward/3837938a.html","forward/7be7c575.html","forward/48a90e5c.html","forward/4a17b156.html","forward/5234d9e2.html","forward/3ea5fff1.html","forward/2aa52898.html","forward/55d102bd.html","forward/ad8d3f77.html","forward/1758bdeb.html","forward/6cfd7a23.html","forward/8cd3cd17.html","forward/8e9bbd7d.html","forward/2cfbf2d2.html","forward/d4ac701.html","forward/8bd2a16a.html","forward/d6f16b84.html","forward/91db5a91.html","forward/29b0e6a9.html","forward/d36764c1.html","forward/852a3e1.html","forward/13c392b.html","forward/82cd681d.html","forward/e94e48aa.html","forward/40c70ce.html","forward/c3e55136.html","forward/84c0fcc7.html","forward/69e1266e.html","forward/663d93c2.html","forward/68023dec.html","forward/da64184b.html","forward/ae6c7518.html","forward/3df8560c.html","forward/b36ee5af.html","forward/1051b489.html","forward/dc57d8c4.html","forward/8269a7fd.html","forward/61316209.html","forward/503970b4.html","forward/8ed285a0.html","forward/ff7280bd.html","forward/b17eefd4.html","forward/5c41384a.html","forward/14a32ee2.html","forward/58eea07e.html","forward/6b4e4d76.html","forward/dc57d8c5.html","forward/7139bb18.html","forward/649a95fd.html","forward/57e2aa11.html","forward/e9795f03.html","forward/312ec9e0.html"];function toRandomPost(){ window.pjax ? pjax.loadUrl('/'+posts[Math.floor(Math.random()*posts.length)]) : window.open('/'+posts[Math.floor(Math.random()*posts.length)], "_self"); };</script><script>var flinks=[{"name":"Eurkon","link":"https://blog.eurkon.com","avatar":"https://blog.eurkon.com/images/user/avatar.jpg","descr":"不只是代码的搬运工"},{"name":"豌豆多多","link":"https://wandouduoduo.github.io/","avatar":"/img/link/index.png","descr":"资深沪漂运维工程师"},{"name":"缺缺","link":"https://www.quewaner.com/","avatar":"https://q2.qlogo.cn/headimg_dl?dst_uin=3393597524&spec=100","descr":"资深前端工程师"},{"name":"yiyun","link":"https://moeci.com/","avatar":"https://q2.qlogo.cn/headimg_dl?dst_uin=2284407619&spec=100","descr":"全栈开发"},{"name":"二哈小窝","link":"https://www.moeeh.cn/","avatar":"https://www.moeeh.cn/eh/eh.png","descr":"苦酒折柳今相离 无风无月也无你"},{"name":"Akilarの糖果屋","link":"https://akilar.top/","avatar":"https://unpkg.zhimg.com/akilar-candyassets/image/siteicon/favicon.png","descr":"期待您的光临！"},{"name":"APP喵","link":"https://www.appmiu.com/","avatar":"https://q2.qlogo.cn/headimg_dl?dst_uin=904037151&spec=100","descr":"阿喵优质应用分享"},{"name":"七星比特","link":"https://www.qixingbit.com","avatar":"https://q2.qlogo.cn/headimg_dl?dst_uin=320406741&spec=100","descr":"信息安全,网络技术,交换路由,编程,漏洞挖掘,CTF"},{"name":"一朵大呲花","link":"https://www.iiemo.com/","avatar":"https://www.iiemo.com/logo.png","descr":"资深NB前端大佬"},{"name":"周小雨","link":"https://zxyy.me/","avatar":"https://q2.qlogo.cn/headimg_dl?dst_uin=1016673080&spec=100","descr":"PHP程序猿"},{"name":"ACG食堂","link":"https://canteen.globalacca.top/","avatar":"https://q2.qlogo.cn/headimg_dl?dst_uin=1478030465&spec=100","descr":"汇集ACG、动漫和galgame为一体的综合小站"},{"name":"海拥","link":"https://haiyong.site","avatar":"https://haiyong.site/img/favicon.png","descr":"一枚乐于分享技术与快乐的博主"},{"name":"杂烩饭","link":"https://zahui.fan","avatar":"https://q2.qlogo.cn/headimg_dl?dst_uin=393991732&spec=100","descr":"运维、运维开发技术分享"},{"name":"小高导航","link":"https://www.dhw22.com/","avatar":"https://www.dhw22.com/wp-content/uploads/2022/01/Favicon.png","descr":"资源类技术教程活动导航分类平台"},{"name":"SimpleHac资源社","link":"https://store.simplehac.cn/","avatar":"https://store.simplehac.cn/wp-content/uploads/2024/12/96e7a03a1e20241206225057.png","descr":"想你所想，至你所及"},{"name":"华为开源镜像站","link":"https://mirrors.huaweicloud.com/","avatar":"/img/link/huawei.png","descr":"构建万物互联的智能世界"},{"name":"阿里开源镜像站","link":"https://mirrors.aliyun.com/","avatar":"/img/link/aliyun.png","descr":"为了无法计算的价值"},{"name":"网易开源镜像站","link":"https://mirrors.163.com/","avatar":"/img/link/netease.png","descr":"网聚人的力量"},{"name":"搜狐开源镜像站","link":"https://mirrors.sohu.com/","avatar":"/img/link/souhu.png","descr":"上搜狐 知天下"},{"name":"清华开源镜像站","link":"https://mirrors.tuna.tsinghua.edu.cn/","avatar":"/img/link/qh.png","descr":"自强不息,厚德载物"},{"name":"浙大开源镜像站","link":"https://mirrors.zju.edu.cn/","avatar":"/img/link/zd.png","descr":"兼总条贯,知至知终"},{"name":"中科大开源镜像站","link":"https://mirrors.ustc.edu.cn/","avatar":"/img/link/zkd.png","descr":"红专并进,理实交融"},{"name":"兰大开源镜像站","link":"https://mirror.lzu.edu.cn/","avatar":"/img/link/ld.png","descr":"独树一帜,自强不息"}];function toRandomFlink(){window.open(flinks[Math.floor(Math.random()*flinks.length)].link);};</script>

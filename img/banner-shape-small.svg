@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1023px" height="264px" viewBox="0 0 1023 264" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Rectangle</title>
+    <defs>
+        <path d="M383.642126,394.469154 L2183.64213,394.469154 L2162.8991,1705.65175 C2072.15373,1880.30712 1959.72376,1973.88092 1825.60917,1986.37314 C1624.43729,2005.11147 1566.19662,1580.25515 1301.18195,1596.83546 C1036.16729,1613.41576 741.506937,2056.10131 497.555097,2122.56935 C334.920538,2166.88137 303.725834,2099.91588 403.970986,1921.67287 L383.642126,394.469154 Z" id="path-1"></path>
+        <filter x="-2.4%" y="-2.4%" width="104.8%" height="105.1%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="14.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Final" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Pagina-1-Copy-19" transform="translate(-777.000000, 0.000000)">
+            <g id="Banner-met-USP's" transform="translate(-2.000000, 0.000000)">
+                <g id="pexels-markus-spiske-965345" transform="translate(745.422255, -1262.171132)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Rectangle" transform="translate(1265.136341, 1265.136341) rotate(-315.000000) translate(-1265.136341, -1265.136341) ">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-1"></use>
+                        <use fill="#2777C2" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,59 @@
+.icon {
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    fill: currentColor;
+    overflow: hidden;
+}
+
+@media screen and (max-width: 576px)  {
+
+    .nav-search-btn {
+        right: 0!important;
+    }
+}
+.couple {
+    text-align: center;
+}
+
+.info .pic,.couple .pic {
+    border-radius: 50%;
+    width: 5rem;
+    background: #fff;
+    padding: 2px;
+}
+
+.couple-love {
+    width: 35px;
+    margin: 20px 0;
+    animation: heartbeat 1.33s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1)
+    }
+    50% {
+        -webkit-transform: scale(.8);
+        transform: scale(.8)
+    }
+    to {
+        -webkit-transform: scale(1);
+        transform: scale(1)
+    }
+}
+#our-company {
+    text-align: center;
+	font-size: 1rem;
+/*    color: #7d7474;
+    background: aliceblue; */
+    width: 100%;
+    border-radius: 4px;
+    padding: 0.5rem 0;
+    user-select: none;
+}
+#our-company span {
+    margin: 0 .25rem;
+    vertical-align: middle;
+}
