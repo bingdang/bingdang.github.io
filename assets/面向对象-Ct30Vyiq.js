@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-DnLHcZrX.js";var r=JSON.parse(`{"path":"/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/","title":"标签 - 面向对象","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 面向对象"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
