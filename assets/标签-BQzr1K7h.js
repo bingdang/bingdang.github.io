@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-C2eJjDUd.js";var r=JSON.parse(`{"path":"/tags/%E6%A0%87%E7%AD%BE/","title":"标签 - 标签","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 标签"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
