@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-BG39AMPO.js";var r=JSON.parse(`{"path":"/tags/%E5%BC%B9%E6%80%A7%E4%BC%B8%E7%BC%A9/","title":"标签 - 弹性伸缩","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 弹性伸缩"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
