@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-BPFQHLdi.js";var r=JSON.parse(`{"path":"/tags/%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/","title":"标签 - 链路追踪","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 链路追踪"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
