@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-BGOyDr2f.js";var r=JSON.parse(`{"path":"/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/","title":"标签 - 网络编程","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 网络编程"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};

@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-DMhizv9R.js";var r=JSON.parse(`{"path":"/tags/%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD/","title":"标签 - 数据备份","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 数据备份"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
