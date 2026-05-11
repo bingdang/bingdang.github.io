@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-BQUFSwj2.js";var r=JSON.parse(`{"path":"/tags/%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/","title":"标签 - 服务发现","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 服务发现"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
