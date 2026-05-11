@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-f7CJIpgu.js";var r=JSON.parse(`{"path":"/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/","title":"标签 - 大模型","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 大模型"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
