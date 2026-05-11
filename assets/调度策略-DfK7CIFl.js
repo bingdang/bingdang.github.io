@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-r-uIYvNQ.js";var r=JSON.parse(`{"path":"/tags/%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/","title":"标签 - 调度策略","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 调度策略"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
