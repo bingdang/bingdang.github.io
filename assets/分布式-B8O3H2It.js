@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-C6WeOrCf.js";var r=JSON.parse(`{"path":"/tags/%E5%88%86%E5%B8%83%E5%BC%8F/","title":"标签 - 分布式","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 分布式"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
