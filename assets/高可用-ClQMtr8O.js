@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-CvPXwUqq.js";var r=JSON.parse(`{"path":"/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/","title":"标签 - 高可用","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 高可用"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};

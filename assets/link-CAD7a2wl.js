@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-CvPXwUqq.js";var r=JSON.parse(`{"path":"/link/","title":"友情链接","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"友情链接"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
