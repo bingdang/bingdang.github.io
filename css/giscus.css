@@ -38,3 +38,11 @@ em.color-text-secondary.text-sm { display: none !important; }
 textarea, input[type="text"] { border-radius: 6px !important; }
 .btn, .Button, button { border-radius: 6px !important; }
 pre { border-radius: 6px !important; }
+
+/* 输入框右侧纸飞机背景图 */
+textarea.gsc-comment-box-textarea {
+  background-image: url("/img/paperAirplane.png") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: auto 33% !important;
+}
