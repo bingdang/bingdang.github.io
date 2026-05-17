@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-CoF9ltTY.js";var r=JSON.parse(`{"path":"/tags/%E5%9E%82%E7%9B%B4%E6%8B%86%E5%88%86/","title":"标签 - 垂直拆分","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 垂直拆分"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
