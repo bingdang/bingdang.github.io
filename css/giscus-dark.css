@@ -1,0 +1,55 @@
+/* Giscus 暗色主题 - 文字白色 + GitHub 绿 + 细边框 */
+
+:root {
+  --color-fg-default: #e5e5e5;
+  --color-fg-muted: #999;
+  --color-fg-subtle: #888;
+  --color-accent-fg: #3fb950;
+  --color-accent-emphasis: #238636;
+  --color-accent-muted: rgba(63,185,80,0.15);
+  --color-border-default: rgba(255,255,255,0.08);
+  --color-border-muted: rgba(255,255,255,0.06);
+  --color-btn-primary-bg: #238636;
+  --color-btn-primary-border: #2ea043;
+  --color-btn-primary-hover-bg: #3fb950;
+  --color-btn-primary-text: #ffffff;
+  --color-canvas-default: #1a1a1a;
+  --color-canvas-subtle: #2a2a2a;
+  font-family: "HarmonyOS_Regular","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+/* 暗色文字强制白色 */
+.color-text-primary,
+.color-fg-default { color: #e5e5e5 !important; }
+.color-text-secondary,
+.color-fg-muted { color: #999 !important; }
+.color-text-tertiary,
+.color-fg-subtle { color: #666 !important; }
+.link-primary { color: #e5e5e5 !important; }
+.link-secondary { color: #999 !important; }
+.color-bg-primary,
+.color-bg-default { background-color: #1a1a1a !important; }
+.color-bg-tertiary { background-color: #2a2a2a !important; }
+.gsc-comment-box-preview { color: #999 !important; }
+
+/* 隐藏 "由 giscus 提供支持" */
+.giscus-footer,
+em.color-text-secondary.text-sm { display: none !important; }
+
+/* 评论卡片边框统一 */
+.color-box-border-info {
+  border-color: var(--color-border-default) !important;
+}
+
+/* 输入框/预览区边框统一 */
+.gsc-comment-box,
+.gsc-comment-box-tabs,
+.gsc-reply-box {
+  border-color: var(--color-border-default) !important;
+}
+
+/* 圆角统一 */
+.gsc-comment { border-radius: 8px !important; }
+textarea, input[type="text"] { border-radius: 6px !important; }
+.btn, .Button, button { border-radius: 6px !important; }
+pre { border-radius: 6px !important; }
