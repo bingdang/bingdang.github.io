@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-DbvJ7fPv.js";var r=JSON.parse(`{"path":"/tags/%E5%8D%8F%E7%A8%8B/","title":"标签 - 协程","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 协程"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
