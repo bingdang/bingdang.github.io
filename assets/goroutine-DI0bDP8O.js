@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-BVJMCO2s.js";var r=JSON.parse(`{"path":"/tags/goroutine/","title":"标签 - goroutine","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - goroutine"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
