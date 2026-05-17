@@ -26,7 +26,8 @@
 }
 
 /* 隐藏 "由 giscus 提供支持" */
-.giscus-footer { display: none !important; }
+.giscus-footer,
+em.color-text-secondary.text-sm { display: none !important; }
 
 /* 圆角统一 8px */
 textarea, input[type="text"] { border-radius: 8px !important; }
