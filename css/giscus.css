@@ -1,0 +1,35 @@
+/* Giscus 自定义覆盖 - 匹配 Maxbit Blog 配色，仅做最小调整 */
+
+/* 亮色 */
+:root {
+  --color-accent-fg: #0070f3;
+  --color-accent-emphasis: #0070f3;
+  --color-border-default: rgba(0,0,0,0.06);
+  --color-border-muted: rgba(0,0,0,0.06);
+  --color-btn-primary-bg: #0070f3;
+  --color-btn-primary-border: #0070f3;
+  --color-btn-primary-hover-bg: #0050b3;
+  font-family: "HarmonyOS_Regular","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+/* 暗色 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-accent-fg: #3291ff;
+    --color-accent-emphasis: #3291ff;
+    --color-border-default: rgba(255,255,255,0.06);
+    --color-border-muted: rgba(255,255,255,0.06);
+    --color-btn-primary-bg: #3291ff;
+    --color-btn-primary-border: #3291ff;
+    --color-btn-primary-hover-bg: #66b0ff;
+  }
+}
+
+/* 隐藏 "由 giscus 提供支持" */
+.giscus-footer { display: none !important; }
+
+/* 圆角统一 8px */
+textarea, input[type="text"] { border-radius: 8px !important; }
+.btn, .Button, button { border-radius: 8px !important; }
+.Box { border-radius: 8px !important; }
+pre { border-radius: 8px !important; }
