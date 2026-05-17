@@ -1,7 +1,11 @@
-/* Giscus 自定义主题 - GitHub 绿 + 细边框 + 暗色适配 */
+/* Giscus 亮色主题 - 完整 :root 变量，无选择器依赖 */
 
-/* ========== 亮色（默认） ========== */
 :root {
+  --color-fg-default: #1f2328;
+  --color-fg-muted: #656d76;
+  --color-fg-subtle: #6e7781;
+  --color-canvas-default: #ffffff;
+  --color-canvas-subtle: #f6f8fa;
   --color-accent-fg: #1a7f37;
   --color-accent-emphasis: #238636;
   --color-accent-muted: rgba(35,134,54,0.12);
@@ -14,56 +18,15 @@
   font-family: "HarmonyOS_Regular","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
-/* ========== 暗色 ========== */
-/* giscus 根据 URL 中的 "dark" 关键字设置 data-color-mode="dark" */
-[data-color-mode="dark"] {
-  --color-fg-default: #e5e5e5;
-  --color-fg-muted: #999;
-  --color-fg-subtle: #888;
-  --color-accent-fg: #3fb950;
-  --color-accent-emphasis: #238636;
-  --color-accent-muted: rgba(63,185,80,0.15);
-  --color-border-default: rgba(255,255,255,0.08);
-  --color-border-muted: rgba(255,255,255,0.06);
-  --color-btn-primary-bg: #238636;
-  --color-btn-primary-border: #2ea043;
-  --color-btn-primary-hover-bg: #3fb950;
-  --color-btn-primary-text: #ffffff;
-  --color-canvas-default: #1a1a1a;
-  --color-canvas-subtle: #2a2a2a;
-}
-
-/* 暗色文字强制白色 */
-[data-color-mode="dark"] .color-text-primary,
-[data-color-mode="dark"] .color-fg-default { color: #e5e5e5 !important; }
-[data-color-mode="dark"] .color-text-secondary,
-[data-color-mode="dark"] .color-fg-muted { color: #999 !important; }
-[data-color-mode="dark"] .color-text-tertiary,
-[data-color-mode="dark"] .color-fg-subtle { color: #666 !important; }
-[data-color-mode="dark"] .link-primary { color: #e5e5e5 !important; }
-[data-color-mode="dark"] .link-secondary { color: #999 !important; }
-[data-color-mode="dark"] .color-bg-primary,
-[data-color-mode="dark"] .color-bg-default { background-color: #1a1a1a !important; }
-[data-color-mode="dark"] .color-bg-tertiary { background-color: #2a2a2a !important; }
-[data-color-mode="dark"] .gsc-comment-box-preview { color: #999 !important; }
-
-/* ========== 通用 ========== */
-
 /* 隐藏 "由 giscus 提供支持" */
 .giscus-footer,
 em.color-text-secondary.text-sm { display: none !important; }
 
 /* 评论卡片边框统一 */
-.color-box-border-info {
-  border-color: var(--color-border-default) !important;
-}
-
-/* 输入框/预览区边框统一 */
+.color-box-border-info { border-color: var(--color-border-default) !important; }
 .gsc-comment-box,
 .gsc-comment-box-tabs,
-.gsc-reply-box {
-  border-color: var(--color-border-default) !important;
-}
+.gsc-reply-box { border-color: var(--color-border-default) !important; }
 
 /* 圆角统一 */
 .gsc-comment { border-radius: 8px !important; }
