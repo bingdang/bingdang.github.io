@@ -1,10 +1,10 @@
-/* Giscus 自定义覆盖 - 匹配 Maxbit Blog 配色，仅做最小调整 */
+/* Giscus 自定义覆盖 - 现代扁平细边框风格 */
 
 /* 亮色 */
 :root {
   --color-accent-fg: #0070f3;
   --color-accent-emphasis: #0070f3;
-  --color-border-default: rgba(0,0,0,0.06);
+  --color-border-default: rgba(0,0,0,0.08);
   --color-border-muted: rgba(0,0,0,0.06);
   --color-btn-primary-bg: #0070f3;
   --color-btn-primary-border: #0070f3;
@@ -17,7 +17,7 @@
   :root {
     --color-accent-fg: #3291ff;
     --color-accent-emphasis: #3291ff;
-    --color-border-default: rgba(255,255,255,0.06);
+    --color-border-default: rgba(255,255,255,0.08);
     --color-border-muted: rgba(255,255,255,0.06);
     --color-btn-primary-bg: #3291ff;
     --color-btn-primary-border: #3291ff;
@@ -29,8 +29,10 @@
 .giscus-footer,
 em.color-text-secondary.text-sm { display: none !important; }
 
-/* 圆角统一 8px */
-textarea, input[type="text"] { border-radius: 8px !important; }
-.btn, .Button, button { border-radius: 8px !important; }
-.Box { border-radius: 8px !important; }
-pre { border-radius: 8px !important; }
+/* 扁平细边框风格 */
+.timeline-comment-group,
+.TimelineItem { border: 1px solid var(--color-border-default) !important; border-radius: 8px !important; }
+.Box { border: 1px solid var(--color-border-default) !important; border-radius: 8px !important; }
+textarea, input[type="text"] { border: 1px solid var(--color-border-default) !important; border-radius: 6px !important; }
+.btn, .Button, button { border-radius: 6px !important; }
+pre { border-radius: 6px !important; }
