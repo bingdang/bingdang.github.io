@@ -22,6 +22,11 @@
 .giscus-footer,
 em.color-text-secondary.text-sm { display: none !important; }
 
+/* 隐藏 Markdown 图标超链接 */
+.gsc-comment-box-markdown,
+.gsc-comment-box a[href*="markdown"],
+.gsc-comment-box a[href*="guides.github.com"] { display: none !important; }
+
 /* 评论卡片边框统一 */
 .color-box-border-info { border-color: var(--color-border-default) !important; }
 .gsc-comment-box,

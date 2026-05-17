@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-dH6iScdl.js";var r=JSON.parse(`{"path":"/tags/AI/","title":"标签 - AI","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - AI"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};

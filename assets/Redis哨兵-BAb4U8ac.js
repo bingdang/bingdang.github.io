@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-dH6iScdl.js";var r=JSON.parse(`{"path":"/tags/Redis%E5%93%A8%E5%85%B5/","title":"标签 - Redis哨兵","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - Redis哨兵"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
