@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-CETXi_wc.js";var r=JSON.parse(`{"path":"/tags/%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96/","title":"标签 - 数据持久化","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 数据持久化"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
