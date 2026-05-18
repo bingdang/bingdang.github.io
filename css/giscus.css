@@ -39,10 +39,22 @@ textarea, input[type="text"] { border-radius: 6px !important; }
 .btn, .Button, button { border-radius: 6px !important; }
 pre { border-radius: 6px !important; }
 
-/* 输入框右侧纸飞机背景图 */
+/* 输入框右侧纸飞机背景图 - 飞行晃动动画 */
+@keyframes paperAirplaneFly {
+  0%   { background-position: calc(100% - 12px) calc(50% + 0px); }
+  12%  { background-position: calc(100% - 16px) calc(50% - 3px); }
+  25%  { background-position: calc(100% - 9px) calc(50% + 2px); }
+  37%  { background-position: calc(100% - 15px) calc(50% - 4px); }
+  50%  { background-position: calc(100% - 10px) calc(50% + 3px); }
+  62%  { background-position: calc(100% - 17px) calc(50% - 2px); }
+  75%  { background-position: calc(100% - 8px)  calc(50% + 4px); }
+  87%  { background-position: calc(100% - 14px) calc(50% - 1px); }
+  100% { background-position: calc(100% - 12px) calc(50% + 0px); }
+}
+
 textarea.gsc-comment-box-textarea {
   background-image: url("/img/paperAirplane.png") !important;
   background-repeat: no-repeat !important;
-  background-position: right 12px center !important;
   background-size: auto 33% !important;
+  animation: paperAirplaneFly 5s ease-in-out infinite !important;
 }
