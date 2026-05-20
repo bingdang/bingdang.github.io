@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-C3NF23nY.js";var r=JSON.parse(`{"path":"/tags/Helm%20v3/","title":"标签 - Helm v3","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - Helm v3"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
