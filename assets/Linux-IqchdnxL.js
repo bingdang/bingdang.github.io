@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-Dxo_FgBL.js";var r=JSON.parse(`{"path":"/tags/Linux/","title":"标签 - Linux","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - Linux"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
