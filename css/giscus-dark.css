@@ -1,45 +1,176 @@
-/* Giscus 暗色主题 - 完整 :root 变量，无选择器依赖 */
+/* Giscus 暗色主题 - 蓝色渐变品牌色，与博客暗色模式统一 */
 
 :root {
   --color-fg-default: #e5e5e5;
-  --color-fg-muted: #999;
+  --color-fg-muted: #a0a0a0;
   --color-fg-subtle: #888;
   --color-canvas-default: #1a1a1a;
   --color-canvas-subtle: #2a2a2a;
-  --color-accent-fg: #3fb950;
-  --color-accent-emphasis: #238636;
-  --color-accent-muted: rgba(63,185,80,0.15);
-  --color-border-default: rgba(255,255,255,0.08);
-  --color-border-muted: rgba(255,255,255,0.06);
-  --color-btn-primary-bg: #238636;
-  --color-btn-primary-border: #2ea043;
-  --color-btn-primary-hover-bg: #3fb950;
+  --color-canvas-inset: #222222;
+  --color-accent-fg: #60a5fa;
+  --color-accent-emphasis: #3b82f6;
+  --color-accent-muted: rgba(96, 165, 250, 0.12);
+  --color-border-default: rgba(255, 255, 255, 0.08);
+  --color-border-muted: rgba(255, 255, 255, 0.05);
+  --color-btn-primary-bg: #2563eb;
+  --color-btn-primary-border: transparent;
+  --color-btn-primary-hover-bg: #3b82f6;
   --color-btn-primary-text: #ffffff;
-  font-family: "HarmonyOS_Regular","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --color-neutral-muted: rgba(255, 255, 255, 0.04);
+  font-family: "HarmonyOS_Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-/* 隐藏 "由 giscus 提供支持" */
+/* === 隐藏元素 === */
 .giscus-footer,
 em.color-text-secondary.text-sm { display: none !important; }
 
-/* 隐藏 Markdown 图标超链接 */
 .gsc-comment-box-markdown,
 .gsc-comment-box a[href*="markdown"],
 .gsc-comment-box a[href*="guides.github.com"] { display: none !important; }
 
-/* 评论卡片边框统一 */
+/* === 全局圆角 === */
+.gsc-comment { border-radius: 10px !important; }
+textarea, input[type="text"] { border-radius: 8px !important; }
+.btn, .Button, button { border-radius: 8px !important; }
+pre { border-radius: 8px !important; }
+
+/* === 评论卡片 === */
+.gsc-comment {
+  border: 1px solid var(--color-border-default) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+  transition: box-shadow 0.25s ease, transform 0.25s ease !important;
+  overflow: hidden !important;
+}
+
+.gsc-comment:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 头像圆形 */
+.gsc-comment img[alt="avatar"],
+img.avatar {
+  border-radius: 50% !important;
+  border: 2px solid var(--color-border-default) !important;
+  transition: border-color 0.2s ease !important;
+}
+
+.gsc-comment img[alt="avatar"]:hover,
+img.avatar:hover {
+  border-color: #60a5fa !important;
+}
+
+/* === 边框统一 === */
 .color-box-border-info { border-color: var(--color-border-default) !important; }
 .gsc-comment-box,
 .gsc-comment-box-tabs,
 .gsc-reply-box { border-color: var(--color-border-default) !important; }
 
-/* 圆角统一 */
-.gsc-comment { border-radius: 8px !important; }
-textarea, input[type="text"] { border-radius: 6px !important; }
-.btn, .Button, button { border-radius: 6px !important; }
-pre { border-radius: 6px !important; }
+/* === 输入区域 === */
+textarea.gsc-comment-box-textarea {
+  background-color: var(--color-canvas-subtle) !important;
+  border: 1px solid var(--color-border-default) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease !important;
+  padding: 12px 14px !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: var(--color-fg-default) !important;
+  /* 纸飞机动画 */
+  background-image: url("/img/paperAirplane.png") !important;
+  background-repeat: no-repeat !important;
+  background-size: auto 33% !important;
+  animation: paperAirplaneFly 5s ease-in-out infinite !important;
+}
 
-/* 输入框右侧纸飞机背景图 - 飞行晃动动画 */
+textarea.gsc-comment-box-textarea:focus {
+  background-color: var(--color-canvas-default) !important;
+  border-color: #60a5fa !important;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15) !important;
+  outline: none !important;
+}
+
+textarea.gsc-comment-box-textarea::placeholder {
+  color: var(--color-fg-subtle) !important;
+}
+
+/* === Tab 区域 === */
+.gsc-comment-box-tabs > button,
+.gsc-comment-box-tabs .color-text-secondary {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  padding: 8px 14px !important;
+  border-radius: 6px 6px 0 0 !important;
+  transition: color 0.2s ease, background-color 0.2s ease !important;
+}
+
+.gsc-comment-box-tabs > button[aria-selected="true"],
+.gsc-comment-box-tabs > button.color-text-primary {
+  color: #60a5fa !important;
+  font-weight: 600 !important;
+  border-bottom: 2px solid #60a5fa !important;
+}
+
+/* === 主按钮（评论/提交） === */
+button[type="submit"],
+.btn-primary,
+.Button--primary {
+  background: linear-gradient(135deg, #2563eb, #60a5fa) !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  padding: 8px 20px !important;
+  font-size: 13px !important;
+  letter-spacing: 0.02em !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+button[type="submit"]:hover,
+.btn-primary:hover,
+.Button--primary:hover {
+  background: linear-gradient(135deg, #3b82f6, #93c5fd) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 14px rgba(96, 165, 250, 0.4) !important;
+}
+
+button[type="submit"]:active,
+.btn-primary:active,
+.Button--primary:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2) !important;
+}
+
+/* === 反应表情 === */
+.gsc-direct-reaction-buttons button {
+  border-radius: 20px !important;
+  padding: 4px 10px !important;
+  border: 1px solid var(--color-border-default) !important;
+  transition: all 0.2s ease !important;
+}
+
+.gsc-direct-reaction-buttons button:hover {
+  border-color: #60a5fa !important;
+  background-color: rgba(96, 165, 250, 0.08) !important;
+}
+
+.gsc-direct-reaction-buttons button.has-reacted {
+  border-color: #60a5fa !important;
+  background-color: rgba(96, 165, 250, 0.15) !important;
+  color: #60a5fa !important;
+}
+
+/* === 链接颜色 === */
+a {
+  color: #60a5fa !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease !important;
+}
+
+a:hover {
+  color: #93c5fd !important;
+}
+
+/* === 纸飞机飞行动画 === */
 @keyframes paperAirplaneFly {
   0%   { background-position: calc(100% - 12px) calc(50% + 0px); }
   12%  { background-position: calc(100% - 16px) calc(50% - 3px); }
@@ -52,9 +183,12 @@ pre { border-radius: 6px !important; }
   100% { background-position: calc(100% - 12px) calc(50% + 0px); }
 }
 
-textarea.gsc-comment-box-textarea {
-  background-image: url("/img/paperAirplane.png") !important;
-  background-repeat: no-repeat !important;
-  background-size: auto 33% !important;
-  animation: paperAirplaneFly 5s ease-in-out infinite !important;
+/* === 时间戳和元信息 === */
+.gsc-comment-header {
+  font-size: 12px !important;
+}
+
+/* === 加载状态 === */
+.gsc-loading {
+  padding: 24px !important;
 }

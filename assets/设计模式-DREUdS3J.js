@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-u36lUa6b.js";var r=JSON.parse(`{"path":"/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/","title":"标签 - 设计模式","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 设计模式"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
