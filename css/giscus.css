@@ -28,6 +28,8 @@ em.color-text-secondary.text-sm { display: none !important; }
 .gsc-comment-box a[href*="markdown"],
 .gsc-comment-box a[href*="guides.github.com"] { display: none !important; }
 
+.gsc-comment-box-textarea-extras { display: none !important; }
+
 /* === 全局圆角 === */
 .gsc-comment { border-radius: 10px !important; }
 textarea, input[type="text"] { border-radius: 8px !important; }
@@ -92,13 +94,30 @@ textarea.gsc-comment-box-textarea::placeholder {
 }
 
 /* === Tab 区域 === */
-.gsc-comment-box-tabs > button,
-.gsc-comment-box-tabs .color-text-secondary {
+.gsc-comment-box-tabs {
+  border-bottom: 1px solid var(--color-border-default) !important;
+  background: var(--color-canvas-subtle) !important;
+  padding: 0 8px !important;
+  gap: 0 !important;
+}
+
+.gsc-comment-box-tabs > button {
   font-size: 13px !important;
   font-weight: 500 !important;
-  padding: 8px 14px !important;
-  border-radius: 6px 6px 0 0 !important;
-  transition: color 0.2s ease, background-color 0.2s ease !important;
+  padding: 10px 16px !important;
+  margin: 0 !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--color-fg-muted) !important;
+  transition: color 0.2s ease, border-color 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+.gsc-comment-box-tabs > button:hover {
+  color: var(--color-fg-default) !important;
+  background: rgba(0, 112, 243, 0.04) !important;
 }
 
 .gsc-comment-box-tabs > button[aria-selected="true"],
@@ -106,6 +125,7 @@ textarea.gsc-comment-box-textarea::placeholder {
   color: #0070f3 !important;
   font-weight: 600 !important;
   border-bottom: 2px solid #0070f3 !important;
+  background: transparent !important;
 }
 
 /* === 主按钮（评论/提交） === */

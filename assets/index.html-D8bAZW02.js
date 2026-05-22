@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-CijSA63H.js";var r=JSON.parse(`{"path":"/page/5/","title":"文章列表 - 第5页","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"文章列表 - 第5页"}}`),i={name:`index.html.vue`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};

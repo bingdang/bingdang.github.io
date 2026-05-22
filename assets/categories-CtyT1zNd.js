@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-CijSA63H.js";var r=JSON.parse(`{"path":"/categories/","title":"分类 -","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"分类 -"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};

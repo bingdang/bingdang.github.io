@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-u36lUa6b.js";var r=JSON.parse(`{"path":"/tags/%E5%AE%B9%E5%99%A8%E7%BC%96%E6%8E%92/","title":"标签 - 容器编排","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 容器编排"}}`),i={name:`index.html.vue`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
