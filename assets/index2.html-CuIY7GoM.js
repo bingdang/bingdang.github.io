@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-B98oErXl.js";var r=JSON.parse(`{"path":"/tags/OPENVPN/","title":"标签 - OPENVPN","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - OPENVPN"}}`),i={name:`index.html.vue`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
