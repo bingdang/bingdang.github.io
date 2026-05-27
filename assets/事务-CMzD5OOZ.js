@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-Est1UD0K.js";var r=JSON.parse(`{"path":"/tags/%E4%BA%8B%E5%8A%A1/","title":"标签 - 事务","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 事务"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
