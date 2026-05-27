@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-Wjhs9opZ.js";var r=JSON.parse(`{"path":"/tags/%E9%94%81/","title":"标签 - 锁","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 锁"}}`),i={name:`index.html.vue`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};

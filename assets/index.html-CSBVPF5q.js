@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-Wjhs9opZ.js";var r=JSON.parse(`{"path":"/tags/FP8/","title":"标签 - FP8","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - FP8"}}`),i={name:`index.html.vue`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
