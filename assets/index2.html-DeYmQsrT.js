@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-CAa9bL4m.js";var r=JSON.parse(`{"path":"/tags/gRPC/","title":"标签 - gRPC","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - gRPC"}}`),i={name:`index.html.vue`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
