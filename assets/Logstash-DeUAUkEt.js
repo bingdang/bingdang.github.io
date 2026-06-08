@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-C5OrV7JA.js";var r=JSON.parse(`{"path":"/tags/Logstash/","title":"标签 - Logstash","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - Logstash"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
