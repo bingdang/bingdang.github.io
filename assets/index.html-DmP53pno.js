@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-MvA9U39Z.js";var r=JSON.parse(`{"path":"/tags/%E5%89%8D%E7%AB%AF%E8%87%AA%E5%8A%A8%E5%8C%96/","title":"标签 - 前端自动化","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 前端自动化"}}`),i={name:`index.html.vue`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
