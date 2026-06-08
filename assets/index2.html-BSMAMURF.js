@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-BA_LMar9.js";var r=JSON.parse(`{"path":"/tags/Prometheus/","title":"标签 - Prometheus","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - Prometheus"}}`),i={name:`index.html.vue`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
