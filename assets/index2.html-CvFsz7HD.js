@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-DRkD69CO.js";var r=JSON.parse(`{"path":"/tags/Zabbix/","title":"标签 - Zabbix","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - Zabbix"}}`),i={name:`index.html.vue`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};

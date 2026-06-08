@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-CE4mzUPv.js";var r=JSON.parse(`{"path":"/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96/","title":"标签 - 数据库优化","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 数据库优化"}}`),i={name:`index.html.vue`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
