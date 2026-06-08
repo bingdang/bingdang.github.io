@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-KP2oCSn4.js";var r=JSON.parse(`{"path":"/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/","title":"标签 - 树莓派","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 树莓派"}}`),i={name:`index.html.vue`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
