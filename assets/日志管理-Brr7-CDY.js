@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-MvA9U39Z.js";var r=JSON.parse(`{"path":"/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/","title":"标签 - 日志管理","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 日志管理"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
