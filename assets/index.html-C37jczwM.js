@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-ny7SLDlP.js";var r=JSON.parse(`{"path":"/tags/%E6%B0%B4%E5%B9%B3%E6%8B%86%E5%88%86/","title":"标签 - 水平拆分","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 水平拆分"}}`),i={name:`index.html.vue`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
