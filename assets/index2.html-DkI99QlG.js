@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-Bh3yWYhu.js";var r=JSON.parse(`{"path":"/tags/PAM/","title":"标签 - PAM","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - PAM"}}`),i={name:`index.html.vue`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};

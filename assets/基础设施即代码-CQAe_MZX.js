@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-Bh3yWYhu.js";var r=JSON.parse(`{"path":"/tags/%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E5%8D%B3%E4%BB%A3%E7%A0%81/","title":"标签 - 基础设施即代码","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 基础设施即代码"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
