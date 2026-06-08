@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-8-C_CaWw.js";var r=JSON.parse(`{"path":"/tags/%E7%B4%A2%E5%BC%95/","title":"标签 - 索引","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 索引"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
