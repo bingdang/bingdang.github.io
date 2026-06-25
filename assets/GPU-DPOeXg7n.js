@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-2VgIZAoh.js";var r=JSON.parse(`{"path":"/tags/GPU/","title":"标签 - GPU","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - GPU"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
