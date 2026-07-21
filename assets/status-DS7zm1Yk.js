@@ -1,0 +1,1 @@
+import{o as e,r as t,t as n}from"./app-OWovTd1I.js";var r=JSON.parse(`{"path":"/status/","title":"站点监控","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"站点监控"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
