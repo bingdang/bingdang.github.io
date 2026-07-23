@@ -1,1 +1,0 @@
-import{o as e,r as t,t as n}from"./app-CPoM4kT6.js";var r=JSON.parse(`{"path":"/tags/%E5%85%AC%E6%9C%89%E4%BA%91%E7%BC%96%E6%8E%92/","title":"标签 - 公有云编排","lang":"zh-CN","frontmatter":{"layout":"Layout","title":"标签 - 公有云编排"}}`),i={name:`index.md`};function a(n,r,i,a,o,s){return e(),t(`div`)}var o=n(i,[[`render`,a]]);export{r as _pageData,o as default};
