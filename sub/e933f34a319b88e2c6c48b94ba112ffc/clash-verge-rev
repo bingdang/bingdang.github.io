@@ -1,0 +1,51 @@
+# Clash Verge Rev（mihomo）订阅 —— 由 scripts/gen-sub.mjs 生成，勿手改
+# 修改节点请在 proxy.yaml 调整后重新生成
+proxies:
+  # VMess AEAD（保底，兼容性最好）
+  - name: "番茄-SG-VMess·保底"
+    type: vmess
+    server: fanqie.cakepanit.com
+    port: 11425
+    uuid: "c4b1271e-42a1-446f-8c4b-7feba323bb8b"
+    alterId: 0
+    cipher: chacha20-poly1305
+    udp: true
+    tls: false
+    network: tcp
+  # VLESS + XTLS Vision + REALITY（主力，抗主动探测）
+  - name: "番茄-SG-REALITY·主力"
+    type: vless
+    server: fanqie.cakepanit.com
+    port: 443
+    uuid: "3b233a97-3b59-442b-a549-bf17f810fc62"
+    network: tcp
+    udp: true
+    tls: true
+    flow: xtls-rprx-vision
+    servername: gateway.icloud.com
+    client-fingerprint: chrome
+    reality-opts:
+      public-key: "ZsYgiwchswaVTMKu18xBfikbT0Tru9va9FDi0tV9cGk"
+      short-id: "998a746abeac9e7a"
+  # Hysteria2（极速；down/up 为 Mbps 整数，写入即启用 Brutal 拥塞控制）
+  - name: "番茄-SG-H2·极速"
+    type: hysteria2
+    server: fanqie.cakepanit.com
+    port: 443
+    password: "064e9e42eb64b30d80094af9"
+    sni: fanqie.cakepanit.com
+    skip-cert-verify: true
+    down: 200
+
+proxy-groups:
+  - name: "SG-自建"
+    type: select
+    proxies:
+      - "番茄-SG-VMess·保底"
+      - "番茄-SG-REALITY·主力"
+      - "番茄-SG-H2·极速"
+      - DIRECT
+
+rules:
+  - GEOIP,CN,DIRECT
+  - MATCH,SG-自建
