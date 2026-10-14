@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /sub/
+
+Sitemap: https://cakepanit.com/sitemap.xml
