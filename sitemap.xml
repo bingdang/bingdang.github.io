@@ -479,19 +479,16 @@
     <loc>https://cakepanit.com/tags/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/categories/DBA/</loc>
+    <loc>https://cakepanit.com/categories/DEV/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/categories/DEV/</loc>
+    <loc>https://cakepanit.com/categories/DBA/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/categories/OPS/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/page/2/</loc>
-  </url>
-  <url>
-    <loc>https://cakepanit.com/page/5/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/page/3/</loc>
@@ -503,16 +500,19 @@
     <loc>https://cakepanit.com/page/6/</loc>
   </url>
   <url>
+    <loc>https://cakepanit.com/page/5/</loc>
+  </url>
+  <url>
     <loc>https://cakepanit.com/protocol/comment/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/protocol/copyright/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/AI/</loc>
+    <loc>https://cakepanit.com/tags/ACID/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/ACID/</loc>
+    <loc>https://cakepanit.com/tags/AI/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/Ansible/</loc>
@@ -686,10 +686,10 @@
     <loc>https://cakepanit.com/tags/tools/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</loc>
+    <loc>https://cakepanit.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7hash%E7%AE%97%E6%B3%95/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7hash%E7%AE%97%E6%B3%95/</loc>
+    <loc>https://cakepanit.com/tags/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/%E4%BA%8B%E5%8A%A1/</loc>
@@ -743,10 +743,10 @@
     <loc>https://cakepanit.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96/</loc>
+    <loc>https://cakepanit.com/tags/%E6%97%A0%E4%BA%BA%E5%BA%94%E7%AD%94/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/%E6%97%A0%E4%BA%BA%E5%BA%94%E7%AD%94/</loc>
+    <loc>https://cakepanit.com/tags/%E6%95%B0%E6%8D%AE%E6%8C%81%E4%B9%85%E5%8C%96/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/</loc>
