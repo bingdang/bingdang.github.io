@@ -4,15 +4,6 @@
     <loc>https://cakepanit.com/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/about/</loc>
-  </url>
-  <url>
-    <loc>https://cakepanit.com/archives/</loc>
-  </url>
-  <url>
-    <loc>https://cakepanit.com/categories/</loc>
-  </url>
-  <url>
     <loc>https://cakepanit.com/forward/91db5a91.html</loc>
     <lastmod>2022-04-04</lastmod>
   </url>
@@ -476,37 +467,37 @@
     <loc>https://cakepanit.com/status/</loc>
   </url>
   <url>
+    <loc>https://cakepanit.com/about/</loc>
+  </url>
+  <url>
     <loc>https://cakepanit.com/tags/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/categories/DBA/</loc>
+    <loc>https://cakepanit.com/archives/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/categories/DEV/</loc>
+    <loc>https://cakepanit.com/categories/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/categories/OPS/</loc>
-  </url>
-  <url>
-    <loc>https://cakepanit.com/protocol/copyright/</loc>
-  </url>
-  <url>
-    <loc>https://cakepanit.com/protocol/comment/</loc>
-  </url>
-  <url>
-    <loc>https://cakepanit.com/page/2/</loc>
+    <loc>https://cakepanit.com/page/4/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/page/3/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/page/4/</loc>
+    <loc>https://cakepanit.com/page/2/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/page/5/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/page/6/</loc>
+  </url>
+  <url>
+    <loc>https://cakepanit.com/protocol/comment/</loc>
+  </url>
+  <url>
+    <loc>https://cakepanit.com/protocol/copyright/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/ACID/</loc>
@@ -554,6 +545,9 @@
     <loc>https://cakepanit.com/tags/GPU/</loc>
   </url>
   <url>
+    <loc>https://cakepanit.com/tags/Gin/</loc>
+  </url>
+  <url>
     <loc>https://cakepanit.com/tags/Git/</loc>
   </url>
   <url>
@@ -564,9 +558,6 @@
   </url>
   <url>
     <loc>https://cakepanit.com/tags/Helm%20v3/</loc>
-  </url>
-  <url>
-    <loc>https://cakepanit.com/tags/Gin/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/JumpServer/</loc>
@@ -617,13 +608,13 @@
     <loc>https://cakepanit.com/tags/PAM/</loc>
   </url>
   <url>
+    <loc>https://cakepanit.com/tags/Playbook/</loc>
+  </url>
+  <url>
     <loc>https://cakepanit.com/tags/Prometheus/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/RAID/</loc>
-  </url>
-  <url>
-    <loc>https://cakepanit.com/tags/Playbook/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/Redis/</loc>
@@ -801,6 +792,15 @@
   </url>
   <url>
     <loc>https://cakepanit.com/toolbox/textdiff/</loc>
+  </url>
+  <url>
+    <loc>https://cakepanit.com/categories/DBA/</loc>
+  </url>
+  <url>
+    <loc>https://cakepanit.com/categories/DEV/</loc>
+  </url>
+  <url>
+    <loc>https://cakepanit.com/categories/OPS/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/CI/CD/</loc>
