@@ -464,6 +464,9 @@
     <loc>https://cakepanit.com/link/</loc>
   </url>
   <url>
+    <loc>https://cakepanit.com/minecraft/</loc>
+  </url>
+  <url>
     <loc>https://cakepanit.com/music/</loc>
   </url>
   <url>
@@ -485,7 +488,16 @@
     <loc>https://cakepanit.com/categories/OPS/</loc>
   </url>
   <url>
+    <loc>https://cakepanit.com/protocol/copyright/</loc>
+  </url>
+  <url>
+    <loc>https://cakepanit.com/protocol/comment/</loc>
+  </url>
+  <url>
     <loc>https://cakepanit.com/page/2/</loc>
+  </url>
+  <url>
+    <loc>https://cakepanit.com/page/3/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/page/4/</loc>
@@ -497,16 +509,13 @@
     <loc>https://cakepanit.com/page/6/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/protocol/comment/</loc>
-  </url>
-  <url>
-    <loc>https://cakepanit.com/protocol/copyright/</loc>
-  </url>
-  <url>
-    <loc>https://cakepanit.com/page/3/</loc>
+    <loc>https://cakepanit.com/tags/ACID/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/AI/</loc>
+  </url>
+  <url>
+    <loc>https://cakepanit.com/tags/Ansible/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/Apollo/</loc>
@@ -518,9 +527,6 @@
     <loc>https://cakepanit.com/tags/CNI/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/Ansible/</loc>
-  </url>
-  <url>
     <loc>https://cakepanit.com/tags/Canal/</loc>
   </url>
   <url>
@@ -528,9 +534,6 @@
   </url>
   <url>
     <loc>https://cakepanit.com/tags/DNS/</loc>
-  </url>
-  <url>
-    <loc>https://cakepanit.com/tags/ACID/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/Docker/</loc>
@@ -542,16 +545,13 @@
     <loc>https://cakepanit.com/tags/ELK/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/GORM/</loc>
-  </url>
-  <url>
     <loc>https://cakepanit.com/tags/FP8/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/GPU/</loc>
+    <loc>https://cakepanit.com/tags/GORM/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/Gin/</loc>
+    <loc>https://cakepanit.com/tags/GPU/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/Git/</loc>
@@ -560,10 +560,13 @@
     <loc>https://cakepanit.com/tags/GitLab/</loc>
   </url>
   <url>
+    <loc>https://cakepanit.com/tags/Golang/</loc>
+  </url>
+  <url>
     <loc>https://cakepanit.com/tags/Helm%20v3/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/Golang/</loc>
+    <loc>https://cakepanit.com/tags/Gin/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/JumpServer/</loc>
@@ -593,10 +596,10 @@
     <loc>https://cakepanit.com/tags/MyCAT/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/Nginx/</loc>
+    <loc>https://cakepanit.com/tags/MySQL/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/MySQL/</loc>
+    <loc>https://cakepanit.com/tags/Nginx/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/NoSQL/</loc>
@@ -614,13 +617,13 @@
     <loc>https://cakepanit.com/tags/PAM/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/Playbook/</loc>
-  </url>
-  <url>
     <loc>https://cakepanit.com/tags/Prometheus/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/RAID/</loc>
+  </url>
+  <url>
+    <loc>https://cakepanit.com/tags/Playbook/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/Redis/</loc>
@@ -656,10 +659,10 @@
     <loc>https://cakepanit.com/tags/Zookeeper/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/goroutine/</loc>
+    <loc>https://cakepanit.com/tags/gRPC/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/gRPC/</loc>
+    <loc>https://cakepanit.com/tags/goroutine/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/iptables/</loc>
@@ -776,13 +779,13 @@
     <loc>https://cakepanit.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/</loc>
   </url>
   <url>
+    <loc>https://cakepanit.com/tags/%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/</loc>
+  </url>
+  <url>
     <loc>https://cakepanit.com/tags/%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/%E9%94%81/</loc>
-  </url>
-  <url>
-    <loc>https://cakepanit.com/tags/%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</loc>
