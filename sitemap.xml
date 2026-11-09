@@ -7,9 +7,6 @@
     <loc>https://cakepanit.com/about/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/archives/</loc>
-  </url>
-  <url>
     <loc>https://cakepanit.com/categories/</loc>
   </url>
   <url>
@@ -467,10 +464,10 @@
     <loc>https://cakepanit.com/minecraft/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/notice/</loc>
+    <loc>https://cakepanit.com/music/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/music/</loc>
+    <loc>https://cakepanit.com/notice/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/status/</loc>
@@ -479,16 +476,16 @@
     <loc>https://cakepanit.com/tags/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/categories/DBA/</loc>
+    <loc>https://cakepanit.com/archives/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/categories/OPS/</loc>
+    <loc>https://cakepanit.com/categories/DBA/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/categories/DEV/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/page/3/</loc>
+    <loc>https://cakepanit.com/categories/OPS/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/page/4/</loc>
@@ -497,16 +494,19 @@
     <loc>https://cakepanit.com/page/5/</loc>
   </url>
   <url>
+    <loc>https://cakepanit.com/page/3/</loc>
+  </url>
+  <url>
     <loc>https://cakepanit.com/page/6/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/page/2/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/protocol/copyright/</loc>
+    <loc>https://cakepanit.com/protocol/comment/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/protocol/comment/</loc>
+    <loc>https://cakepanit.com/protocol/copyright/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/ACID/</loc>
@@ -548,31 +548,31 @@
     <loc>https://cakepanit.com/tags/FP8/</loc>
   </url>
   <url>
+    <loc>https://cakepanit.com/tags/GORM/</loc>
+  </url>
+  <url>
     <loc>https://cakepanit.com/tags/GPU/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/Gin/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/GORM/</loc>
+    <loc>https://cakepanit.com/tags/Git/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/GitLab/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/Git/</loc>
+    <loc>https://cakepanit.com/tags/Golang/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/Helm%20v3/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/Golang/</loc>
+    <loc>https://cakepanit.com/tags/JumpServer/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/Kong/</loc>
-  </url>
-  <url>
-    <loc>https://cakepanit.com/tags/JumpServer/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/Kubernetes/</loc>
@@ -584,10 +584,10 @@
     <loc>https://cakepanit.com/tags/Logstash/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/Minecraft/</loc>
+    <loc>https://cakepanit.com/tags/MHA/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/MHA/</loc>
+    <loc>https://cakepanit.com/tags/Minecraft/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/MongoDB/</loc>
