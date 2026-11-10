@@ -7,6 +7,9 @@
     <loc>https://cakepanit.com/about/</loc>
   </url>
   <url>
+    <loc>https://cakepanit.com/archives/</loc>
+  </url>
+  <url>
     <loc>https://cakepanit.com/categories/</loc>
   </url>
   <url>
@@ -476,9 +479,6 @@
     <loc>https://cakepanit.com/tags/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/archives/</loc>
-  </url>
-  <url>
     <loc>https://cakepanit.com/categories/DBA/</loc>
   </url>
   <url>
@@ -488,19 +488,19 @@
     <loc>https://cakepanit.com/categories/OPS/</loc>
   </url>
   <url>
+    <loc>https://cakepanit.com/page/2/</loc>
+  </url>
+  <url>
+    <loc>https://cakepanit.com/page/3/</loc>
+  </url>
+  <url>
     <loc>https://cakepanit.com/page/4/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/page/5/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/page/3/</loc>
-  </url>
-  <url>
     <loc>https://cakepanit.com/page/6/</loc>
-  </url>
-  <url>
-    <loc>https://cakepanit.com/page/2/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/protocol/comment/</loc>
