@@ -35,7 +35,7 @@ proxies:
     password: "756af44d34264208d1c71e27"
     sni: fanqie.cakepanit.com
     skip-cert-verify: true
-    down: 200
+    down: 100
 
 proxy-groups:
   - name: "SG-自建"
