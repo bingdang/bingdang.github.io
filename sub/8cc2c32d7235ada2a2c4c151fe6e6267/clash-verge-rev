@@ -4,7 +4,7 @@ proxies:
   # Hysteria2（极速；down/up 为 Mbps 整数，写入即启用 Brutal 拥塞控制）
   - name: "番茄-SG-H2·极速"
     type: hysteria2
-    server: fanqie-sh.cakepanit.com
+    server: fanqie.cakepanit.com
     port: 443
     password: "756af44d34264208d1c71e27"
     sni: fanqie.cakepanit.com
