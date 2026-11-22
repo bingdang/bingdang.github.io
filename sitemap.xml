@@ -13,6 +13,9 @@
     <loc>https://cakepanit.com/categories/</loc>
   </url>
   <url>
+    <loc>https://cakepanit.com/link/</loc>
+  </url>
+  <url>
     <loc>https://cakepanit.com/forward/91db5a91.html</loc>
     <lastmod>2022-04-04</lastmod>
   </url>
@@ -465,9 +468,6 @@
     <lastmod>2019-04-03</lastmod>
   </url>
   <url>
-    <loc>https://cakepanit.com/link/</loc>
-  </url>
-  <url>
     <loc>https://cakepanit.com/minecraft/</loc>
   </url>
   <url>
@@ -507,19 +507,19 @@
     <loc>https://cakepanit.com/page/6/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/protocol/comment/</loc>
+    <loc>https://cakepanit.com/protocol/copyright/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/protocol/copyright/</loc>
+    <loc>https://cakepanit.com/protocol/comment/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/ACID/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/Ansible/</loc>
+    <loc>https://cakepanit.com/tags/AI/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/AI/</loc>
+    <loc>https://cakepanit.com/tags/Ansible/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/Apollo/</loc>
@@ -753,10 +753,10 @@
     <loc>https://cakepanit.com/tags/%E6%97%A0%E4%BA%BA%E5%BA%94%E7%AD%94/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/%E6%98%BE%E5%AD%98%E4%BC%98%E5%8C%96/</loc>
+    <loc>https://cakepanit.com/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/</loc>
   </url>
   <url>
-    <loc>https://cakepanit.com/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/</loc>
+    <loc>https://cakepanit.com/tags/%E6%98%BE%E5%AD%98%E4%BC%98%E5%8C%96/</loc>
   </url>
   <url>
     <loc>https://cakepanit.com/tags/%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/</loc>
